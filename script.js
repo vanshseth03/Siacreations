@@ -1,6 +1,7 @@
 // Global Variables
 let currentSlideIndex = 0;
 let cart = [];
+let wishlist = [];
 let currentTab = 'home';
 let currentProduct = null;
 let detailQuantity = 1;
@@ -69,6 +70,7 @@ function initializeApp() {
     setupNavigation();
     setupFooterNavigation();
     setupCarousel();
+    loadWishlistFromStorage();
     loadHomeProducts();
     setupMobileMenu();
     setupCartEventListeners();
@@ -220,10 +222,17 @@ function loadProducts(category) {
 }
 
 function createProductCard(product) {
+    const isInWishlist = wishlist.some(item => item.id === product.id);
+    const heartIcon = isInWishlist ? '♥' : '♡';
+    const heartClass = isInWishlist ? 'wishlist-heart-filled' : 'wishlist-heart-empty';
+    
     return `
         <div class="product-card" data-id="${product.id}" onclick="showProductDetail(${product.id})">
             <div class="product-image">
                 ${product.image}
+                <div class="product-wishlist-heart ${heartClass}" onclick="event.stopPropagation(); toggleWishlist(${product.id})" title="Add to Wishlist">
+                    ${heartIcon}
+                </div>
             </div>
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
@@ -559,6 +568,169 @@ function observeProductCards() {
 // Initialize intersection observer after products load
 setTimeout(observeProductCards, 1000);
 
+// Wishlist Functions
+function loadWishlistFromStorage() {
+    const savedWishlist = localStorage.getItem('siaCreationsWishlist');
+    if (savedWishlist) {
+        wishlist = JSON.parse(savedWishlist);
+    }
+    updateWishlistCount();
+    updateWishlistDisplay();
+}
+
+function saveWishlistToStorage() {
+    localStorage.setItem('siaCreationsWishlist', JSON.stringify(wishlist));
+}
+
+function showWishlistFeedback(message, type) {
+    const feedback = document.createElement('div');
+    const bgColor = type === 'added' ? 'var(--soft-gold)' : 
+                   type === 'removed' ? '#e74c3c' : 
+                   'var(--blush-pink)';
+    
+    feedback.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${bgColor};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        z-index: 1002;
+        animation: slideInRight 0.3s ease-out;
+        font-weight: 600;
+    `;
+    feedback.textContent = message;
+    
+    document.body.appendChild(feedback);
+    
+    setTimeout(() => {
+        feedback.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => {
+            if (document.body.contains(feedback)) {
+                document.body.removeChild(feedback);
+            }
+        }, 300);
+    }, 2000);
+}
+
+function toggleWishlist(productId) {
+    // Find product in all categories
+    let product = null;
+    for (const category in productData) {
+        product = productData[category].find(p => p.id === productId);
+        if (product) break;
+    }
+    
+    if (!product) return;
+    
+    const existingIndex = wishlist.findIndex(item => item.id === productId);
+    
+    if (existingIndex > -1) {
+        // Remove from wishlist
+        wishlist.splice(existingIndex, 1);
+        showWishlistFeedback('Item removed from wishlist', 'removed');
+    } else {
+        // Add to wishlist
+        wishlist.push(product);
+        showWishlistFeedback('Item added to wishlist ♥', 'added');
+    }
+    
+    saveWishlistToStorage();
+    updateWishlistCount();
+    updateWishlistDisplay();
+    
+    // Update product card heart icons
+    updateProductCardHearts();
+}
+
+function updateWishlistCount() {
+    const countElement = document.getElementById('wishlist-count');
+    if (countElement) {
+        countElement.textContent = wishlist.length;
+    }
+}
+
+function updateProductCardHearts() {
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+        const productId = parseInt(card.getAttribute('data-id'));
+        const heartElement = card.querySelector('.product-wishlist-heart');
+        
+        if (heartElement) {
+            const isInWishlist = wishlist.some(item => item.id === productId);
+            heartElement.textContent = isInWishlist ? '♥' : '♡';
+            heartElement.className = isInWishlist ? 'product-wishlist-heart wishlist-heart-filled' : 'product-wishlist-heart wishlist-heart-empty';
+        }
+    });
+}
+
+function updateWishlistDisplay() {
+    const wishlistItemsContainer = document.getElementById('wishlist-items');
+    const wishlistEmptyContainer = document.getElementById('wishlist-empty');
+    
+    if (!wishlistItemsContainer || !wishlistEmptyContainer) return;
+    
+    if (wishlist.length === 0) {
+        wishlistItemsContainer.style.display = 'none';
+        wishlistEmptyContainer.style.display = 'block';
+    } else {
+        wishlistItemsContainer.style.display = 'grid';
+        wishlistEmptyContainer.style.display = 'none';
+        
+        const wishlistHTML = wishlist.map(item => createWishlistCard(item)).join('');
+        wishlistItemsContainer.innerHTML = wishlistHTML;
+    }
+}
+
+function createWishlistCard(product) {
+    return `
+        <div class="wishlist-item" data-id="${product.id}">
+            <div class="wishlist-item-image" onclick="showProductDetail(${product.id})">
+                ${product.image}
+            </div>
+            <div class="wishlist-item-info">
+                <div class="wishlist-item-name">${product.name}</div>
+                <div class="wishlist-item-price">₹${product.price}</div>
+                <div class="wishlist-item-actions">
+                    <button class="add-to-cart-from-wishlist" onclick="addToCartFromWishlist(${product.id})">
+                        Add to Cart
+                    </button>
+                    <button class="remove-from-wishlist" onclick="removeFromWishlist(${product.id})" title="Remove from wishlist">
+                        ✕
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function addToCartFromWishlist(productId) {
+    addToCart(productId);
+    showWishlistFeedback('Item added to cart!', 'cart');
+}
+
+function removeFromWishlist(productId) {
+    const index = wishlist.findIndex(item => item.id === productId);
+    if (index > -1) {
+        wishlist.splice(index, 1);
+        saveWishlistToStorage();
+        updateWishlistCount();
+        updateWishlistDisplay();
+        updateProductCardHearts();
+        showWishlistFeedback('Item removed from wishlist', 'removed');
+    }
+}
+
+// Update switchTab to refresh wishlist display when switching to wishlist
+const originalSwitchTab = switchTab;
+function switchTab(tabName) {
+    originalSwitchTab(tabName);
+    if (tabName === 'wishlist') {
+        updateWishlistDisplay();
+    }
+}
+
 // Export functions for global access
 window.switchTab = switchTab;
 window.toggleCart = toggleCart;
@@ -573,3 +745,6 @@ window.showProductDetail = showProductDetail;
 window.updateDetailQuantity = updateDetailQuantity;
 window.addDetailToCart = addDetailToCart;
 window.backToCategory = backToCategory;
+window.toggleWishlist = toggleWishlist;
+window.addToCartFromWishlist = addToCartFromWishlist;
+window.removeFromWishlist = removeFromWishlist;

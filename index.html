@@ -26,6 +26,10 @@
                 </li>
             </ul>
             <div class="nav-icons">
+                <div class="wishlist-icon" onclick="switchTab('wishlist')">
+                    <span class="wishlist-heart">♡</span>
+                    <span class="wishlist-count" id="wishlist-count">0</span>
+                </div>
                 <div class="cart-icon" onclick="toggleCart()">
                     <span class="cart-text">Cart</span>
                     <span class="cart-count" id="cart-count">0</span>
@@ -344,6 +348,27 @@
                         </ul>
                     </div>
                     <button class="continue-shopping" onclick="switchTab('home')">Continue Shopping</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wishlist Tab -->
+        <section id="wishlist" class="tab-content">
+            <div class="wishlist-content">
+                <div class="wishlist-header">
+                    <h1>♡ My Wishlist</h1>
+                    <p>Your saved favorite items</p>
+                </div>
+                <div class="wishlist-items" id="wishlist-items">
+                    <!-- Wishlist items will be displayed here -->
+                </div>
+                <div class="wishlist-empty" id="wishlist-empty" style="display: none;">
+                    <div class="empty-wishlist">
+                        <span class="empty-heart">♡</span>
+                        <h3>Your wishlist is empty</h3>
+                        <p>Start adding items you love to your wishlist</p>
+                        <button class="continue-shopping" onclick="switchTab('home')">Continue Shopping</button>
+                    </div>
                 </div>
             </div>
         </section>

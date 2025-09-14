@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sia Creations - Premium Women's Fashion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Sia Creations</h2>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-tab="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link" data-tab="about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link" data-tab="contact">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-icons">
+                <div class="cart-icon" onclick="toggleCart()">
+                    <span class="cart-text">Cart</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: ₹<span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Tab -->
+        <section id="home" class="tab-content active">
+            <!-- Hero Carousel -->
+            <div class="hero-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-slide active">
+                        <div class="slide-content">
+                            <h1>Premium Stitched Collection</h1>
+                            <p>Elegantly crafted outfits for the modern woman</p>
+                            <button class="cta-btn" onclick="switchTab('stitched')">Shop Now</button>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="slide-content">
+                            <h1>Unstitched Fabric Collection</h1>
+                            <p>Premium fabrics for your custom designs</p>
+                            <button class="cta-btn" onclick="switchTab('unstitched')">Explore Fabrics</button>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="slide-content">
+                            <h1>Gym Wear Collection</h1>
+                            <p>Comfortable and stylish activewear</p>
+                            <button class="cta-btn" onclick="switchTab('gym')">Get Active</button>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="slide-content">
+                            <h1>Daily & Casual Wear</h1>
+                            <p>Everyday comfort meets style</p>
+                            <button class="cta-btn" onclick="switchTab('daily')">Shop Daily</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-nav">
+                    <button class="carousel-btn prev" onclick="prevSlide()">&lt;</button>
+                    <button class="carousel-btn next" onclick="nextSlide()">&gt;</button>
+                </div>
+                <div class="carousel-dots">
+                    <span class="dot active" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                    <span class="dot" onclick="currentSlide(3)"></span>
+                    <span class="dot" onclick="currentSlide(4)"></span>
+                </div>
+            </div>
+
+            <!-- Shop by Category Section -->
+            <div class="category-section">
+                <div class="category-container">
+                    <h2>Shop by Category</h2>
+                    <div class="category-buttons">
+                        <button class="category-btn" onclick="switchTab('stitched')">
+                            <span class="category-icon">👗</span>
+                            <span class="category-name">Stitched Collection</span>
+                            <span class="category-desc">Ready-to-wear outfits</span>
+                        </button>
+                        <button class="category-btn" onclick="switchTab('unstitched')">
+                            <span class="category-icon">🧵</span>
+                            <span class="category-name">Unstitched Fabric</span>
+                            <span class="category-desc">Premium fabrics</span>
+                        </button>
+                        <button class="category-btn" onclick="switchTab('gym')">
+                            <span class="category-icon">🏃‍♀️</span>
+                            <span class="category-name">Gym Wear</span>
+                            <span class="category-desc">Activewear collection</span>
+                        </button>
+                        <button class="category-btn" onclick="switchTab('daily')">
+                            <span class="category-icon">👔</span>
+                            <span class="category-name">Daily Wear</span>
+                            <span class="category-desc">Everyday comfort</span>
+                        </button>
+                        <button class="category-btn" onclick="switchTab('casuals')">
+                            <span class="category-icon">👕</span>
+                            <span class="category-name">Casuals</span>
+                            <span class="category-desc">Relaxed style</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Sections -->
+            <div class="product-sections">
+                <div class="section-header">
+                    <h2>Unstitched Collection</h2>
+                    <button class="view-all-btn" onclick="switchTab('unstitched')">View All</button>
+                </div>
+                <div class="product-scroll" id="unstitched-preview">
+                    <!-- Products will be loaded here -->
+                </div>
+
+                <div class="section-header">
+                    <h2>Gym Collection</h2>
+                    <button class="view-all-btn" onclick="switchTab('gym')">View All</button>
+                </div>
+                <div class="product-scroll" id="gym-preview">
+                    <!-- Products will be loaded here -->
+                </div>
+
+                <div class="section-header">
+                    <h2>Stitched Collection</h2>
+                    <button class="view-all-btn" onclick="switchTab('stitched')">View All</button>
+                </div>
+                <div class="product-scroll" id="stitched-preview">
+                    <!-- Products will be loaded here -->
+                </div>
+
+                <div class="section-header">
+                    <h2>Casuals</h2>
+                    <button class="view-all-btn" onclick="switchTab('casuals')">View All</button>
+                </div>
+                <div class="product-scroll" id="casuals-preview">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Collection Tabs -->
+        <section id="stitched" class="tab-content">
+            <div class="tab-header">
+                <h1>Stitched Collection</h1>
+                <p>Elegantly crafted ready-to-wear outfits</p>
+            </div>
+            <div class="products-grid" id="stitched-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+
+        <section id="unstitched" class="tab-content">
+            <div class="tab-header">
+                <h1>Unstitched Fabric</h1>
+                <p>Premium fabrics for your custom designs</p>
+            </div>
+            <div class="products-grid" id="unstitched-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+
+        <section id="gym" class="tab-content">
+            <div class="tab-header">
+                <h1>Gym Wear</h1>
+                <p>Comfortable and stylish activewear</p>
+            </div>
+            <div class="products-grid" id="gym-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+
+        <section id="daily" class="tab-content">
+            <div class="tab-header">
+                <h1>Daily Wear</h1>
+                <p>Everyday comfort meets elegance</p>
+            </div>
+            <div class="products-grid" id="daily-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+
+        <section id="casuals" class="tab-content">
+            <div class="tab-header">
+                <h1>Casuals</h1>
+                <p>Relaxed style for casual moments</p>
+            </div>
+            <div class="products-grid" id="casuals-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Product Detail Page -->
+        <section id="product-detail" class="tab-content">
+            <div class="product-detail-container">
+                <div class="product-detail-content">
+                    <div class="product-detail-image">
+                        <div class="product-image-large" id="product-image-large">
+                            <!-- Large product image will be displayed here -->
+                        </div>
+                    </div>
+                    <div class="product-detail-info">
+                        <div class="product-detail-header">
+                            <h1 id="product-detail-name">Product Name</h1>
+                            <div class="product-detail-price" id="product-detail-price">₹0</div>
+                        </div>
+                        <div class="product-detail-description">
+                            <h3>Description</h3>
+                            <p id="product-detail-desc">This is a premium quality garment crafted with attention to detail and finest materials. Perfect for modern women who appreciate style and comfort. Features include excellent fabric quality, elegant design, and versatile styling options that make it suitable for various occasions.</p>
+                        </div>
+                        <div class="product-detail-actions">
+                            <div class="quantity-selector">
+                                <label>Quantity:</label>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn-detail" onclick="updateDetailQuantity(-1)">-</button>
+                                    <span class="quantity-display" id="detail-quantity">1</span>
+                                    <button class="quantity-btn-detail" onclick="updateDetailQuantity(1)">+</button>
+                                </div>
+                            </div>
+                            <button class="add-to-cart-detail" id="add-to-cart-detail" onclick="addDetailToCart()">
+                                Add to Cart
+                            </button>
+                            <button class="back-to-category" id="back-to-category" onclick="backToCategory()">
+                                Back to Category
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Tab -->
+        <section id="about" class="tab-content">
+            <div class="about-content">
+                <h1>About Sia Creations</h1>
+                <p>At Sia Creations, we believe that every woman deserves to feel beautiful and confident in what she wears. Our carefully curated collection of premium women's fashion combines timeless elegance with contemporary style.</p>
+                <p>From sophisticated stitched pieces to premium unstitched fabrics, comfortable gym wear to elegant daily wear, we offer a complete range of clothing that celebrates the modern woman's lifestyle.</p>
+                <p>Our commitment to quality, style, and customer satisfaction has made us a trusted name in women's fashion.</p>
+            </div>
+        </section>
+
+        <!-- Contact Tab -->
+        <section id="contact" class="tab-content">
+            <div class="contact-content">
+                <h1>Contact Us</h1>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>Phone & WhatsApp</h3>
+                        <p>+91 9711544523</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Email</h3>
+                        <p>info@siacreations.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Follow Us</h3>
+                        <div class="social-links">
+                            <a href="#" class="social-link">Instagram</a>
+                            <a href="#" class="social-link">Facebook</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Form -->
+        <section id="checkout" class="tab-content">
+            <div class="checkout-content">
+                <h1>Checkout</h1>
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-group">
+                        <label for="customer-name">Full Name</label>
+                        <input type="text" id="customer-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Phone Number</label>
+                        <input type="tel" id="customer-phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-address">Delivery Address</label>
+                        <textarea id="customer-address" name="address" rows="4" required></textarea>
+                    </div>
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="checkout-items">
+                            <!-- Checkout items will be populated here -->
+                        </div>
+                        <div class="checkout-total">
+                            <strong>Total: ₹<span id="checkout-total">0</span></strong>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-order-btn">Place Order</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Order Confirmation -->
+        <section id="order-confirmation" class="tab-content">
+            <div class="confirmation-content">
+                <div class="confirmation-success">
+                    <h1>🎉 Order Confirmed!</h1>
+                    <p>Thank you for your order. We have received your request and will contact you soon for confirmation and delivery details.</p>
+                    <div class="confirmation-details">
+                        <h3>Next Steps:</h3>
+                        <ul>
+                            <li>We will call you at <strong id="confirmation-phone"></strong> within 24 hours</li>
+                            <li>Our team will confirm your order details and arrange delivery</li>
+                            <li>For immediate assistance, contact us at <strong>+91 9711544523</strong></li>
+                        </ul>
+                    </div>
+                    <button class="continue-shopping" onclick="switchTab('home')">Continue Shopping</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

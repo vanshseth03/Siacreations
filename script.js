@@ -29,7 +29,7 @@ const productData = {
         { id: 16, name: "Organza Fabric", price: 999, category: "unstitched", image: "🧵", description: "Crisp organza fabric with transparent finish. Perfect for creating structured designs and layered garments. Holds shape well." }
     ],
     gym: [
-        { id: 17, name: "Sports Bra Set", price: 1299, category: "gym", image: "🏃‍♀️", description: "High-support sports bra set designed for intense workouts. Moisture-wicking fabric keeps you dry and comfortable during exercise." },
+        { id: 17, name: "Athletic Leggings Set", price: 1399, category: "gym", image: "🩱", description: "Premium athletic leggings set with matching top. Features moisture-wicking fabric and four-way stretch for ultimate comfort. Perfect for workouts, yoga, and active lifestyle." },
         { id: 18, name: "Yoga Pants", price: 999, category: "gym", image: "🧘‍♀️", description: "Flexible yoga pants with four-way stretch. Perfect for yoga, pilates, and meditation. Comfortable waistband and breathable fabric." },
         { id: 19, name: "Activewear Top", price: 799, category: "gym", image: "💪", description: "Versatile activewear top suitable for various workouts. Quick-dry technology and comfortable fit for all-day wear." },
         { id: 20, name: "Running Shorts", price: 699, category: "gym", image: "🏃‍♀️", description: "Lightweight running shorts with built-in compression. Perfect for jogging and cardio workouts. Features side pockets for essentials." },

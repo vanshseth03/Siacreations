@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize Application
 function initializeApp() {
     setupNavigation();
+    setupFooterNavigation();
     setupCarousel();
     loadHomeProducts();
     setupMobileMenu();
@@ -82,6 +83,19 @@ function setupNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
     
     navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tab = this.getAttribute('data-tab');
+            switchTab(tab);
+        });
+    });
+}
+
+// Footer Navigation Setup
+function setupFooterNavigation() {
+    const footerLinks = document.querySelectorAll('.footer-link');
+    
+    footerLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const tab = this.getAttribute('data-tab');

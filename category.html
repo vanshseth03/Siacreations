@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Sia Creations - Category</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-footer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=ios_share" />
+</head>
+<body>
+    <!-- Navigation (same as index) -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Sia Creations</h2>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html#home" class="nav-link" data-tab="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#about" class="nav-link" data-tab="about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#contact" class="nav-link" data-tab="contact">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-icons">
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: ₹<span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" onclick="window.location.href='checkout-page.html'">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <main class="main-content" style="padding-bottom: 80px;">
+        <section id="category-page" class="tab-content active">
+            <div class="tab-header">
+                <h1 id="category-title">Category</h1>
+                <p id="category-desc">Browse our curated collection</p>
+            </div>
+            <div class="products-grid" id="category-products">
+                <!-- Products for the selected category will be loaded here by script.js -->
+            </div>
+            <!-- Pagination will be inserted here automatically -->
+        </section>
+    </main>
+
+    <!-- Footer (same as index) -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer
+                    <span class="footer-divider">|</span>
+                    <a href="index.html#about" class="footer-link" data-tab="about">About Us</a>
+                    <span class="footer-divider">|</span>
+                    <a href="index.html#contact" class="footer-link" data-tab="contact">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Collections</h3>
+                <div class="footer-links">
+                    <a href="category.html#stitched" class="footer-link" data-tab="stitched">Stitched</a>
+                    <span class="footer-divider">|</span>
+                    <a href="category.html#unstitched" class="footer-link" data-tab="unstitched">Unstitched</a>
+                    <span class="footer-divider">|</span>
+                    <a href="category.html#gym" class="footer-link" data-tab="gym">Gym Wear</a>
+                    <span class="footer-divider">|</span>
+                    <a href="category.html#casuals" class="footer-link" data-tab="casuals">Casuals</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="footer-connect">
+                    <div class="footer-phone">
+                        <span class="phone-icon">📞</span>
+                        <span>+91 9711544523</span>
+                    </div>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/" target="_blank" class="footer-social-link">Instagram</a>
+                        <span class="footer-divider">|</span>
+                        <a href="https://facebook.com/" target="_blank" class="footer-social-link">Facebook</a>
+                        <span class="footer-divider">|</span>
+                        <a href="https://wa.me/919711544523" target="_blank" class="footer-social-link">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>&copy; 2025 Sia Creations. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Wishlist Sidebar -->
+    <div class="wishlist-sidebar" id="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3>♡ My Wishlist</h3>
+            <button class="close-wishlist" onclick="toggleWishlistSidebar()">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-sidebar-items"></div>
+        <div class="wishlist-footer">
+            <button class="checkout-btn" onclick="addAllWishlistToCart()">Add All to Cart</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-bar">
+        <a href="index.html">
+            <span class="bottom-bar-icon">🏠</span>
+            <span class="bottom-bar-label">Home</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleWishlistSidebar()">
+            <span class="bottom-bar-icon">♡</span>
+            <span class="bottom-bar-label">Wishlist</span>
+            <span class="bottom-bar-badge" id="bottom-wishlist-count">0</span>
+        </a>
+        <a href="javascript:void(0)" onclick="window.location.href='checkout-page.html'">
+            <span class="bottom-bar-icon">💳</span>
+            <span class="bottom-bar-label">Checkout</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleCart()">
+            <span class="bottom-bar-icon">🛒</span>
+            <span class="bottom-bar-label">Cart</span>
+            <span class="bottom-bar-badge" id="bottom-cart-count">0</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="extras.js"></script>
+    <script>
+        // On load, read hash and show corresponding category
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize only safe features from script.js to avoid errors
+            if (typeof loadWishlistFromStorage === 'function') loadWishlistFromStorage();
+            if (typeof setupMobileMenu === 'function') setupMobileMenu();
+            if (typeof setupCartEventListeners === 'function') setupCartEventListeners();
+            
+            // Manual hamburger setup as backup
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                
+                // Close on link click
+                navMenu.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+
+            // Initialize current page tracker
+            let categoryCurrentPage = 1;
+            
+            function showCategoryFromHash() {
+                const hash = (location.hash || '').replace('#','') || 'stitched';
+                const valid = ['stitched','unstitched','gym','daily','casuals'];
+                const category = valid.includes(hash) ? hash : 'stitched';
+
+                // Reset to page 1 when category changes
+                categoryCurrentPage = 1;
+                if (typeof window.currentPage !== 'undefined') {
+                    window.currentPage = 1;
+                }
+
+                // Update page title and header
+                document.getElementById('category-title').textContent = category.charAt(0).toUpperCase() + category.slice(1) + ' Collection';
+                document.getElementById('category-desc').textContent = 'Browse our premium ' + category + ' items';
+
+                // Ensure tab is visible
+                const allTabs = document.querySelectorAll('.tab-content');
+                allTabs.forEach(t => t.classList.remove('active'));
+                document.getElementById('category-page').classList.add('active');
+
+                // Prepare a container id that loadProducts expects
+                const expectedContainerId = `${category}-products`;
+                let expectedContainer = document.getElementById(expectedContainerId);
+                const fallbackContainer = document.getElementById('category-products');
+
+                if (!expectedContainer) {
+                    expectedContainer = document.createElement('div');
+                    expectedContainer.id = expectedContainerId;
+                    expectedContainer.className = fallbackContainer.className || 'products-grid';
+                    // Replace or append into fallback container's parent
+                    fallbackContainer.parentNode.replaceChild(expectedContainer, fallbackContainer);
+                }
+
+                // Use loadProducts from script.js to populate grid with pagination
+                if (typeof loadProducts === 'function') {
+                    window.currentCategory = category;
+                    loadProducts(category);
+                } else {
+                    // Fallback: populate directly from productData if available
+                    if (window.productData && window.productData[category]) {
+                        expectedContainer.innerHTML = window.productData[category].map(p => createProductCard(p)).join('');
+                    }
+                }
+            }
+
+            showCategoryFromHash();
+
+            // Handle hash changes
+            window.addEventListener('hashchange', showCategoryFromHash);
+            
+            // Update bottom bar counts periodically
+            setInterval(function(){
+                const bottomWishlistCount = document.getElementById('bottom-wishlist-count');
+                const bottomCartCount = document.getElementById('bottom-cart-count');
+                
+                if (bottomWishlistCount && typeof wishlist !== 'undefined') {
+                    bottomWishlistCount.textContent = wishlist.length;
+                    bottomWishlistCount.style.display = wishlist.length > 0 ? 'flex' : 'none';
+                }
+                
+                if (bottomCartCount && typeof cart !== 'undefined') {
+                    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+                    bottomCartCount.textContent = total;
+                    bottomCartCount.style.display = total > 0 ? 'flex' : 'none';
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

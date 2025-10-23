@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Item View - Sia Creations</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-footer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=ios_share" />
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><h2>Sia Creations</h2></div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="hamburger" id="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content" style="padding-bottom: 80px;">
+        <section class="tab-content active">
+            <div class="product-detail-container">
+                <div class="product-detail-content">
+                    <div class="product-detail-left">
+                        <div class="product-images-container">
+                            <div class="product-main-image">
+                                <div class="main-image" id="item-image-large">🧵</div>
+                            </div>
+                            <div class="product-thumbnails" id="item-thumbnails">
+                                <div class="thumbnail active">🧵</div>
+                                <div class="thumbnail">👗</div>
+                                <div class="thumbnail">👚</div>
+                                <div class="thumbnail">👕</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-detail-info">
+                        <div class="product-detail-header">
+                            <h1 id="item-name">Product Name</h1>
+                            <div style="margin-top:12px;">
+                                <div style="color:var(--text-light); font-size: 0.9rem; margin-bottom:4px;">Special Price</div>
+                                <div style="color:var(--soft-gold); font-weight:700; font-size: 1.8rem;">₹<span id="item-special">—</span></div>
+                            </div>
+                            <div style="margin-top:6px;">
+                                <div style="color:var(--text-light); font-size: 0.85rem;">MRP <span class="product-detail-price" id="item-price" style="text-decoration: line-through; color:var(--text-light); font-size: 1rem;">₹0</span></div>
+                            </div>
+                        </div>
+                        <div class="product-detail-description">
+                            <h3>Description</h3>
+                            <p id="item-desc">Product full description will appear here.</p>
+                        </div>
+                        <div class="product-detail-actions">
+                            <div class="quantity-selector">
+                                <label>Quantity:</label>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn-detail" onclick="itemUpdateQuantity(-1)">-</button>
+                                    <span class="quantity-display" id="item-quantity">1</span>
+                                    <button class="quantity-btn-detail" onclick="itemUpdateQuantity(1)">+</button>
+                                </div>
+                            </div>
+                            <button class="add-to-cart-detail" onclick="itemAddToCart()">Add to Cart</button>
+                            <button class="item-wishlist-btn" id="item-wishlist-btn" onclick="itemToggleWishlist()">
+                                <span id="item-wishlist-icon">♡</span> <span id="item-wishlist-text">Add to Wishlist</span>
+                            </button>
+                            <button class="detail-share-btn" onclick="shareCurrentProduct()">
+                                <span class="material-symbols-outlined">ios_share</span>
+                                Share Product
+                            </button>
+                            <button class="back-to-category" onclick="history.back()">← Back to Products</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:3rem; padding-top:2rem; border-top: 1px solid var(--beige);">
+                    <h3 style="margin-bottom: 1.5rem;">Similar Products</h3>
+                    <div class="product-scroll" id="similar-products"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html" class="footer-link">About Us</a>
+                    <a href="contact.html" class="footer-link">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Collections</h3>
+                <div class="footer-links">
+                    <a href="category.html#stitched" class="footer-link">Stitched</a>
+                    <a href="category.html#unstitched" class="footer-link">Unstitched</a>
+                    <a href="category.html#gym" class="footer-link">Gym Wear</a>
+                    <a href="category.html#casuals" class="footer-link">Casuals</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="footer-connect">
+                    <div class="footer-phone">
+                        <span class="phone-icon">📞</span>
+                        <span>+91 9711544523</span>
+                    </div>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/" target="_blank" class="footer-social-link">Instagram</a>
+                        <a href="https://facebook.com/" target="_blank" class="footer-social-link">Facebook</a>
+                        <a href="https://wa.me/919711544523" target="_blank" class="footer-social-link">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>&copy; 2025 Sia Creations. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: ₹<span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" onclick="window.location.href='checkout-page.html'">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Wishlist Sidebar -->
+    <div class="wishlist-sidebar" id="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3>♡ My Wishlist</h3>
+            <button class="close-wishlist" onclick="toggleWishlistSidebar()">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-sidebar-items"></div>
+        <div class="wishlist-footer">
+            <button class="checkout-btn" onclick="addAllWishlistToCart()">Add All to Cart</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-bar">
+        <a href="index.html">
+            <span class="bottom-bar-icon">🏠</span>
+            <span class="bottom-bar-label">Home</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleWishlistSidebar()">
+            <span class="bottom-bar-icon">♡</span>
+            <span class="bottom-bar-label">Wishlist</span>
+            <span class="bottom-bar-badge" id="bottom-wishlist-count">0</span>
+        </a>
+        <a href="javascript:void(0)" onclick="window.location.href='checkout-page.html'">
+            <span class="bottom-bar-icon">💳</span>
+            <span class="bottom-bar-label">Checkout</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleCart()">
+            <span class="bottom-bar-icon">🛒</span>
+            <span class="bottom-bar-label">Cart</span>
+            <span class="bottom-bar-badge" id="bottom-cart-count">0</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="extras.js"></script>
+    <script>
+        // Wait for productData to be available
+        function waitForProductData(callback) {
+            if (typeof productData !== 'undefined') {
+                callback();
+            } else {
+                setTimeout(() => waitForProductData(callback), 50);
+            }
+        }
+
+        // item view logic uses productData and helpers from script.js
+        let itemId = parseInt(new URLSearchParams(location.search).get('id')) || null;
+        let itemQty = 1;
+        let currentImageIndex = 0;
+        const imageEmojis = ['🧵', '👗', '👚', '👕']; // Default images
+        let currentProductData = null;
+
+        function renderItem(product) {
+            currentProductData = product;
+            document.getElementById('item-image-large').textContent = product.image;
+            document.getElementById('item-name').textContent = product.name;
+            const special = Math.round(product.price * 0.9);
+            document.getElementById('item-special').textContent = special;
+            document.getElementById('item-price').textContent = `₹${product.price}`;
+            document.getElementById('item-desc').textContent = product.description || '';
+            document.getElementById('item-quantity').textContent = itemQty;
+
+            // Use product image for all thumbnails (in real app, these would be different angles)
+            imageEmojis[0] = product.image;
+
+            // Generate thumbnails
+            const thumbnails = document.getElementById('item-thumbnails');
+            thumbnails.innerHTML = imageEmojis.map((img, i) => `
+                <div class="thumbnail${i === 0 ? ' active' : ''}" onclick="switchToImage(${i})">
+                    ${img}
+                </div>
+            `).join('');
+
+            // Load similar products with working heart buttons
+            const similar = (productData[product.category] || []).filter(p => p.id !== product.id);
+            const similarProductsContainer = document.getElementById('similar-products');
+            if (similarProductsContainer) {
+                similarProductsContainer.innerHTML = similar.map(p => {
+                    // Check if product is in wishlist
+                    const isInWishlist = wishlist.some(item => item.id === p.id);
+                    const heartIcon = isInWishlist ? '♥' : '♡';
+                    const heartClass = isInWishlist ? 'wishlist-heart-filled' : 'wishlist-heart-empty';
+                    
+                    return `
+                        <div class="product-card" data-id="${p.id}">
+                            <div class="product-image" onclick="window.location.href='item-view.html?id=${p.id}'">
+                                ${p.image}
+                                <button class="product-share-btn" onclick="event.stopPropagation(); shareProduct(${p.id})" title="Share">
+                                    <span class="material-symbols-outlined">ios_share</span>
+                                </button>
+                                <div class="product-wishlist-heart ${heartClass}" onclick="event.stopPropagation(); toggleWishlist(${p.id});" title="Add to Wishlist">
+                                    ${heartIcon}
+                                </div>
+                            </div>
+                            <div class="product-info" onclick="window.location.href='item-view.html?id=${p.id}'">
+                                <div class="product-name">${p.name}</div>
+                                <div class="product-price">₹${p.price}</div>
+                                <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${p.id})">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Update wishlist button state
+            updateWishlistButton();
+            
+            // Setup swipe on main image
+            setupImageSwipe();
+        }
+
+        // Function to update heart icons in similar products section
+        function updateSimilarProductHearts() {
+            const similarProducts = document.querySelectorAll('#similar-products .product-card');
+            similarProducts.forEach(card => {
+                const productId = parseInt(card.getAttribute('data-id'));
+                const heartElement = card.querySelector('.product-wishlist-heart');
+                
+                if (heartElement) {
+                    const isInWishlist = wishlist.some(item => item.id === productId);
+                    heartElement.textContent = isInWishlist ? '♥' : '♡';
+                    heartElement.className = isInWishlist ? 'product-wishlist-heart wishlist-heart-filled' : 'product-wishlist-heart wishlist-heart-empty';
+                }
+            });
+        }
+
+        // Make updateSimilarProductHearts available globally
+        window.updateSimilarProductHearts = updateSimilarProductHearts;
+
+        function switchToImage(index) {
+            currentImageIndex = index;
+            const mainImage = document.getElementById('item-image-large');
+            mainImage.textContent = imageEmojis[index];
+            
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % imageEmojis.length;
+            switchToImage(currentImageIndex);
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + imageEmojis.length) % imageEmojis.length;
+            switchToImage(currentImageIndex);
+        }
+
+        function setupImageSwipe() {
+            const mainImageContainer = document.querySelector('.product-main-image');
+            if (!mainImageContainer) return;
+
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            mainImageContainer.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            mainImageContainer.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleImageSwipe();
+            }, { passive: true });
+
+            function handleImageSwipe() {
+                const swipeThreshold = 50;
+                
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // Swiped left, go to next image
+                    nextImage();
+                }
+                
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    // Swiped right, go to previous image
+                    prevImage();
+                }
+            }
+
+            // Also add click handlers for left/right areas
+            mainImageContainer.addEventListener('click', function(e) {
+                const rect = mainImageContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                
+                if (clickX < width / 3) {
+                    prevImage();
+                } else if (clickX > (width * 2) / 3) {
+                    nextImage();
+                }
+            });
+        }
+
+        function switchMainImage(index, emoji) {
+            switchToImage(index);
+        }
+
+        function itemUpdateQuantity(delta) { 
+            itemQty = Math.max(1, itemQty + delta); 
+            document.getElementById('item-quantity').textContent = itemQty; 
+        }
+
+        function toggleCart() {
+            const cart = document.querySelector('.cart-sidebar');
+            if (cart) cart.classList.toggle('active');
+        }
+
+        function toggleWishlistSidebar() {
+            const wishlist = document.querySelector('.wishlist-sidebar');
+            if (wishlist) wishlist.classList.toggle('active');
+        }
+        
+        function itemAddToCart() {
+            if (!itemId) return;
+            let prod = null;
+            for (const cat in productData) { 
+                prod = productData[cat].find(p => p.id === itemId); 
+                if (prod) break; 
+            }
+            if (!prod) return;
+            
+            // Check if cart exists, if not initialize it
+            if (typeof cart === 'undefined') {
+                window.cart = [];
+            }
+            
+            // Add to cart with quantity
+            const existingItem = cart.find(item => item.id === prod.id);
+            if (existingItem) {
+                existingItem.quantity += itemQty;
+            } else {
+                cart.push({
+                    ...prod,
+                    quantity: itemQty
+                });
+            }
+            
+            updateCartCount();
+            updateCartDisplay();
+            
+            // Show feedback instead of alert
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--soft-gold);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+                font-weight: 600;
+            `;
+            feedback.textContent = `Added ${itemQty} item(s) to cart!`;
+            
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (document.body.contains(feedback)) {
+                        document.body.removeChild(feedback);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
+        function itemToggleWishlist() {
+            if (!currentProductData) return;
+            
+            // Ensure wishlist is initialized
+            if (typeof wishlist === 'undefined') {
+                window.wishlist = [];
+            }
+            
+            const existingIndex = wishlist.findIndex(item => item.id === currentProductData.id);
+            
+            if (existingIndex > -1) {
+                // Remove from wishlist
+                wishlist.splice(existingIndex, 1);
+                if (typeof showWishlistFeedback === 'function') {
+                    showWishlistFeedback('Removed from wishlist', 'removed');
+                }
+            } else {
+                // Add to wishlist
+                wishlist.push(currentProductData);
+                if (typeof showWishlistFeedback === 'function') {
+                    showWishlistFeedback('Added to wishlist ♥', 'added');
+                }
+            }
+            
+            // Save to storage
+            if (typeof saveWishlistToStorage === 'function') {
+                saveWishlistToStorage();
+            }
+            
+            // Update counts and UI
+            if (typeof updateWishlistCount === 'function') {
+                updateWishlistCount();
+            }
+            updateWishlistButton();
+            updateBottomBarCounts();
+        }
+
+        function updateWishlistButton() {
+            if (!currentProductData) return;
+            
+            const btn = document.getElementById('item-wishlist-btn');
+            const icon = document.getElementById('item-wishlist-icon');
+            const text = document.getElementById('item-wishlist-text');
+            
+            if (!btn || !icon || !text) return;
+            
+            // Ensure wishlist is initialized
+            if (typeof wishlist === 'undefined') {
+                window.wishlist = [];
+            }
+            
+            const isInWishlist = wishlist.some(item => item.id === currentProductData.id);
+            
+            if (isInWishlist) {
+                btn.classList.add('in-wishlist');
+                icon.textContent = '♥';
+                text.textContent = 'In Wishlist';
+            } else {
+                btn.classList.remove('in-wishlist');
+                icon.textContent = '♡';
+                text.textContent = 'Add to Wishlist';
+            }
+        }
+
+        function shareCurrentProduct() {
+            if (itemId) {
+                shareProduct(itemId);
+            }
+        }
+        
+        function updateBottomBarCounts() {
+            const bottomWishlistCount = document.getElementById('bottom-wishlist-count');
+            const bottomCartCount = document.getElementById('bottom-cart-count');
+            
+            if (bottomWishlistCount && typeof wishlist !== 'undefined') {
+                bottomWishlistCount.textContent = wishlist.length;
+                bottomWishlistCount.style.display = wishlist.length > 0 ? 'flex' : 'none';
+            }
+            
+            if (bottomCartCount && typeof cart !== 'undefined') {
+                const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+                bottomCartCount.textContent = total;
+                bottomCartCount.style.display = total > 0 ? 'flex' : 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!itemId) {
+                // try hash style #id
+                itemId = parseInt((location.hash || '').replace('#','')) || null;
+            }
+            
+            // Wait for productData to be loaded
+            waitForProductData(function() {
+                if (itemId) {
+                    let prod = null;
+                    for (const cat in productData) { 
+                        prod = productData[cat].find(p => p.id === itemId); 
+                        if (prod) break; 
+                    }
+                    if (prod) renderItem(prod);
+                }
+            });
+            
+            // Load cart and wishlist
+            if (typeof loadCartFromStorage === 'function') loadCartFromStorage();
+            if (typeof loadWishlistFromStorage === 'function') loadWishlistFromStorage();
+            
+            // Initialize mobile menu FIRST
+            if (typeof setupMobileMenu === 'function') {
+                setupMobileMenu();
+            }
+            
+            // Backup hamburger setup with proper event handling
+            setTimeout(function() {
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('nav-menu');
+                
+                if (hamburger && navMenu) {
+                    // Remove existing event listeners by cloning
+                    const newHamburger = hamburger.cloneNode(true);
+                    hamburger.parentNode.replaceChild(newHamburger, hamburger);
+                    
+                    newHamburger.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        newHamburger.classList.toggle('active');
+                        navMenu.classList.toggle('active');
+                    });
+                    
+                    // Close on link click
+                    navMenu.querySelectorAll('.nav-link').forEach(link => {
+                        link.addEventListener('click', () => {
+                            newHamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                        });
+                    });
+                    
+                    // Close when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!navMenu.contains(e.target) && !newHamburger.contains(e.target)) {
+                            newHamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                        }
+                    });
+                }
+            }, 100);
+
+            // Update bottom bar counts periodically
+            setInterval(updateBottomBarCounts, 500);
+            updateBottomBarCounts();
+        });
+    </script>
+</body>
+</html>

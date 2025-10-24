@@ -6,6 +6,14 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
+// Import Routes at the top
+import productRoutes from './routes/products.js';
+import categoryRoutes from './routes/categories.js';
+import orderRoutes from './routes/orders.js';
+import carouselRoutes from './routes/carousel.js';
+import statsRoutes from './routes/stats.js';
+import uploadRoutes from './routes/upload.js';
+
 dotenv.config();
 
 const app = express();
@@ -67,14 +75,6 @@ if (!MONGODB_URI) {
 }
 
 console.log('===================');
-
-// Import Routes
-import productRoutes from './routes/products.js';
-import categoryRoutes from './routes/categories.js';
-import orderRoutes from './routes/orders.js';
-import carouselRoutes from './routes/carousel.js';
-import statsRoutes from './routes/stats.js';
-import uploadRoutes from './routes/upload.js';
 
 // API Routes
 app.use('/api/products', productRoutes);      // Product endpoints
@@ -168,3 +168,6 @@ async function testImageKitConnection() {
         console.log('📝 Please check IMAGEKIT credentials in .env file');
     }
 }
+
+// Export for Vercel serverless
+export default app;

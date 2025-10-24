@@ -4,9 +4,8 @@
 // ========================================
 
 // API Configuration - Production API URL
-// Use local server during development
-const API_URL = 'http://localhost:3000/api';
-// For production, use: 'https://siacreations.vercel.app/api'
+const API_URL = 'https://siacreations.vercel.app/api';
+// For local development, use: 'http://localhost:3000/api'
 let apiAvailable = true;
 
 // Pagination state

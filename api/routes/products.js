@@ -54,13 +54,10 @@ router.get('/', async (req, res) => {
         });
         
     } catch (error) {
-        console.error('Error in GET /api/products:', error);
         res.status(500).json({
             success: false,
             message: 'Error fetching products',
-            error: error.message,
-            errorName: error.name,
-            mongooseState: error.message.includes('buffering') ? 'MongoDB not connected - check environment variables and network access' : undefined
+            error: error.message
         });
     }
 });

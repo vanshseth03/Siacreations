@@ -38,17 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const isConnected = await checkApiConnection();
     
     if (!isConnected) {
-        showNotification('⚠️ API Server not running! Start server: cd api && npm start', 'error');
-        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.error('⚠️  API SERVER NOT RUNNING');
-        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.error('');
-        console.error('To start the server, run these commands:');
-        console.error('  1. cd api');
-        console.error('  2. npm start');
-        console.error('');
-        console.error('Expected server URL: https://siacreations.vercel.app');
-        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        showNotification('⚠️ API Server not running!', 'error');
+        console.error('API SERVER NOT RUNNING');
         
         // Show persistent warning banner
         showApiWarningBanner();

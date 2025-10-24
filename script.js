@@ -3,8 +3,6 @@
 const API_URL = 'https://siacreations.vercel.app/api';
 // For local development, use: 'http://localhost:3000/api'
 
-console.log('🚀 Script loaded! API URL:', API_URL);
-
 // Global Variables
 let currentSlideIndex = 0;
 let cart = [];
@@ -32,12 +30,9 @@ window.carouselSlides = carouselSlides;
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log('📄 DOM Content Loaded - Starting initialization...');
     // Load data from API first
     await loadDataFromAPI();
-    console.log('📊 Data loaded, initializing app...');
     initializeApp();
-    console.log('✅ App initialized!');
 });
 
 // Load all data from API
@@ -51,16 +46,10 @@ async function loadDataFromAPI() {
                 allProducts = productsData.products;
                 window.allProducts = allProducts; // Update window reference
                 
-                console.log('📅 Product order from API (sorted by newest first):');
-                allProducts.forEach((p, idx) => {
-                    console.log(`  ${idx + 1}. "${p.name}" - Created: ${p.createdAt || 'N/A'}`);
-                });
-                
                 // Group products by category (preserving newest-first order)
                 productData = {};
                 allProducts.forEach(product => {
                     const categoryName = product.category?.name || product.category || 'uncategorized';
-                    console.log(`  📦 Product "${product.name}" → Category: "${categoryName}"`);
                     if (!productData[categoryName]) {
                         productData[categoryName] = [];
                     }
@@ -80,21 +69,7 @@ async function loadDataFromAPI() {
                     });
                 });
                 window.productData = productData; // Update window reference
-                
-                console.log('✅ Products loaded:', allProducts.length);
-                console.log('📦 Product categories:', Object.keys(productData));
-                console.log('📊 Products per category:', Object.entries(productData).map(([cat, prods]) => `${cat}: ${prods.length}`));
-                
-                // Log product order within each category to verify newest-first
-                Object.entries(productData).forEach(([catName, products]) => {
-                    console.log(`\n📂 Category "${catName}" - Products order (newest first):`);
-                    products.forEach((p, idx) => {
-                        console.log(`  ${idx + 1}. "${p.name}" - Created: ${p.createdAt || 'N/A'}`);
-                    });
-                });
             }
-        } else {
-            console.error('❌ Failed to load products:', productsResponse.status);
         }
 
         // Load categories
@@ -104,11 +79,7 @@ async function loadDataFromAPI() {
             if (categoriesData.success) {
                 categories = categoriesData.categories;
                 window.categories = categories; // Update window reference
-                console.log('✅ Categories loaded:', categories.length);
-                console.log('📁 Categories:', categories.map(c => `${c.name} (showOnMainPage: ${c.showOnMainPage})`));
             }
-        } else {
-            console.error('❌ Failed to load categories:', categoriesResponse.status);
         }
 
         // Load carousel slides
@@ -117,45 +88,12 @@ async function loadDataFromAPI() {
             const carouselData = await carouselResponse.json();
             if (carouselData.success) {
                 carouselSlides = carouselData.slides.sort((a, b) => a.order - b.order);
-                console.log('✅ Carousel slides loaded:', carouselSlides.length);
             }
-        } else {
-            console.error('❌ Failed to load carousel:', carouselResponse.status);
         }
     } catch (error) {
-        console.error('❌ Error loading data from API:', error);
-        
-        // Check if error is due to ad blocker or connection issues
-        if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
-            console.warn('⚠️ API request failed - This could be due to:');
-            console.warn('   1. Network connectivity issues');
-            console.warn('   2. API server is down or not responding');
-            console.warn('   3. CORS configuration issues');
-            if (API_URL.includes('localhost')) {
-                console.warn('   4. Ad blocker blocking localhost requests (disable ad blocker for localhost)');
-                console.warn('   5. Local API server not running (cd api && npm start)');
-            }
-            console.warn('');
-            console.warn('💡 Please ensure:');
-            console.warn('   - You have an active internet connection');
-            console.warn('   - The API server is running and accessible');
-            
-            // Show development notice banner only for localhost
-            const devNotice = document.getElementById('dev-notice');
-            if (devNotice && API_URL.includes('localhost')) {
-                devNotice.style.display = 'block';
-            } else if (devNotice) {
-                // Show production error message
-                devNotice.innerHTML = `
-                    <strong>⚠️ Connection Error:</strong> Unable to load data from server. Please check your internet connection. 
-                    <button onclick="location.reload()" style="margin-left: 15px; background: white; color: #c92a2a; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-weight: 600;">Retry</button>
-                `;
-                devNotice.style.display = 'block';
-            }
-        }
+        console.error('Error loading data from API:', error);
         
         // Initialize empty data structures
-        console.log('⚠️ No data loaded - website requires API connection');
         productData = {};
         window.productData = productData;
         categories = [];
@@ -526,11 +464,8 @@ function loadNewArrivals() {
 function generateCategoryTabs() {
     const container = document.getElementById('category-tabs-container');
     if (!container) {
-        console.warn('⚠️ Category tabs container not found');
         return;
     }
-    
-    console.log('🏗️ Generating category tabs for', categories.length, 'categories');
     
     // Generate tab sections for all categories
     const categoryTabsHTML = categories
@@ -553,30 +488,22 @@ function generateCategoryTabs() {
         }).join('');
     
     container.innerHTML = categoryTabsHTML;
-    console.log('✅ Category tabs generated');
 }
 
 // Load categories from API and render them
 function loadCategoriesFromAPI() {
     const categoryButtonsContainer = document.getElementById('category-buttons');
     if (!categoryButtonsContainer) {
-        console.warn('⚠️ Category buttons container not found');
         return;
     }
-    
-    console.log('📂 Loading categories for main page...');
     
     // Filter categories that should show on main page and sort by display order
     const mainPageCategories = categories
         .filter(cat => cat.showOnMainPage)
         .sort((a, b) => a.displayOrder - b.displayOrder);
     
-    console.log('📋 Categories to show on main page:', mainPageCategories.length);
-    console.log('   Categories:', mainPageCategories.map(c => c.name));
-    
     if (mainPageCategories.length === 0) {
         categoryButtonsContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #999;">No categories available</p>';
-        console.warn('⚠️ No categories have showOnMainPage enabled');
         return;
     }
     
@@ -602,34 +529,25 @@ function loadCategoriesFromAPI() {
             </a>
         `;
     }).join('');
-    
-    console.log('✅ Category buttons rendered');
 }
 
 // Load product sections dynamically based on categories
 function loadProductSectionsFromAPI() {
     const productSectionsContainer = document.getElementById('product-sections');
     if (!productSectionsContainer) {
-        console.warn('⚠️ Product sections container not found');
         return;
     }
-    
-    console.log('📦 Loading product sections...');
     
     // Filter categories that should show on main page and have products
     const mainPageCategories = categories
         .filter(cat => {
             const hasProducts = productData[cat.name] && productData[cat.name].length > 0;
-            console.log(`  - ${cat.name}: showOnMainPage=${cat.showOnMainPage}, hasProducts=${hasProducts}`);
             return cat.showOnMainPage && hasProducts;
         })
         .sort((a, b) => a.displayOrder - b.displayOrder);
     
-    console.log('📋 Product sections to show:', mainPageCategories.length);
-    
     if (mainPageCategories.length === 0) {
         productSectionsContainer.innerHTML = '<p style="text-align: center; padding: 3rem; color: #999;">No products available yet</p>';
-        console.warn('⚠️ No categories with products to show on main page');
         return;
     }
     
@@ -657,8 +575,6 @@ function loadProductSectionsFromAPI() {
         const previewId = `${categorySlug}-preview`;
         loadProductPreview(category.name, previewId);
     });
-    
-    console.log('✅ Product sections rendered');
 }
 
 // Load footer category links

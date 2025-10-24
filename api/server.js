@@ -31,16 +31,34 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // MongoDB Connection
 // You need to add MONGODB_URI in .env file
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch((err) => {
-    console.error('❌ MongoDB connection error:', err.message);
-    console.log('⚠️  Server will start but database features will not work.');
-    console.log('📝 Please update MONGODB_URI in .env file with your MongoDB Atlas connection string.');
-});
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+    console.error('❌ MONGODB_URI is not defined in environment variables!');
+    console.log('📝 Please add MONGODB_URI to your Vercel environment variables.');
+} else {
+    console.log('📝 MongoDB URI found, attempting connection...');
+    console.log('🔗 Connecting to:', MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@')); // Hide password in logs
+    
+    mongoose.connect(MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+        socketTimeoutMS: 45000, // Socket timeout
+    })
+    .then(() => {
+        console.log('✅ Connected to MongoDB successfully');
+        console.log('📊 Database:', mongoose.connection.db.databaseName);
+    })
+    .catch((err) => {
+        console.error('❌ MongoDB connection error:', err.message);
+        console.log('⚠️  Server will start but database features will not work.');
+        console.log('📝 Please verify:');
+        console.log('   1. MongoDB URI is correct in Vercel environment variables');
+        console.log('   2. MongoDB Atlas Network Access allows 0.0.0.0/0');
+        console.log('   3. Database user credentials are correct');
+    });
+}
 
 // Import Routes
 import productRoutes from './routes/products.js';

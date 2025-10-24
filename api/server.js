@@ -33,9 +33,14 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 // You need to add MONGODB_URI in .env file
 const MONGODB_URI = process.env.MONGODB_URI;
 
+console.log('=== MONGODB SETUP ===');
+console.log('URI configured:', !!MONGODB_URI);
+console.log('Environment:', process.env.NODE_ENV);
+
 if (!MONGODB_URI) {
     console.error('❌ MONGODB_URI is not defined in environment variables!');
     console.log('📝 Please add MONGODB_URI to your Vercel environment variables.');
+    console.log('⚠️  Server will start but database features will not work.');
 } else {
     console.log('📝 MongoDB URI found, attempting connection...');
     console.log('🔗 Connecting to:', MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@')); // Hide password in logs
@@ -52,6 +57,7 @@ if (!MONGODB_URI) {
     })
     .catch((err) => {
         console.error('❌ MongoDB connection error:', err.message);
+        console.error('Full error:', err);
         console.log('⚠️  Server will start but database features will not work.');
         console.log('📝 Please verify:');
         console.log('   1. MongoDB URI is correct in Vercel environment variables');
@@ -59,6 +65,8 @@ if (!MONGODB_URI) {
         console.log('   3. Database user credentials are correct');
     });
 }
+
+console.log('===================');
 
 // Import Routes
 import productRoutes from './routes/products.js';
@@ -110,11 +118,18 @@ app.use((req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+    console.error('=== ERROR HANDLER ===');
     console.error('Error:', err);
+    console.error('Stack:', err.stack);
+    console.error('MongoDB State:', mongoose.connection.readyState);
+    console.error('==================');
+    
     res.status(500).json({
         success: false,
         message: 'Internal server error',
-        error: err.message
+        error: err.message,
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+        mongoStatus: mongoose.connection.readyState
     });
 });
 

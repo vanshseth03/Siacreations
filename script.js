@@ -1,5 +1,5 @@
 // API Configuration
-// Production API URL
+// Production API URL (routes directly to API, no /api prefix needed)
 const API_URL = 'https://siacreations.vercel.app/api';
 // For local development, use: 'http://localhost:3000/api'
 

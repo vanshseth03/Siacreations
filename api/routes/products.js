@@ -8,6 +8,15 @@ const router = express.Router();
 // GET /api/products - Get all products (with optional filters)
 router.get('/', async (req, res) => {
     try {
+        // Check if MongoDB is connected
+        if (!Product.db || Product.db.readyState !== 1) {
+            return res.status(503).json({
+                success: false,
+                message: 'Database connection not available',
+                error: 'MongoDB is not connected. Please check environment variables and network access.'
+            });
+        }
+        
         const { category, status, newArrival, homepage, visible, page, limit } = req.query;
         
         // Build query filters
@@ -25,14 +34,15 @@ router.get('/', async (req, res) => {
         const skip = (pageNum - 1) * limitNum;
         
         // Get total count for pagination
-        const total = await Product.countDocuments(query);
+        const total = await Product.countDocuments(query).maxTimeMS(30000);
         
         // Get products from database with pagination
         const products = await Product.find(query)
             .populate('category', 'name description') // Populate category with name and description
             .sort({ createdAt: -1 })
             .skip(skip)
-            .limit(limitNum);
+            .limit(limitNum)
+            .maxTimeMS(30000);
         
         res.json({
             success: true,

@@ -78,10 +78,25 @@ app.use('/api/upload', uploadRoutes);          // Image upload endpoints
 
 // Root endpoint - API health check
 app.get('/', (req, res) => {
+    const mongoStatus = mongoose.connection.readyState;
+    const statusMap = {
+        0: 'disconnected',
+        1: 'connected',
+        2: 'connecting',
+        3: 'disconnecting'
+    };
+    
     res.json({
         message: 'Welcome to Sia Creations API',
         status: 'running',
-        version: '1.0.0'
+        version: '1.0.0',
+        mongodb: {
+            status: statusMap[mongoStatus],
+            readyState: mongoStatus,
+            uri_configured: !!process.env.MONGODB_URI,
+            database: mongoose.connection.db ? mongoose.connection.db.databaseName : 'not connected'
+        },
+        environment: process.env.NODE_ENV || 'development'
     });
 });
 

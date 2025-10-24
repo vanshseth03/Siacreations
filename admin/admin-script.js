@@ -3,9 +3,10 @@
 // Premium E-Commerce Admin Interface
 // ========================================
 
-// API Configuration - Use your local IP for phone/network access
-// Change this to your computer's IP address (found using ipconfig)
-const API_URL = 'http://192.168.29.237:3000/api';
+// API Configuration - Production API URL
+// Use local server during development
+const API_URL = 'http://localhost:3000/api';
+// For production, use: 'https://siacreations.vercel.app/api'
 let apiAvailable = true;
 
 // Pagination state
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('  1. cd api');
         console.error('  2. npm start');
         console.error('');
-        console.error('Expected server URL: http://192.168.29.237:3000');
+        console.error('Expected server URL: https://siacreations.vercel.app');
         console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         
         // Show persistent warning banner
@@ -1682,9 +1683,5 @@ document.head.appendChild(style);
 // ========================================
 
 // You can uncomment this to load sample data
-// loadSampleData();
-
-function loadSampleData() {
-    console.log('Admin panel loaded successfully!');
-    showNotification('Welcome to Sia Creation Admin Panel', 'success');
-}
+// Initialize complete
+showNotification('Welcome to Sia Creation Admin Panel', 'success');

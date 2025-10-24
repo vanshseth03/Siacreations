@@ -37,6 +37,13 @@
         </div>
     </nav>
 
+    <!-- Development Notice Banner (hidden by default, shown if API is blocked) -->
+    <div id="dev-notice" style="display: none; background: #ff6b6b; border-bottom: 2px solid #c92a2a; padding: 12px 20px; text-align: center; font-size: 14px; color: white;">
+        <strong>⚠️ API Connection Failed:</strong> Ad blocker is blocking the API or server is not running. 
+        <span style="font-size: 12px; opacity: 0.9;">Disable ad blocker or make sure API server is running.</span>
+        <button onclick="location.reload()" style="margin-left: 15px; background: white; color: #c92a2a; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-weight: 600;">Retry</button>
+    </div>
+
     <!-- Cart Sidebar -->
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="cart-header">
@@ -58,35 +65,14 @@
     <main class="main-content" style="padding-bottom: 80px;">
         <!-- Home Tab -->
         <section id="home" class="tab-content active">
-            <!-- Hero Carousel -->
+            <!-- Hero Carousel - Loaded from API -->
             <div class="hero-carousel">
-                <div class="carousel-container">
+                <div class="carousel-slides">
+                    <!-- Carousel slides will be loaded from API -->
                     <div class="carousel-slide active">
-                        <div class="slide-content">
-                            <h1>Premium Stitched Collection</h1>
-                            <p>Elegantly crafted outfits for the modern woman</p>
-                            <button class="cta-btn" onclick="switchTab('stitched')">Shop Now</button>
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="slide-content">
-                            <h1>Unstitched Fabric Collection</h1>
-                            <p>Premium fabrics for your custom designs</p>
-                            <button class="cta-btn" onclick="switchTab('unstitched')">Explore Fabrics</button>
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="slide-content">
-                            <h1>Gym Wear Collection</h1>
-                            <p>Comfortable and stylish activewear</p>
-                            <button class="cta-btn" onclick="switchTab('gym')">Get Active</button>
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="slide-content">
-                            <h1>Daily & Casual Wear</h1>
-                            <p>Everyday comfort meets style</p>
-                            <button class="cta-btn" onclick="switchTab('daily')">Shop Daily</button>
+                        <div class="hero-content">
+                            <h1>Welcome to Sia Creations</h1>
+                            <p>Loading latest collections...</p>
                         </div>
                     </div>
                 </div>
@@ -95,14 +81,12 @@
                     <button class="carousel-btn next" onclick="nextSlide()">&gt;</button>
                 </div>
                 <div class="carousel-dots">
-                    <span class="dot active" onclick="currentSlide(1)"></span>
-                    <span class="dot" onclick="currentSlide(2)"></span>
-                    <span class="dot" onclick="currentSlide(3)"></span>
-                    <span class="dot" onclick="currentSlide(4)"></span>
+                    <!-- Dots will be generated dynamically -->
+                    <span class="dot active" onclick="goToSlide(0)"></span>
                 </div>
             </div>
 
-            <!-- New Arrivals Section -->
+            <!-- New Arrivals Section - Loaded from API -->
             <div class="new-arrivals-section">
                 <div class="arrivals-container">
                     <div class="arrivals-header">
@@ -111,74 +95,8 @@
                         <p class="arrivals-subtitle">Fresh styles, just for you</p>
                     </div>
                     
-                    <div class="arrivals-showcase">
-                        <div class="arrival-card" data-aos="fade-up" data-delay="0">
-                            <div class="arrival-badge">NEW</div>
-                            <div class="arrival-image">
-                                <div class="arrival-img-inner">👗</div>
-                                <div class="arrival-glow"></div>
-                            </div>
-                            <div class="arrival-info">
-                                <h3>Elegant Evening Dress</h3>
-                                <p class="arrival-desc">Sophisticated charm for special occasions</p>
-                                <div class="arrival-price">₹3,499</div>
-                                <button class="arrival-quick-view" onclick="viewProduct('stitched', 0)">
-                                    <span>Quick View</span>
-                                    <span class="arrow">→</span>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="arrival-card" data-aos="fade-up" data-delay="100">
-                            <div class="arrival-badge">HOT</div>
-                            <div class="arrival-image">
-                                <div class="arrival-img-inner">🧵</div>
-                                <div class="arrival-glow"></div>
-                            </div>
-                            <div class="arrival-info">
-                                <h3>Premium Silk Fabric</h3>
-                                <p class="arrival-desc">Luxurious texture, endless possibilities</p>
-                                <div class="arrival-price">₹1,899</div>
-                                <button class="arrival-quick-view" onclick="viewProduct('unstitched', 0)">
-                                    <span>Quick View</span>
-                                    <span class="arrow">→</span>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="arrival-card" data-aos="fade-up" data-delay="200">
-                            <div class="arrival-badge">TRENDING</div>
-                            <div class="arrival-image">
-                                <div class="arrival-img-inner">🏃‍♀️</div>
-                                <div class="arrival-glow"></div>
-                            </div>
-                            <div class="arrival-info">
-                                <h3>Active Sport Set</h3>
-                                <p class="arrival-desc">Performance meets style</p>
-                                <div class="arrival-price">₹2,299</div>
-                                <button class="arrival-quick-view" onclick="viewProduct('gym', 0)">
-                                    <span>Quick View</span>
-                                    <span class="arrow">→</span>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="arrival-card" data-aos="fade-up" data-delay="300">
-                            <div class="arrival-badge">POPULAR</div>
-                            <div class="arrival-image">
-                                <div class="arrival-img-inner">👕</div>
-                                <div class="arrival-glow"></div>
-                            </div>
-                            <div class="arrival-info">
-                                <h3>Casual Comfort Wear</h3>
-                                <p class="arrival-desc">Effortless style for everyday</p>
-                                <div class="arrival-price">₹1,599</div>
-                                <button class="arrival-quick-view" onclick="viewProduct('casuals', 0)">
-                                    <span>Quick View</span>
-                                    <span class="arrow">→</span>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="arrivals-showcase" id="new-arrivals-showcase">
+                        <!-- New arrivals will be loaded from API -->
                     </div>
                     
                     <div class="arrivals-floating-elements">
@@ -190,131 +108,26 @@
                 </div>
             </div>
 
-            <!-- Shop by Category Section -->
+            <!-- Shop by Category Section - Loaded from API -->
             <div class="category-section">
                 <div class="category-container">
                     <h2>Shop by Category</h2>
-                    <div class="category-buttons">
-                        <a class="category-btn" href="category.html#stitched">
-                            <span class="category-icon">👗</span>
-                            <span class="category-name">Stitched Collection</span>
-                            <span class="category-desc">Ready-to-wear outfits</span>
-                        </a>
-                        <button class="category-btn" onclick="switchTab('unstitched')">
-                            <span class="category-icon">🧵</span>
-                            <span class="category-name">Unstitched Fabric</span>
-                            <span class="category-desc">Premium fabrics</span>
-                        </button>
-                        <a class="category-btn" href="category.html#unstitched">
-                            <span class="category-icon">🧵</span>
-                            <span class="category-name">Unstitched Fabric</span>
-                            <span class="category-desc">Premium fabrics</span>
-                        </a>
-                        <a class="category-btn" href="category.html#gym">
-                            <span class="category-icon">🏃‍♀️</span>
-                            <span class="category-name">Gym Wear</span>
-                            <span class="category-desc">Activewear collection</span>
-                        </a>
-                        <a class="category-btn" href="category.html#daily">
-                            <span class="category-icon">👔</span>
-                            <span class="category-name">Daily Wear</span>
-                            <span class="category-desc">Everyday comfort</span>
-                        </a>
-                        <a class="category-btn" href="category.html#casuals">
-                            <span class="category-icon">👕</span>
-                            <span class="category-name">Casuals</span>
-                            <span class="category-desc">Relaxed style</span>
-                        </a>
+                    <div class="category-buttons" id="category-buttons">
+                        <!-- Categories will be loaded from API -->
                     </div>
                 </div>
             </div>
 
-            <!-- Product Sections -->
-            <div class="product-sections">
-                <div class="section-header">
-                    <h2>Unstitched Collection</h2>
-                    <a class="view-all-btn" href="category.html#unstitched">View All</a>
-                </div>
-                <div class="product-scroll" id="unstitched-preview">
-                    <!-- Products will be loaded here -->
-                </div>
-
-                <div class="section-header">
-                    <h2>Gym Collection</h2>
-                    <a class="view-all-btn" href="category.html#gym">View All</a>
-                </div>
-                <div class="product-scroll" id="gym-preview">
-                    <!-- Products will be loaded here -->
-                </div>
-
-                <div class="section-header">
-                    <h2>Stitched Collection</h2>
-                    <a class="view-all-btn" href="category.html#stitched">View All</a>
-                </div>
-                <div class="product-scroll" id="stitched-preview">
-                    <!-- Products will be loaded here -->
-                </div>
-
-                <div class="section-header">
-                    <h2>Casuals</h2>
-                    <a class="view-all-btn" href="category.html#casuals">View All</a>
-                </div>
-                <div class="product-scroll" id="casuals-preview">
-                    <!-- Products will be loaded here -->
-                </div>
+            <!-- Product Sections - Loaded from API -->
+            <div class="product-sections" id="product-sections">
+                <!-- Product sections will be dynamically generated based on categories -->
             </div>
         </section>
 
-        <!-- Collection Tabs -->
-        <section id="stitched" class="tab-content">
-            <div class="tab-header">
-                <h1>Stitched Collection</h1>
-                <p>Elegantly crafted ready-to-wear outfits</p>
-            </div>
-            <div class="products-grid" id="stitched-products">
-                <!-- Products will be loaded here -->
-            </div>
-        </section>
-
-        <section id="unstitched" class="tab-content">
-            <div class="tab-header">
-                <h1>Unstitched Fabric</h1>
-                <p>Premium fabrics for your custom designs</p>
-            </div>
-            <div class="products-grid" id="unstitched-products">
-                <!-- Products will be loaded here -->
-            </div>
-        </section>
-
-        <section id="gym" class="tab-content">
-            <div class="tab-header">
-                <h1>Gym Wear</h1>
-                <p>Comfortable and stylish activewear</p>
-            </div>
-            <div class="products-grid" id="gym-products">
-                <!-- Products will be loaded here -->
-            </div>
-        </section>
-
-        <section id="daily" class="tab-content">
-            <div class="tab-header">
-                <h1>Daily Wear</h1>
-                <p>Everyday comfort meets elegance</p>
-            </div>
-            <div class="products-grid" id="daily-products">
-                <!-- Products will be loaded here -->
-            </div>
-        </section>
-
-        <section id="casuals" class="tab-content">
-            <div class="tab-header">
-                <h1>Casuals</h1>
-                <p>Relaxed style for casual moments</p>
-            </div>
-            <div class="products-grid" id="casuals-products">
-                <!-- Products will be loaded here -->
-            </div>
-        </section>
+        <!-- Collection Tabs - Dynamically Generated from API -->
+        <div id="category-tabs-container">
+            <!-- Category tabs will be generated dynamically -->
+        </div>
 
         <!-- Product Detail Page -->
         <section id="product-detail" class="tab-content">
@@ -477,14 +290,8 @@
             
             <div class="footer-section">
                 <h3>Collections</h3>
-                <div class="footer-links">
-                    <a href="#stitched" class="footer-link" data-tab="stitched">Stitched</a>
-                    <span class="footer-divider">|</span>
-                    <a href="#unstitched" class="footer-link" data-tab="unstitched">Unstitched</a>
-                    <span class="footer-divider">|</span>
-                    <a href="#gym" class="footer-link" data-tab="gym">Gym Wear</a>
-                    <span class="footer-divider">|</span>
-                    <a href="#casuals" class="footer-link" data-tab="casuals">Casuals</a>
+                <div class="footer-links" id="footer-category-links">
+                    <!-- Category links will be loaded from API -->
                 </div>
             </div>
             

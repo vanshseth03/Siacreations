@@ -17,9 +17,10 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     
-    // Category - can be either category ID (ObjectId) or string
+    // Category - reference to Category model
     category: {
-        type: mongoose.Schema.Types.Mixed,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
         required: true
     },
     

@@ -8,7 +8,7 @@ const router = express.Router();
 // GET /api/products - Get all products (with optional filters)
 router.get('/', async (req, res) => {
     try {
-        const { category, status, newArrival, homepage, page, limit } = req.query;
+        const { category, status, newArrival, homepage, visible, page, limit } = req.query;
         
         // Build query filters
         let query = {};
@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
         if (status) query.status = status;
         if (newArrival === 'true') query.isNewArrival = true;
         if (homepage === 'true') query.showOnHomepage = true;
+        if (visible === 'true') query.isVisible = true; // Filter for visible products only
         
         // Pagination
         const pageNum = parseInt(page) || 1;
@@ -28,6 +29,7 @@ router.get('/', async (req, res) => {
         
         // Get products from database with pagination
         const products = await Product.find(query)
+            .populate('category', 'name description') // Populate category with name and description
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limitNum);

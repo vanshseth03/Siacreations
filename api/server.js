@@ -85,13 +85,10 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start Server - Listen on all network interfaces (0.0.0.0) for phone/network access
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on:`);
-    console.log(`   Local:   http://localhost:${PORT}`);
-    console.log(`   Network: http://192.168.29.237:${PORT}`);
-    console.log(`📱 API endpoints available at http://192.168.29.237:${PORT}/api`);
-    console.log(`💡 Access from phone/network using: http://192.168.29.237:${PORT}`);
+// Start Server
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📱 API endpoints available at /api`);
     
     // Test ImageKit connection
     testImageKitConnection();

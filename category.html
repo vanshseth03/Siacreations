@@ -37,6 +37,13 @@
         </div>
     </nav>
 
+    <!-- Development Notice Banner (hidden by default, shown if API is blocked) -->
+    <div id="dev-notice" style="display: none; background: #ff6b6b; border-bottom: 2px solid #c92a2a; padding: 12px 20px; text-align: center; font-size: 14px; color: white;">
+        <strong>⚠️ API Connection Failed:</strong> Ad blocker is blocking the API or server is not running. 
+        <span style="font-size: 12px; opacity: 0.9;">Disable ad blocker or make sure API server is running.</span>
+        <button onclick="location.reload()" style="margin-left: 15px; background: white; color: #c92a2a; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-weight: 600;">Retry</button>
+    </div>
+
     <!-- Cart Sidebar -->
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="cart-header">
@@ -70,7 +77,8 @@
         <div class="footer-container">
             <div class="footer-section">
                 <h3>Quick Links</h3>
-                <div class="footer
+                <div class="footer-links">
+                    <a href="index.html#home" class="footer-link" data-tab="home">Home</a>
                     <span class="footer-divider">|</span>
                     <a href="index.html#about" class="footer-link" data-tab="about">About Us</a>
                     <span class="footer-divider">|</span>
@@ -80,14 +88,8 @@
             
             <div class="footer-section">
                 <h3>Collections</h3>
-                <div class="footer-links">
-                    <a href="category.html#stitched" class="footer-link" data-tab="stitched">Stitched</a>
-                    <span class="footer-divider">|</span>
-                    <a href="category.html#unstitched" class="footer-link" data-tab="unstitched">Unstitched</a>
-                    <span class="footer-divider">|</span>
-                    <a href="category.html#gym" class="footer-link" data-tab="gym">Gym Wear</a>
-                    <span class="footer-divider">|</span>
-                    <a href="category.html#casuals" class="footer-link" data-tab="casuals">Casuals</a>
+                <div class="footer-links" id="footer-category-links">
+                    <!-- Category links will be loaded from API -->
                 </div>
             </div>
             
@@ -152,7 +154,22 @@
     <script src="extras.js"></script>
     <script>
         // On load, read hash and show corresponding category
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('📄 Category page loaded');
+            
+            // Wait for data to load from API
+            if (typeof loadDataFromAPI === 'function') {
+                await loadDataFromAPI();
+                console.log('✅ API data loaded for category page');
+                console.log('📁 Available categories:', window.categories);
+                console.log('📦 Available product data:', Object.keys(window.productData || {}));
+            }
+            
+            // Load footer categories
+            if (typeof loadFooterCategories === 'function') {
+                loadFooterCategories();
+            }
+            
             // Initialize only safe features from script.js to avoid errors
             if (typeof loadWishlistFromStorage === 'function') loadWishlistFromStorage();
             if (typeof setupMobileMenu === 'function') setupMobileMenu();
@@ -181,9 +198,36 @@
             let categoryCurrentPage = 1;
             
             function showCategoryFromHash() {
-                const hash = (location.hash || '').replace('#','') || 'stitched';
-                const valid = ['stitched','unstitched','gym','daily','casuals'];
-                const category = valid.includes(hash) ? hash : 'stitched';
+                console.log('🔄 showCategoryFromHash called');
+                console.log('   window.categories:', window.categories);
+                console.log('   window.productData:', window.productData);
+                
+                const hash = (location.hash || '').replace('#','').toLowerCase();
+                
+                // Check if data is loaded
+                if (!window.categories || window.categories.length === 0) {
+                    console.warn('⚠️ Categories not loaded yet, retrying in 500ms...');
+                    setTimeout(showCategoryFromHash, 500);
+                    return;
+                }
+                
+                // Get valid category slugs from API categories
+                const validSlugs = window.categories.map(cat => 
+                    cat.name.toLowerCase().replace(/\s+/g, '-')
+                );
+                
+                console.log('📂 Valid category slugs:', validSlugs);
+                console.log('🔗 Current hash:', hash);
+                
+                // Use first category as default if hash is invalid
+                const categorySlug = validSlugs.includes(hash) ? hash : (validSlugs[0] || 'products');
+                
+                // Find the actual category object
+                const categoryObj = window.categories.find(cat => 
+                    cat.name.toLowerCase().replace(/\s+/g, '-') === categorySlug
+                );
+                
+                console.log('📦 Selected category object:', categoryObj);
 
                 // Reset to page 1 when category changes
                 categoryCurrentPage = 1;
@@ -192,8 +236,13 @@
                 }
 
                 // Update page title and header
-                document.getElementById('category-title').textContent = category.charAt(0).toUpperCase() + category.slice(1) + ' Collection';
-                document.getElementById('category-desc').textContent = 'Browse our premium ' + category + ' items';
+                if (categoryObj) {
+                    document.getElementById('category-title').textContent = categoryObj.name;
+                    document.getElementById('category-desc').textContent = categoryObj.description || 'Browse our curated collection';
+                } else {
+                    document.getElementById('category-title').textContent = 'Products';
+                    document.getElementById('category-desc').textContent = 'Browse our collection';
+                }
 
                 // Ensure tab is visible
                 const allTabs = document.querySelectorAll('.tab-content');
@@ -201,26 +250,44 @@
                 document.getElementById('category-page').classList.add('active');
 
                 // Prepare a container id that loadProducts expects
-                const expectedContainerId = `${category}-products`;
+                const expectedContainerId = `${categorySlug}-products`;
                 let expectedContainer = document.getElementById(expectedContainerId);
                 const fallbackContainer = document.getElementById('category-products');
 
-                if (!expectedContainer) {
+                if (!expectedContainer && fallbackContainer) {
                     expectedContainer = document.createElement('div');
                     expectedContainer.id = expectedContainerId;
                     expectedContainer.className = fallbackContainer.className || 'products-grid';
-                    // Replace or append into fallback container's parent
                     fallbackContainer.parentNode.replaceChild(expectedContainer, fallbackContainer);
+                } else if (!expectedContainer) {
+                    // Create container if neither exists
+                    expectedContainer = document.createElement('div');
+                    expectedContainer.id = expectedContainerId;
+                    expectedContainer.className = 'products-grid';
+                    document.getElementById('category-page').appendChild(expectedContainer);
                 }
 
                 // Use loadProducts from script.js to populate grid with pagination
-                if (typeof loadProducts === 'function') {
-                    window.currentCategory = category;
-                    loadProducts(category);
+                if (typeof loadProducts === 'function' && categoryObj) {
+                    console.log('✅ Calling loadProducts for:', categoryObj.name);
+                    window.currentCategory = categoryObj.name;
+                    loadProducts(categoryObj.name);
                 } else {
+                    console.warn('⚠️ Could not load products');
+                    console.log('   loadProducts function exists?', typeof loadProducts === 'function');
+                    console.log('   categoryObj exists?', !!categoryObj);
+                    console.log('   categoryObj:', categoryObj);
+                    
                     // Fallback: populate directly from productData if available
-                    if (window.productData && window.productData[category]) {
-                        expectedContainer.innerHTML = window.productData[category].map(p => createProductCard(p)).join('');
+                    if (window.productData && categoryObj && window.productData[categoryObj.name]) {
+                        console.log('📦 Using fallback - loading from productData');
+                        expectedContainer.innerHTML = window.productData[categoryObj.name].map(p => createProductCard(p)).join('');
+                    } else {
+                        console.error('❌ No products found');
+                        console.log('   productData exists?', !!window.productData);
+                        console.log('   productData keys:', Object.keys(window.productData || {}));
+                        console.log('   Looking for category:', categoryObj?.name);
+                        expectedContainer.innerHTML = '<p style="text-align: center; padding: 3rem; color: #999;">No products found in this category</p>';
                     }
                 }
             }

@@ -1,3 +1,10 @@
+// API Configuration
+// Production API URL
+const API_URL = 'https://siacreations.vercel.app/api';
+// For local development, use: 'http://localhost:3000/api'
+
+console.log('🚀 Script loaded! API URL:', API_URL);
+
 // Global Variables
 let currentSlideIndex = 0;
 let cart = [];
@@ -11,79 +18,152 @@ const ITEMS_PER_PAGE = 12;
 let currentPage = 1;
 let currentCategory = null;
 
-// Sample Product Data (in a real app, this would come from an API)
-const productData = {
-    stitched: [
-        { id: 1, name: "Elegant Silk Kurta Set", price: 2599, category: "stitched", image: "👗", description: "This premium silk kurta set features elegant embroidery and comfortable fit. Perfect for festive occasions and special events. Made with high-quality silk fabric that drapes beautifully." },
-        { id: 2, name: "Designer Palazzo Suit", price: 3299, category: "stitched", image: "👘", description: "Contemporary palazzo suit with modern design elements. Features comfortable palazzo pants and stylish top. Ideal for office wear and casual outings." },
-        { id: 3, name: "Embroidered Anarkali", price: 4199, category: "stitched", image: "👗", description: "Beautifully embroidered Anarkali dress with intricate detailing. Perfect for weddings and traditional celebrations. Features flowing silhouette and premium fabric." },
-        { id: 4, name: "Cotton Salwar Kameez", price: 1899, category: "stitched", image: "👘", description: "Comfortable cotton salwar kameez for everyday wear. Breathable fabric with classic design. Perfect for daily activities and casual meetings." },
-        { id: 5, name: "Party Wear Lehenga", price: 5999, category: "stitched", image: "👗", description: "Stunning party wear lehenga with rich embellishments. Perfect for special occasions and celebrations. Features flowing skirt with matching blouse." },
-        { id: 6, name: "Casual Kurti Set", price: 1599, category: "stitched", image: "👘", description: "Comfortable casual kurti set for everyday styling. Soft fabric with contemporary cut. Great for work, shopping, and casual outings." },
-        { id: 7, name: "Formal Blazer Set", price: 3899, category: "stitched", image: "👗", description: "Professional blazer set for formal occasions. Tailored fit with premium fabric. Perfect for business meetings and formal events." },
-        { id: 8, name: "Traditional Saree", price: 2799, category: "stitched", image: "🥻", description: "Classic traditional saree with elegant draping. Features beautiful patterns and premium fabric quality. Perfect for cultural events and ceremonies." }
-    ],
-    unstitched: [
-        { id: 9, name: "Premium Silk Fabric", price: 899, category: "unstitched", image: "🧵", description: "High-quality silk fabric with lustrous finish. Perfect for creating elegant ethnic wear. Soft texture with excellent draping quality." },
-        { id: 10, name: "Cotton Lawn Material", price: 599, category: "unstitched", image: "🧵", description: "Lightweight cotton lawn fabric ideal for summer wear. Breathable and comfortable material perfect for casual dresses and tops." },
-        { id: 11, name: "Chiffon Print Fabric", price: 799, category: "unstitched", image: "🧵", description: "Beautiful printed chiffon fabric with vibrant patterns. Perfect for creating flowing dresses and scarves. Lightweight and elegant." },
-        { id: 12, name: "Georgette Fabric", price: 699, category: "unstitched", image: "🧵", description: "Classic georgette fabric with crisp texture. Ideal for formal and semi-formal wear. Holds pleats well and drapes beautifully." },
-        { id: 13, name: "Embroidered Net", price: 1299, category: "unstitched", image: "🧵", description: "Intricate embroidered net fabric perfect for special occasions. Features delicate patterns and premium quality embroidery work." },
-        { id: 14, name: "Banarasi Silk", price: 1599, category: "unstitched", image: "🧵", description: "Authentic Banarasi silk with traditional motifs. Premium quality fabric perfect for creating classic Indian wear. Rich texture and finish." },
-        { id: 15, name: "Cotton Jacquard", price: 799, category: "unstitched", image: "🧵", description: "Textured cotton jacquard fabric with raised patterns. Perfect for creating structured garments. Durable and easy to maintain." },
-        { id: 16, name: "Organza Fabric", price: 999, category: "unstitched", image: "🧵", description: "Crisp organza fabric with transparent finish. Perfect for creating structured designs and layered garments. Holds shape well." }
-    ],
-    gym: [
-        { id: 17, name: "Athletic Leggings Set", price: 1399, category: "gym", image: "🩱", description: "Premium athletic leggings set with matching top. Features moisture-wicking fabric and four-way stretch for ultimate comfort. Perfect for workouts, yoga, and active lifestyle." },
-        { id: 18, name: "Yoga Pants", price: 999, category: "gym", image: "🧘‍♀️", description: "Flexible yoga pants with four-way stretch. Perfect for yoga, pilates, and meditation. Comfortable waistband and breathable fabric." },
-        { id: 19, name: "Activewear Top", price: 799, category: "gym", image: "💪", description: "Versatile activewear top suitable for various workouts. Quick-dry technology and comfortable fit for all-day wear." },
-        { id: 20, name: "Running Shorts", price: 699, category: "gym", image: "🏃‍♀️", description: "Lightweight running shorts with built-in compression. Perfect for jogging and cardio workouts. Features side pockets for essentials." },
-        { id: 21, name: "Gym Track Suit", price: 1899, category: "gym", image: "🏃‍♀️", description: "Complete gym track suit for comprehensive workout sessions. Coordinated set with jacket and pants. Comfortable and stylish." },
-        { id: 22, name: "Yoga Bra", price: 899, category: "gym", image: "🧘‍♀️", description: "Comfortable yoga bra with medium support. Perfect for yoga and low-impact exercises. Soft fabric with excellent stretch." },
-        { id: 23, name: "Workout Leggings", price: 1199, category: "gym", image: "💪", description: "High-performance workout leggings with compression technology. Squat-proof fabric with moisture management. Perfect for all workouts." },
-        { id: 24, name: "Sports Jacket", price: 1599, category: "gym", image: "🏃‍♀️", description: "Stylish sports jacket for outdoor activities. Wind-resistant fabric with breathable lining. Perfect for pre and post-workout wear." },
-        { id: 101, name: "CrossFit Training Set", price: 1699, category: "gym", image: "🏋️‍♀️", description: "Durable training set for intense CrossFit sessions. Reinforced stitching and breathable material." },
-        { id: 102, name: "Pilates Crop Top", price: 849, category: "gym", image: "🤸‍♀️", description: "Stylish crop top perfect for Pilates and barre classes. Supportive and comfortable design." },
-        { id: 103, name: "Cycling Shorts", price: 949, category: "gym", image: "🚴‍♀️", description: "Padded cycling shorts for long rides. Moisture-wicking with anti-chafe technology." },
-        { id: 104, name: "Dance Leotard", price: 1249, category: "gym", image: "💃", description: "Flexible leotard for dance and gymnastics. Four-way stretch with elegant cut." },
-        { id: 105, name: "Boxing Shorts", price: 899, category: "gym", image: "🥊", description: "Lightweight boxing shorts with wide waistband. Perfect for training and competition." },
-        { id: 106, name: "Swim Shorts", price: 799, category: "gym", image: "🏊‍♀️", description: "Quick-dry swim shorts for pool workouts. Chlorine-resistant fabric." },
-        { id: 107, name: "Martial Arts Pants", price: 1099, category: "gym", image: "🥋", description: "Traditional martial arts pants with modern fabric technology. Durable and flexible." },
-        { id: 108, name: "Tennis Skirt", price: 1399, category: "gym", image: "🎾", description: "Athletic tennis skirt with built-in shorts. Lightweight with ball pockets." },
-        { id: 109, name: "Zumba Top", price: 749, category: "gym", image: "💃", description: "Colorful Zumba top with loose fit. Perfect for dance fitness classes." },
-        { id: 110, name: "Compression Tights", price: 1499, category: "gym", image: "🏃‍♀️", description: "Medical-grade compression tights for recovery and performance. Graduated compression zones." },
-        { id: 111, name: "Hiking Pants", price: 1799, category: "gym", image: "🥾", description: "Convertible hiking pants with zip-off legs. Water-resistant and quick-dry." },
-        { id: 112, name: "Basketball Jersey", price: 999, category: "gym", image: "🏀", description: "Breathable basketball jersey with mesh panels. Moisture-wicking performance fabric." },
-        { id: 113, name: "Golf Polo", price: 1299, category: "gym", image: "⛳", description: "Classic golf polo with UV protection. Stretchy fabric for full range of motion." },
-        { id: 114, name: "Climbing Pants", price: 1899, category: "gym", image: "🧗‍♀️", description: "Reinforced climbing pants with gusseted crotch. Abrasion-resistant material." },
-        { id: 115, name: "Skating Dress", price: 2199, category: "gym", image: "⛸️", description: "Elegant skating dress with built-in shorts. Stretchy and figure-hugging design." },
-        { id: 116, name: "Ski Base Layer", price: 1599, category: "gym", image: "⛷️", description: "Thermal base layer for winter sports. Moisture-wicking with insulation." }
-    ],
-    daily: [
-        { id: 25, name: "Comfortable Cotton Top", price: 599, category: "daily", image: "👕", description: "Soft cotton top perfect for everyday comfort. Breathable fabric with relaxed fit. Ideal for casual outings and home wear." },
-        { id: 26, name: "Daily Wear Jeans", price: 1299, category: "daily", image: "👖", description: "Classic daily wear jeans with comfortable fit. Durable denim fabric that maintains shape. Perfect for everyday styling." },
-        { id: 27, name: "Office Blouse", price: 899, category: "daily", image: "👔", description: "Professional office blouse with polished finish. Wrinkle-resistant fabric perfect for workdays. Classic design with modern touch." },
-        { id: 28, name: "Casual Dress", price: 1199, category: "daily", image: "👗", description: "Versatile casual dress for everyday wear. Comfortable fabric with flattering silhouette. Perfect for lunch dates and casual meetings." },
-        { id: 29, name: "Work Trousers", price: 1399, category: "daily", image: "👖", description: "Formal work trousers with tailored fit. Professional appearance with comfortable wear. Perfect for office and business meetings." },
-        { id: 30, name: "Everyday Cardigan", price: 999, category: "daily", image: "🧥", description: "Cozy everyday cardigan for layering. Soft knit fabric with versatile styling options. Perfect for changing weather conditions." },
-        { id: 31, name: "Simple Tunic", price: 799, category: "daily", image: "👕", description: "Simple and elegant tunic for daily wear. Comfortable fit with timeless design. Great for pairing with leggings or jeans." }
-    ],
-    casuals: [
-        { id: 33, name: "Weekend T-Shirt", price: 499, category: "casuals", image: "👕", description: "Relaxed weekend t-shirt with soft cotton fabric. Perfect for leisure activities and casual hangouts. Comfortable and easy to style." },
-        { id: 34, name: "Casual Shorts", price: 699, category: "casuals", image: "🩳", description: "Comfortable casual shorts for warm weather. Lightweight fabric with relaxed fit. Perfect for beach days and summer outings." },
-        { id: 35, name: "Denim Jacket", price: 1599, category: "casuals", image: "🧥", description: "Classic denim jacket with timeless appeal. Durable fabric with vintage-inspired design. Perfect layering piece for any season." },
-        { id: 36, name: "Casual Maxi Dress", price: 1299, category: "casuals", image: "👗", description: "Flowing casual maxi dress for effortless style. Comfortable fabric with relaxed silhouette. Perfect for weekend brunches and casual events." },
-        { id: 37, name: "Summer Tank Top", price: 399, category: "casuals", image: "👕", description: "Lightweight summer tank top with breathable fabric. Perfect for hot weather and layering. Essential piece for casual summer styling." },
-        { id: 38, name: "Casual Pants", price: 999, category: "casuals", image: "👖", description: "Comfortable casual pants for relaxed styling. Soft fabric with easy fit. Perfect for weekend activities and casual outings." },
-        { id: 39, name: "Beach Cover-up", price: 899, category: "casuals", image: "👗", description: "Stylish beach cover-up for vacation wear. Lightweight and quick-dry fabric. Perfect for poolside and beach activities." },
-        { id: 40, name: "Casual Hoodie", price: 1199, category: "casuals", image: "🧥", description: "Cozy casual hoodie for comfortable wear. Soft fleece interior with relaxed fit. Perfect for cool weather and lounging." }
-    ]
-};
+// Product Data - Will be loaded from API
+let productData = {};
+let allProducts = [];
+let categories = [];
+let carouselSlides = [];
+
+// Make these globally accessible for category.html and other pages
+window.productData = productData;
+window.allProducts = allProducts;
+window.categories = categories;
+window.carouselSlides = carouselSlides;
 
 // DOM Content Loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('📄 DOM Content Loaded - Starting initialization...');
+    // Load data from API first
+    await loadDataFromAPI();
+    console.log('📊 Data loaded, initializing app...');
     initializeApp();
+    console.log('✅ App initialized!');
 });
+
+// Load all data from API
+async function loadDataFromAPI() {
+    try {
+        // Load products
+        const productsResponse = await fetch(`${API_URL}/products?visible=true`);
+        if (productsResponse.ok) {
+            const productsData = await productsResponse.json();
+            if (productsData.success) {
+                allProducts = productsData.products;
+                window.allProducts = allProducts; // Update window reference
+                
+                console.log('📅 Product order from API (sorted by newest first):');
+                allProducts.forEach((p, idx) => {
+                    console.log(`  ${idx + 1}. "${p.name}" - Created: ${p.createdAt || 'N/A'}`);
+                });
+                
+                // Group products by category (preserving newest-first order)
+                productData = {};
+                allProducts.forEach(product => {
+                    const categoryName = product.category?.name || product.category || 'uncategorized';
+                    console.log(`  📦 Product "${product.name}" → Category: "${categoryName}"`);
+                    if (!productData[categoryName]) {
+                        productData[categoryName] = [];
+                    }
+                    // Transform product to match expected format
+                    productData[categoryName].push({
+                        id: product._id,
+                        name: product.name,
+                        price: product.price,
+                        mrp: product.mrp,
+                        category: categoryName,
+                        image: product.images && product.images[0] ? product.images[0] : '🛍️',
+                        description: product.description || '',
+                        images: product.images || [],
+                        tags: product.tags || [],
+                        isNewArrival: product.isNewArrival,
+                        createdAt: product.createdAt
+                    });
+                });
+                window.productData = productData; // Update window reference
+                
+                console.log('✅ Products loaded:', allProducts.length);
+                console.log('📦 Product categories:', Object.keys(productData));
+                console.log('📊 Products per category:', Object.entries(productData).map(([cat, prods]) => `${cat}: ${prods.length}`));
+                
+                // Log product order within each category to verify newest-first
+                Object.entries(productData).forEach(([catName, products]) => {
+                    console.log(`\n📂 Category "${catName}" - Products order (newest first):`);
+                    products.forEach((p, idx) => {
+                        console.log(`  ${idx + 1}. "${p.name}" - Created: ${p.createdAt || 'N/A'}`);
+                    });
+                });
+            }
+        } else {
+            console.error('❌ Failed to load products:', productsResponse.status);
+        }
+
+        // Load categories
+        const categoriesResponse = await fetch(`${API_URL}/categories`);
+        if (categoriesResponse.ok) {
+            const categoriesData = await categoriesResponse.json();
+            if (categoriesData.success) {
+                categories = categoriesData.categories;
+                window.categories = categories; // Update window reference
+                console.log('✅ Categories loaded:', categories.length);
+                console.log('📁 Categories:', categories.map(c => `${c.name} (showOnMainPage: ${c.showOnMainPage})`));
+            }
+        } else {
+            console.error('❌ Failed to load categories:', categoriesResponse.status);
+        }
+
+        // Load carousel slides
+        const carouselResponse = await fetch(`${API_URL}/carousel?active=true`);
+        if (carouselResponse.ok) {
+            const carouselData = await carouselResponse.json();
+            if (carouselData.success) {
+                carouselSlides = carouselData.slides.sort((a, b) => a.order - b.order);
+                console.log('✅ Carousel slides loaded:', carouselSlides.length);
+            }
+        } else {
+            console.error('❌ Failed to load carousel:', carouselResponse.status);
+        }
+    } catch (error) {
+        console.error('❌ Error loading data from API:', error);
+        
+        // Check if error is due to ad blocker or connection issues
+        if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+            console.warn('⚠️ API request failed - This could be due to:');
+            console.warn('   1. Network connectivity issues');
+            console.warn('   2. API server is down or not responding');
+            console.warn('   3. CORS configuration issues');
+            if (API_URL.includes('localhost')) {
+                console.warn('   4. Ad blocker blocking localhost requests (disable ad blocker for localhost)');
+                console.warn('   5. Local API server not running (cd api && npm start)');
+            }
+            console.warn('');
+            console.warn('💡 Please ensure:');
+            console.warn('   - You have an active internet connection');
+            console.warn('   - The API server is running and accessible');
+            
+            // Show development notice banner only for localhost
+            const devNotice = document.getElementById('dev-notice');
+            if (devNotice && API_URL.includes('localhost')) {
+                devNotice.style.display = 'block';
+            } else if (devNotice) {
+                // Show production error message
+                devNotice.innerHTML = `
+                    <strong>⚠️ Connection Error:</strong> Unable to load data from server. Please check your internet connection. 
+                    <button onclick="location.reload()" style="margin-left: 15px; background: white; color: #c92a2a; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-weight: 600;">Retry</button>
+                `;
+                devNotice.style.display = 'block';
+            }
+        }
+        
+        // Initialize empty data structures
+        console.log('⚠️ No data loaded - website requires API connection');
+        productData = {};
+        window.productData = productData;
+        categories = [];
+        window.categories = categories;
+        allProducts = [];
+        window.allProducts = allProducts;
+    }
+}
 
 // Initialize Application
 function initializeApp() {
@@ -107,6 +187,7 @@ function initializeApp() {
     const carousel = document.querySelector('.hero-carousel');
     if (carousel) {
         setupCarousel();
+        loadCarouselFromAPI(); // Load carousel from API
         setInterval(nextSlide, 5000);
         loadHomeProducts();
     }
@@ -210,9 +291,14 @@ function switchTab(tabName) {
     // Reset to page 1 when switching categories
     currentPage = 1;
     
-    // Load products for collection tabs
-    if (['stitched', 'unstitched', 'gym', 'daily', 'casuals'].includes(tabName)) {
-        loadProducts(tabName);
+    // Load products for collection tabs - check if it's a category
+    const categoryNames = categories.map(cat => cat.name.toLowerCase().replace(/\s+/g, '-'));
+    if (categoryNames.includes(tabName)) {
+        // Find the actual category name from slug
+        const category = categories.find(cat => cat.name.toLowerCase().replace(/\s+/g, '-') === tabName);
+        if (category) {
+            loadProducts(category.name);
+        }
     }
     
     // Update wishlist display if needed
@@ -353,28 +439,290 @@ function updateCarousel() {
     });
 }
 
+// Load carousel from API
+function loadCarouselFromAPI() {
+    if (carouselSlides.length === 0) return;
+    
+    const carouselContainer = document.querySelector('.carousel-slides');
+    const dotsContainer = document.querySelector('.carousel-dots');
+    
+    if (!carouselContainer || !dotsContainer) return;
+    
+    // Clear existing slides
+    carouselContainer.innerHTML = '';
+    dotsContainer.innerHTML = '';
+    
+    // Create slides from API data
+    carouselSlides.forEach((slide, index) => {
+        // Create slide
+        const slideDiv = document.createElement('div');
+        slideDiv.className = `carousel-slide ${index === 0 ? 'active' : ''}`;
+        slideDiv.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${slide.imageUrl}')`;
+        slideDiv.innerHTML = `
+            <div class="hero-content">
+                <h1>${slide.title}</h1>
+                <p>${slide.description}</p>
+                <a href="${slide.buttonLink}" class="cta-button">${slide.buttonTitle}</a>
+            </div>
+        `;
+        carouselContainer.appendChild(slideDiv);
+        
+        // Create dot
+        const dot = document.createElement('span');
+        dot.className = `dot ${index === 0 ? 'active' : ''}`;
+        dot.onclick = () => goToSlide(index);
+        dotsContainer.appendChild(dot);
+    });
+    
+    currentSlideIndex = 0;
+}
+
+// Load new arrivals from API
+function loadNewArrivals() {
+    const showcase = document.getElementById('new-arrivals-showcase');
+    if (!showcase) return;
+    
+    // Filter products with isNewArrival = true
+    const newArrivals = allProducts.filter(product => product.isNewArrival === true).slice(0, 8); // Show max 8 products
+    
+    if (newArrivals.length === 0) {
+        showcase.innerHTML = '<p style="text-align: center; padding: 2rem; color: #999;">No new arrivals at the moment. Check back soon!</p>';
+        return;
+    }
+    
+    const badges = ['NEW', 'HOT', 'TRENDING', 'POPULAR', 'FRESH', 'LATEST', 'EXCLUSIVE', 'FEATURED'];
+    
+    showcase.innerHTML = newArrivals.map((product, index) => {
+        const categoryName = product.category?.name || product.category || 'shop';
+        const productIndex = allProducts.findIndex(p => p._id === product.id || p.id === product.id);
+        const image = product.images && product.images[0] ? product.images[0] : product.image || '🛍️';
+        const badge = badges[index % badges.length];
+        
+        return `
+            <div class="arrival-card" data-aos="fade-up" data-delay="${index * 100}">
+                <div class="arrival-badge">${badge}</div>
+                <div class="arrival-image">
+                    ${image.startsWith('http') ? 
+                        `<img src="${image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">` : 
+                        `<div class="arrival-img-inner">${image}</div>`
+                    }
+                    <div class="arrival-glow"></div>
+                </div>
+                <div class="arrival-info">
+                    <h3>${product.name}</h3>
+                    <p class="arrival-desc">${product.description ? product.description.substring(0, 50) + '...' : 'Discover our latest collection'}</p>
+                    <div class="arrival-price">₹${product.price}</div>
+                    <button class="arrival-quick-view" onclick="viewProductById('${product.id}')">
+                        <span>Quick View</span>
+                        <span class="arrow">→</span>
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Generate category tabs dynamically
+function generateCategoryTabs() {
+    const container = document.getElementById('category-tabs-container');
+    if (!container) {
+        console.warn('⚠️ Category tabs container not found');
+        return;
+    }
+    
+    console.log('🏗️ Generating category tabs for', categories.length, 'categories');
+    
+    // Generate tab sections for all categories
+    const categoryTabsHTML = categories
+        .sort((a, b) => a.displayOrder - b.displayOrder)
+        .map(category => {
+            const categorySlug = category.name.toLowerCase().replace(/\s+/g, '-');
+            const categoryId = category.name.toLowerCase();
+            
+            return `
+                <section id="${categorySlug}" class="tab-content">
+                    <div class="tab-header">
+                        <h1>${category.name}</h1>
+                        <p>${category.description || 'Explore our collection'}</p>
+                    </div>
+                    <div class="products-grid" id="${categorySlug}-products">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </section>
+            `;
+        }).join('');
+    
+    container.innerHTML = categoryTabsHTML;
+    console.log('✅ Category tabs generated');
+}
+
+// Load categories from API and render them
+function loadCategoriesFromAPI() {
+    const categoryButtonsContainer = document.getElementById('category-buttons');
+    if (!categoryButtonsContainer) {
+        console.warn('⚠️ Category buttons container not found');
+        return;
+    }
+    
+    console.log('📂 Loading categories for main page...');
+    
+    // Filter categories that should show on main page and sort by display order
+    const mainPageCategories = categories
+        .filter(cat => cat.showOnMainPage)
+        .sort((a, b) => a.displayOrder - b.displayOrder);
+    
+    console.log('📋 Categories to show on main page:', mainPageCategories.length);
+    console.log('   Categories:', mainPageCategories.map(c => c.name));
+    
+    if (mainPageCategories.length === 0) {
+        categoryButtonsContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #999;">No categories available</p>';
+        console.warn('⚠️ No categories have showOnMainPage enabled');
+        return;
+    }
+    
+    // Category icons mapping (you can customize these)
+    const iconMap = {
+        'stitched': '👗',
+        'unstitched': '🧵',
+        'gym': '🏃‍♀️',
+        'daily': '👔',
+        'casuals': '👕',
+        'default': '🛍️'
+    };
+    
+    categoryButtonsContainer.innerHTML = mainPageCategories.map(category => {
+        const categorySlug = category.name.toLowerCase().replace(/\s+/g, '-');
+        const icon = iconMap[category.name.toLowerCase()] || iconMap['default'];
+        
+        return `
+            <a class="category-btn" href="category.html#${categorySlug}">
+                <span class="category-icon">${icon}</span>
+                <span class="category-name">${category.name}</span>
+                <span class="category-desc">${category.description || 'Explore collection'}</span>
+            </a>
+        `;
+    }).join('');
+    
+    console.log('✅ Category buttons rendered');
+}
+
+// Load product sections dynamically based on categories
+function loadProductSectionsFromAPI() {
+    const productSectionsContainer = document.getElementById('product-sections');
+    if (!productSectionsContainer) {
+        console.warn('⚠️ Product sections container not found');
+        return;
+    }
+    
+    console.log('📦 Loading product sections...');
+    
+    // Filter categories that should show on main page and have products
+    const mainPageCategories = categories
+        .filter(cat => {
+            const hasProducts = productData[cat.name] && productData[cat.name].length > 0;
+            console.log(`  - ${cat.name}: showOnMainPage=${cat.showOnMainPage}, hasProducts=${hasProducts}`);
+            return cat.showOnMainPage && hasProducts;
+        })
+        .sort((a, b) => a.displayOrder - b.displayOrder);
+    
+    console.log('📋 Product sections to show:', mainPageCategories.length);
+    
+    if (mainPageCategories.length === 0) {
+        productSectionsContainer.innerHTML = '<p style="text-align: center; padding: 3rem; color: #999;">No products available yet</p>';
+        console.warn('⚠️ No categories with products to show on main page');
+        return;
+    }
+    
+    // Generate sections HTML
+    const sectionsHTML = mainPageCategories.map(category => {
+        const categorySlug = category.name.toLowerCase().replace(/\s+/g, '-');
+        const previewId = `${categorySlug}-preview`;
+        
+        return `
+            <div class="section-header">
+                <h2>${category.name}</h2>
+                <a class="view-all-btn" href="category.html#${categorySlug}">View All</a>
+            </div>
+            <div class="product-scroll" id="${previewId}">
+                <!-- Products will be loaded here -->
+            </div>
+        `;
+    }).join('');
+    
+    productSectionsContainer.innerHTML = sectionsHTML;
+    
+    // Now load products for each section
+    mainPageCategories.forEach(category => {
+        const categorySlug = category.name.toLowerCase().replace(/\s+/g, '-');
+        const previewId = `${categorySlug}-preview`;
+        loadProductPreview(category.name, previewId);
+    });
+    
+    console.log('✅ Product sections rendered');
+}
+
+// Load footer category links
+function loadFooterCategories() {
+    const footerLinksContainer = document.getElementById('footer-category-links');
+    if (!footerLinksContainer) return;
+    
+    // Show all categories in footer, sorted by display order
+    const footerCategories = categories
+        .sort((a, b) => a.displayOrder - b.displayOrder)
+        .slice(0, 6); // Limit to 6 categories in footer
+    
+    if (footerCategories.length === 0) {
+        footerLinksContainer.innerHTML = '<span style="color: #999;">No categories</span>';
+        return;
+    }
+    
+    const linksHTML = footerCategories.map((category, index) => {
+        const categorySlug = category.name.toLowerCase().replace(/\s+/g, '-');
+        const divider = index < footerCategories.length - 1 ? '<span class="footer-divider">|</span>' : '';
+        return `<a href="#${categorySlug}" class="footer-link" data-tab="${categorySlug}">${category.name}</a>${divider}`;
+    }).join('');
+    
+    footerLinksContainer.innerHTML = linksHTML;
+}
+
 // Product Loading Functions
 function loadHomeProducts() {
-    loadProductPreview('unstitched', 'unstitched-preview');
-    loadProductPreview('gym', 'gym-preview');
-    loadProductPreview('stitched', 'stitched-preview');
-    loadProductPreview('casuals', 'casuals-preview');
+    generateCategoryTabs(); // Generate category tab sections
+    loadCategoriesFromAPI(); // Load categories first
+    loadProductSectionsFromAPI(); // Then load product sections
+    loadNewArrivals(); // Load new arrivals from API
+    loadFooterCategories(); // Load footer category links
 }
 
 function loadProductPreview(category, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return; // Skip if container doesn't exist
     
+    // Check if category exists and has products
+    if (!productData[category] || productData[category].length === 0) {
+        container.innerHTML = '<p style="text-align: center; padding: 2rem; color: #999;">No products available in this category</p>';
+        return;
+    }
+    
     const products = productData[category].slice(0, 6); // Show first 6 products
     container.innerHTML = products.map(product => createProductCard(product)).join('');
 }
 
-function loadProducts(category) {
-    const container = document.getElementById(`${category}-products`);
+function loadProducts(categoryName) {
+    // Convert category name to slug for container ID
+    const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
+    const container = document.getElementById(`${categorySlug}-products`);
     if (!container) return; // Skip if container doesn't exist
     
-    currentCategory = category;
-    const products = productData[category];
+    currentCategory = categoryName;
+    
+    // Check if category exists and has products
+    if (!productData[categoryName] || productData[categoryName].length === 0) {
+        container.innerHTML = '<p style="text-align: center; padding: 3rem; color: #999; font-size: 1.2rem;">No products available in this category yet. Check back soon!</p>';
+        return;
+    }
+    
+    const products = productData[categoryName];
     const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
     
     // Calculate start and end indices for current page
@@ -386,15 +734,16 @@ function loadProducts(category) {
     container.innerHTML = pageProducts.map(product => createProductCard(product)).join('');
     
     // Add pagination controls
-    renderPagination(category, totalPages);
+    renderPagination(categoryName, totalPages);
     
     // Scroll to top of products
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function renderPagination(category, totalPages) {
-    // Find or create pagination container
-    const productsGrid = document.getElementById(`${category}-products`);
+function renderPagination(categoryName, totalPages) {
+    // Convert category name to slug for container ID
+    const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
+    const productsGrid = document.getElementById(`${categorySlug}-products`);
     if (!productsGrid) return;
     
     let paginationContainer = productsGrid.parentElement.querySelector('.pagination-container');
@@ -532,7 +881,7 @@ function shareProduct(productId) {
         }).catch((error) => {
             // User cancelled or error occurred
             if (error.name !== 'AbortError') {
-                console.log('Error sharing:', error);
+                // Error sharing - silent fail
                 showShareFeedback('Could not share. Try again!', 'error');
             }
         });
@@ -677,6 +1026,11 @@ function showShareFeedback(message, type) {
 function showProductDetail(productId) {
     // Redirect to item-view.html with the product ID
     window.location.href = `item-view.html?id=${productId}`;
+}
+
+// View product by ID (for new arrivals and other sections)
+function viewProductById(productId) {
+    showProductDetail(productId);
 }
 
 function updateDetailQuantity(change) {
@@ -1129,28 +1483,72 @@ function updateCheckoutSummary() {
     checkoutTotal.textContent = total;
 }
 
-function processOrder() {
+async function processOrder() {
     const formData = new FormData(document.getElementById('checkout-form'));
     const customerData = {
         name: formData.get('name'),
         phone: formData.get('phone'),
-        address: formData.get('address')
+        address: formData.get('address'),
+        email: formData.get('email') || '',
+        city: formData.get('city') || '',
+        state: formData.get('state') || '',
+        pincode: formData.get('pincode') || ''
     };
     
+    // Prepare order data for API
+    const orderData = {
+        customer: {
+            name: customerData.name,
+            phone: customerData.phone,
+            email: customerData.email,
+            address: `${customerData.address}, ${customerData.city}, ${customerData.state} - ${customerData.pincode}`
+        },
+        items: cart.map(item => ({
+            productId: item.id,
+            productName: item.name,
+            quantity: item.quantity,
+            price: item.price
+        })),
+        totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        paymentMode: formData.get('payment') || 'cod',
+        orderStatus: 'pending',
+        paymentStatus: 'pending'
+    };
+    
+    // Submit order to API
+    try {
+        const response = await fetch(`${API_URL}/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        });
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+            // Silently continue with local processing
+        }
+    } catch (error) {
+        // Silently continue with local processing
+    }
+    
+    // Update UI
     const confirmationPhone = document.getElementById('confirmation-phone');
     if (confirmationPhone) {
         confirmationPhone.textContent = customerData.phone;
     }
     
+    // Clear cart
     cart = [];
     saveCartToStorage();
     updateCartCount();
     
+    // Show confirmation
     if (typeof switchTab === 'function') {
         switchTab('order-confirmation');
     }
-    
-    console.log('Order processed:', { customer: customerData, items: cart });
 }
 
 function loadWishlistFromStorage() {

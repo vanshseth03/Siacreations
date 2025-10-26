@@ -819,7 +819,10 @@ function changePage(page) {
 
 function createProductCard(product) {
     const productId = product._id || product.id; // Support both MongoDB _id and id
-    const isInWishlist = wishlist.some(item => (item._id || item.id) === productId);
+    const isInWishlist = wishlist.some(item => {
+        const itemId = item._id || item.id;
+        return String(itemId) === String(productId);
+    });
     const heartIcon = isInWishlist ? '♥' : '♡';
     const heartClass = isInWishlist ? 'wishlist-heart-filled' : 'wishlist-heart-empty';
     
@@ -1271,10 +1274,21 @@ function updateProductCardHearts() {
         const productId = card.getAttribute('data-id'); // Keep as string for MongoDB ObjectId
         const heartElement = card.querySelector('.product-wishlist-heart');
         
-        if (heartElement) {
-            const isInWishlist = wishlist.some(item => (item._id || item.id) === productId);
+        if (heartElement && productId) {
+            // Check if product is in wishlist - compare both _id and id fields
+            const isInWishlist = wishlist.some(item => {
+                const itemId = item._id || item.id;
+                return String(itemId) === String(productId);
+            });
+            
+            // Update heart icon and class
             heartElement.textContent = isInWishlist ? '♥' : '♡';
-            heartElement.className = isInWishlist ? 'product-wishlist-heart wishlist-heart-filled' : 'product-wishlist-heart wishlist-heart-empty';
+            
+            // Remove all heart classes first
+            heartElement.classList.remove('wishlist-heart-filled', 'wishlist-heart-empty');
+            
+            // Add the appropriate class
+            heartElement.classList.add(isInWishlist ? 'wishlist-heart-filled' : 'wishlist-heart-empty');
         }
     });
 }
@@ -1744,7 +1758,10 @@ function toggleWishlist(productId) {
     
     if (!product) return;
     
-    const existingIndex = wishlist.findIndex(item => (item._id || item.id) === productId);
+    const existingIndex = wishlist.findIndex(item => {
+        const itemId = item._id || item.id;
+        return String(itemId) === String(productId);
+    });
     
     if (existingIndex > -1) {
         wishlist.splice(existingIndex, 1);

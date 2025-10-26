@@ -2031,6 +2031,7 @@ function confirmVariantSelection() {
             updateWishlistCount();
             updateAllWishlistCounts();
             updateWishlistDisplay();
+            updateProductCardHearts();
             showWishlistFeedback('Item added to wishlist ♥', 'added');
         }
     }

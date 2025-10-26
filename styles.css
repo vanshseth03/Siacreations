@@ -214,6 +214,9 @@ h4 { font-size: 1.25rem; }
     padding: 0.5rem;
     background: none;
     border: none;
+    position: relative;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    touch-action: manipulation; /* Improve touch responsiveness */
 }
 
 .hamburger .bar {
@@ -2448,12 +2451,21 @@ h4 { font-size: 1.25rem; }
         order: 3;
         display: flex;
         align-items: center;
+        pointer-events: none; /* Let clicks pass through to hamburger */
     }
     
     .hamburger {
         display: flex;
         order: 1;
         margin: 0;
+        padding: 0.75rem; /* Larger tap area */
+        min-width: 44px; /* iOS minimum tap target */
+        min-height: 44px; /* iOS minimum tap target */
+        z-index: 1003;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        pointer-events: auto; /* Re-enable pointer events for hamburger */
     }
 
     .hamburger.active .bar:nth-child(2) {

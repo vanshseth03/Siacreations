@@ -318,8 +318,8 @@ function setupMobileMenu() {
     const newHamburger = hamburger.cloneNode(true);
     hamburger.parentNode.replaceChild(newHamburger, hamburger);
     
-    // Toggle menu on hamburger click
-    newHamburger.addEventListener('click', function(e) {
+    // Toggle menu on hamburger click (using both click and touchstart for mobile)
+    const toggleMenu = function(e) {
         e.preventDefault();
         e.stopPropagation();
         
@@ -332,7 +332,14 @@ function setupMobileMenu() {
             newHamburger.classList.add('active');
             navMenu.classList.add('active');
         }
-    });
+    };
+    
+    // Add both click and touchstart listeners for better mobile support
+    newHamburger.addEventListener('click', toggleMenu);
+    newHamburger.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        toggleMenu(e);
+    }, { passive: false });
     
     // Handle nav link clicks - close menu after navigation
     const navLinks = navMenu.querySelectorAll('.nav-link');

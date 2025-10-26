@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Order Confirmed - Sia Creations</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="loader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-loader">
+        <div class="loader-content">
+            <div class="loader-icons">
+                <span class="loader-icon">👗</span>
+                <span class="loader-icon">👚</span>
+                <span class="loader-icon">👘</span>
+                <span class="loader-icon">🧵</span>
+                <span class="loader-icon">✨</span>
+            </div>
+            <div class="loader-logo">Sia Creations</div>
+            <div class="loader-subtitle">Crafting Elegance</div>
+        </div>
+    </div>
+    <div class="main-app-content">
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><h2>Sia Creations</h2></div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content" style="padding-bottom: 80px;">
+        <div class="order-confirmation-page">
+            <div class="confirmation-icon">✅</div>
+            <h1>Order Confirmed!</h1>
+            <div class="order-number">Order Number: <span id="order-number"></span></div>
+            
+            <div class="confirmation-message">
+                <h3>What happens next?</h3>
+                <p><strong>Our store manager will contact you soon via WhatsApp</strong> for payment completion and delivery related queries.</p>
+                <p>We will confirm your order details, discuss payment options, and arrange delivery at your convenience.</p>
+                
+                <div class="contact-info-box">
+                    <p>You can also reach us directly at:</p>
+                    <strong>+91 9711544523</strong>
+                    <p style="margin-top: 0.5rem; font-size: 0.95rem;">Remember: We will make all communication via this number only.</p>
+                </div>
+            </div>
+            
+            <button class="continue-shopping" onclick="window.location.href='index.html'">Continue Shopping</button>
+        </div>
+    </main>
+
+    <div class="bottom-bar">
+        <a href="index.html">
+            <span class="bottom-bar-icon">🏠</span>
+            <span class="bottom-bar-label">Home</span>
+        </a>
+        <a href="javascript:void(0)" onclick="window.location.href='checkout-page.html'">
+            <span class="bottom-bar-icon">💳</span>
+            <span class="bottom-bar-label">Checkout</span>
+        </a>
+        <a href="index.html">
+            <span class="bottom-bar-icon">🛒</span>
+            <span class="bottom-bar-label">Cart</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderNumber = urlParams.get('order') || 'N/A';
+            document.getElementById('order-number').textContent = orderNumber;
+            
+            if (typeof setupMobileMenu === 'function') setupMobileMenu();
+            
+            setTimeout(()=>{const loader=document.getElementById('app-loader');const body=document.body;if(body){body.classList.add('loaded')}if(loader){setTimeout(()=>{loader.classList.add('hidden')},200)}},50);
+        });
+    </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Item View - Sia Creations</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-footer.css">
+    <link rel="stylesheet" href="loader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=ios_share" />
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="app-loader">
+        <div class="loader-content">
+            <div class="loader-icons">
+                <span class="loader-icon">👗</span>
+                <span class="loader-icon">👚</span>
+                <span class="loader-icon">👘</span>
+                <span class="loader-icon">🧵</span>
+                <span class="loader-icon">✨</span>
+            </div>
+            <div class="loader-logo">Sia Creations</div>
+            <div class="loader-subtitle">Crafting Elegance</div>
+        </div>
+    </div>
+
+    <!-- Main App Content -->
+    <div class="main-app-content">
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><h2>Sia Creations</h2></div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="hamburger" id="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content" style="padding-bottom: 80px;">
+        <section class="tab-content active">
+            <div class="product-detail-container">
+                <div class="product-detail-content">
+                    <div class="product-detail-left">
+                        <div class="product-images-container">
+                            <div class="product-main-image">
+                                <div class="main-image" id="item-image-large">🧵</div>
+                            </div>
+                            <div class="product-thumbnails" id="item-thumbnails">
+                                <div class="thumbnail active">🧵</div>
+                                <div class="thumbnail">👗</div>
+                                <div class="thumbnail">👚</div>
+                                <div class="thumbnail">👕</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-detail-info">
+                        <div class="product-detail-header">
+                            <h1 id="item-name">Product Name</h1>
+                            <div style="margin-top:12px;">
+                                <div style="color:var(--text-light); font-size: 0.9rem; margin-bottom:4px;">Special Price</div>
+                                <div style="color:var(--soft-gold); font-weight:700; font-size: 1.8rem;">₹<span id="item-special">—</span></div>
+                            </div>
+                            <div style="margin-top:6px;">
+                                <div style="color:var(--text-light); font-size: 0.85rem;">MRP <span class="product-detail-price" id="item-price" style="text-decoration: line-through; color:var(--text-light); font-size: 1rem;">₹0</span></div>
+                            </div>
+                        </div>
+                        <div class="product-detail-description">
+                            <h3>Description</h3>
+                            <p id="item-desc">Product full description will appear here.</p>
+                        </div>
+                        
+                        <!-- Product Variants Section -->
+                        <div class="product-variants-section" id="itemVariantsSection" style="display: none; margin-top: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(232, 196, 184, 0.08) 0%, rgba(255, 248, 245, 0.9) 100%); border-left: 4px solid var(--soft-gold); border-radius: 12px;">
+                            <h3 style="font-size: 1.1rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 600;">Available Options</h3>
+                            
+                            <div id="itemColorsDisplay" style="display: none; margin-bottom: 1rem;">
+                                <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.95rem;">
+                                    <span style="color: var(--soft-gold);">🎨</span> Colors Available:
+                                </div>
+                                <div id="itemColorsList" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <!-- Colors will be populated here -->
+                                </div>
+                            </div>
+                            
+                            <div id="itemSizesDisplay" style="display: none;">
+                                <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.95rem;">
+                                    <span style="color: var(--soft-gold);">📏</span> Sizes Available:
+                                </div>
+                                <div id="itemSizesList" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <!-- Sizes will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-detail-actions">
+                            <div class="quantity-selector">
+                                <label>Quantity:</label>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn-detail" onclick="itemUpdateQuantity(-1)">-</button>
+                                    <span class="quantity-display" id="item-quantity">1</span>
+                                    <button class="quantity-btn-detail" onclick="itemUpdateQuantity(1)">+</button>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                <button class="add-to-cart-detail" onclick="itemAddToCart()" style="flex: 1;">Add to Cart</button>
+                                <button class="buy-now-detail" onclick="itemBuyNow()" style="flex: 1;">Buy Now</button>
+                            </div>
+                            <button class="item-wishlist-btn" id="item-wishlist-btn" onclick="itemToggleWishlist()">
+                                <span id="item-wishlist-icon">♡</span> <span id="item-wishlist-text">Add to Wishlist</span>
+                            </button>
+                            <button class="detail-share-btn" onclick="shareCurrentProduct()">
+                                <span class="material-symbols-outlined">ios_share</span>
+                                Share Product
+                            </button>
+                            <button class="back-to-category" onclick="history.back()">← Back to Products</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:3rem; padding-top:2rem; border-top: 1px solid var(--beige);">
+                    <h3 style="margin-bottom: 1.5rem;">Similar Products</h3>
+                    <div class="product-scroll" id="similar-products"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html" class="footer-link">About Us</a>
+                    <a href="contact.html" class="footer-link">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Collections</h3>
+                <div class="footer-links">
+                    <a href="category.html#stitched" class="footer-link">Stitched</a>
+                    <a href="category.html#unstitched" class="footer-link">Unstitched</a>
+                    <a href="category.html#gym" class="footer-link">Gym Wear</a>
+                    <a href="category.html#casuals" class="footer-link">Casuals</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="footer-connect">
+                    <div class="footer-phone">
+                        <span class="phone-icon">📞</span>
+                        <span>+91 9711544523</span>
+                    </div>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/" target="_blank" class="footer-social-link">Instagram</a>
+                        <a href="https://facebook.com/" target="_blank" class="footer-social-link">Facebook</a>
+                        <a href="https://wa.me/919711544523" target="_blank" class="footer-social-link">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>&copy; 2025 Sia Creations. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: ₹<span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Wishlist Sidebar -->
+    <div class="wishlist-sidebar" id="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3>♡ My Wishlist</h3>
+            <button class="close-wishlist" onclick="toggleWishlistSidebar()">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-sidebar-items"></div>
+        <div class="wishlist-footer">
+            <button class="checkout-btn" onclick="addAllWishlistToCart()">Add All to Cart</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-bar">
+        <a href="index.html">
+            <span class="bottom-bar-icon">🏠</span>
+            <span class="bottom-bar-label">Home</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleWishlistSidebar()">
+            <span class="bottom-bar-icon">♡</span>
+            <span class="bottom-bar-label">Wishlist</span>
+            <span class="bottom-bar-badge" id="bottom-wishlist-count">0</span>
+        </a>
+        <a href="javascript:void(0)" onclick="proceedToCheckout()">
+            <span class="bottom-bar-icon">💳</span>
+            <span class="bottom-bar-label">Checkout</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleCart()">
+            <span class="bottom-bar-icon">🛒</span>
+            <span class="bottom-bar-label">Cart</span>
+            <span class="bottom-bar-badge" id="bottom-cart-count">0</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="extras.js"></script>
+    <script>
+        // Wait for productData to be available
+        function waitForProductData(callback) {
+            // Check if productData exists AND has categories with products
+            if (typeof productData !== 'undefined' && Object.keys(productData).length > 0) {
+                callback();
+            } else {
+                setTimeout(() => waitForProductData(callback), 50);
+            }
+        }
+
+        // item view logic uses productData and helpers from script.js
+        let itemId = new URLSearchParams(location.search).get('id') || null; // Keep as string for MongoDB ObjectId
+        let itemQty = 1;
+        let currentImageIndex = 0;
+        let productImages = []; // Will store actual product images
+        let currentProductData = null;
+
+        function renderItem(product) {
+            currentProductData = product;
+            
+            // Store product images for navigation
+            productImages = product.images && product.images.length > 0 ? product.images : [product.image || '🛍️'];
+            
+            // Handle image display - URL or emoji
+            const mainImage = document.getElementById('item-image-large');
+            const imageUrl = productImages[0];
+            
+            if (imageUrl && imageUrl.startsWith('http')) {
+                mainImage.innerHTML = `<img src="${imageUrl}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: contain;">`;
+            } else {
+                mainImage.textContent = imageUrl || '🛍️';
+            }
+            
+            document.getElementById('item-name').textContent = product.name;
+            
+            // Use actual price (special price) and mrp from product
+            document.getElementById('item-special').textContent = product.price;
+            if (product.mrp && product.mrp > product.price) {
+                document.getElementById('item-price').textContent = `₹${product.mrp}`;
+            } else {
+                // If no MRP or MRP is same as price, hide the MRP line
+                const mrpElement = document.getElementById('item-price').parentElement;
+                if (mrpElement) {
+                    mrpElement.style.display = 'none';
+                }
+            }
+            
+            document.getElementById('item-desc').textContent = product.description || '';
+            document.getElementById('item-quantity').textContent = itemQty;
+
+            // Display product variants (colors and sizes)
+            const variantsSection = document.getElementById('itemVariantsSection');
+            const colorsDisplay = document.getElementById('itemColorsDisplay');
+            const sizesDisplay = document.getElementById('itemSizesDisplay');
+            const colorsList = document.getElementById('itemColorsList');
+            const sizesList = document.getElementById('itemSizesList');
+            
+            let hasVariants = false;
+            
+            // Display colors
+            if (product.colors && product.colors.length > 0) {
+                hasVariants = true;
+                colorsDisplay.style.display = 'block';
+                colorsList.innerHTML = product.colors.map(color => `
+                    <span style="display: inline-block; padding: 0.5rem 1rem; background: white; border: 2px solid var(--soft-gold); border-radius: 8px; font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">
+                        ${color}
+                    </span>
+                `).join('');
+            } else {
+                colorsDisplay.style.display = 'none';
+            }
+            
+            // Display sizes
+            if (product.sizes && product.sizes.length > 0) {
+                hasVariants = true;
+                sizesDisplay.style.display = 'block';
+                sizesList.innerHTML = product.sizes.map(size => `
+                    <span style="display: inline-block; padding: 0.5rem 1rem; background: white; border: 2px solid var(--soft-gold); border-radius: 8px; font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">
+                        ${size}
+                    </span>
+                `).join('');
+            } else {
+                sizesDisplay.style.display = 'none';
+            }
+            
+            // Show/hide variants section
+            if (hasVariants && variantsSection) {
+                variantsSection.style.display = 'block';
+            } else if (variantsSection) {
+                variantsSection.style.display = 'none';
+            }
+
+            // Use product images for thumbnails
+            const thumbnails = document.getElementById('item-thumbnails');
+            thumbnails.innerHTML = productImages.slice(0, 4).map((img, i) => {
+                const thumbHTML = img && img.startsWith('http') 
+                    ? `<img src="${img}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">` 
+                    : `<div style="font-size: 2rem;">${img || '🛍️'}</div>`;
+                
+                return `
+                    <div class="thumbnail${i === 0 ? ' active' : ''}" onclick="switchToImage(${i})">
+                        ${thumbHTML}
+                    </div>
+                `;
+            }).join('');
+
+            // Load similar products with working heart buttons
+            const similar = (productData[product.category] || []).filter(p => (p._id || p.id) !== (product._id || product.id));
+            const similarProductsContainer = document.getElementById('similar-products');
+            if (similarProductsContainer) {
+                similarProductsContainer.innerHTML = similar.map(p => {
+                    const pId = p._id || p.id;
+                    const pImage = p.images && p.images[0] ? p.images[0] : p.image;
+                    const imageHTML = pImage && pImage.startsWith('http') 
+                        ? `<img src="${pImage}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">` 
+                        : `<div style="font-size: 3rem; display: flex; align-items: center; justify-content: center; height: 100%;">${pImage || '🛍️'}</div>`;
+                    
+                    // Check if product is in wishlist
+                    const isInWishlist = wishlist.some(item => (item._id || item.id) === pId);
+                    const heartIcon = isInWishlist ? '♥' : '♡';
+                    const heartClass = isInWishlist ? 'wishlist-heart-filled' : 'wishlist-heart-empty';
+                    
+                    return `
+                        <div class="product-card" data-id="${pId}">
+                            <div class="product-image" onclick="window.location.href='item-view.html?id=${pId}'">
+                                ${imageHTML}
+                                <button class="product-share-btn" onclick="event.stopPropagation(); shareProduct('${pId}')" title="Share">
+                                    <span class="material-symbols-outlined">ios_share</span>
+                                </button>
+                                <div class="product-wishlist-heart ${heartClass}" onclick="event.stopPropagation(); toggleWishlist('${pId}');" title="Add to Wishlist">
+                                    ${heartIcon}
+                                </div>
+                            </div>
+                            <div class="product-info" onclick="window.location.href='item-view.html?id=${pId}'">
+                                <div class="product-name">${p.name}</div>
+                                <div class="product-price">₹${p.price}</div>
+                                <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('${pId}')">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Update wishlist button state
+            updateWishlistButton();
+            
+            // Setup swipe on main image
+            setupImageSwipe();
+        }
+
+        // Function to update heart icons in similar products section
+        function updateSimilarProductHearts() {
+            const similarProducts = document.querySelectorAll('#similar-products .product-card');
+            similarProducts.forEach(card => {
+                const productId = card.getAttribute('data-id'); // Keep as string
+                const heartElement = card.querySelector('.product-wishlist-heart');
+                
+                if (heartElement) {
+                    const isInWishlist = wishlist.some(item => (item._id || item.id) === productId);
+                    heartElement.textContent = isInWishlist ? '♥' : '♡';
+                    heartElement.className = isInWishlist ? 'product-wishlist-heart wishlist-heart-filled' : 'product-wishlist-heart wishlist-heart-empty';
+                }
+            });
+        }
+
+        // Make updateSimilarProductHearts available globally
+        window.updateSimilarProductHearts = updateSimilarProductHearts;
+
+        function switchToImage(index) {
+            currentImageIndex = index;
+            const mainImage = document.getElementById('item-image-large');
+            const imageUrl = productImages[index];
+            
+            // Update main image with proper HTML
+            if (imageUrl && imageUrl.startsWith('http')) {
+                mainImage.innerHTML = `<img src="${imageUrl}" alt="Product image" style="width: 100%; height: 100%; object-fit: contain;">`;
+            } else {
+                mainImage.textContent = imageUrl || '🛍️';
+            }
+            
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % productImages.length;
+            switchToImage(currentImageIndex);
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+            switchToImage(currentImageIndex);
+        }
+
+        function setupImageSwipe() {
+            const mainImageContainer = document.querySelector('.product-main-image');
+            if (!mainImageContainer) return;
+
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            mainImageContainer.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            mainImageContainer.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleImageSwipe();
+            }, { passive: true });
+
+            function handleImageSwipe() {
+                const swipeThreshold = 50;
+                
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // Swiped left, go to next image
+                    nextImage();
+                }
+                
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    // Swiped right, go to previous image
+                    prevImage();
+                }
+            }
+
+            // Also add click handlers for left/right areas
+            mainImageContainer.addEventListener('click', function(e) {
+                const rect = mainImageContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                
+                if (clickX < width / 3) {
+                    prevImage();
+                } else if (clickX > (width * 2) / 3) {
+                    nextImage();
+                }
+            });
+        }
+
+        function switchMainImage(index, emoji) {
+            switchToImage(index);
+        }
+
+        function itemUpdateQuantity(delta) { 
+            itemQty = Math.max(1, itemQty + delta); 
+            document.getElementById('item-quantity').textContent = itemQty; 
+        }
+
+        function toggleCart() {
+            const cart = document.querySelector('.cart-sidebar');
+            if (cart) cart.classList.toggle('active');
+        }
+
+        function toggleWishlistSidebar() {
+            const wishlist = document.querySelector('.wishlist-sidebar');
+            if (wishlist) wishlist.classList.toggle('active');
+        }
+        
+        function itemAddToCart() {
+            if (!itemId) return;
+            let prod = null;
+            for (const cat in productData) { 
+                prod = productData[cat].find(p => p._id === itemId || p.id === itemId); 
+                if (prod) break; 
+            }
+            if (!prod) return;
+            
+            // Ensure cart is loaded from storage
+            if (typeof cart === 'undefined' || !Array.isArray(cart)) {
+                window.cart = [];
+                // Try to load from localStorage
+                if (typeof loadCartFromStorage === 'function') {
+                    loadCartFromStorage();
+                } else {
+                    const savedCart = localStorage.getItem('siaCreationsCart');
+                    if (savedCart) {
+                        window.cart = JSON.parse(savedCart);
+                    }
+                }
+            }
+            
+            // Use consistent ID (prefer _id from MongoDB)
+            const productId = prod._id || prod.id;
+            
+            // Add to cart with quantity
+            const existingItem = cart.find(item => {
+                const itemId = item._id || item.id;
+                return itemId === productId;
+            });
+            
+            if (existingItem) {
+                existingItem.quantity += itemQty;
+            } else {
+                cart.push({
+                    ...prod,
+                    id: productId,
+                    _id: productId,
+                    quantity: itemQty
+                });
+            }
+            
+            // Save to localStorage
+            if (typeof saveCartToStorage === 'function') {
+                saveCartToStorage();
+            } else {
+                localStorage.setItem('siaCreationsCart', JSON.stringify(cart));
+            }
+            
+            updateCartCount();
+            updateCartDisplay();
+            
+            // Show feedback instead of alert
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--soft-gold);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+                font-weight: 600;
+            `;
+            feedback.textContent = `Added ${itemQty} item(s) to cart!`;
+            
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (document.body.contains(feedback)) {
+                        document.body.removeChild(feedback);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
+        function itemBuyNow() {
+            if (!itemId) return;
+            let prod = null;
+            for (const cat in productData) { 
+                prod = productData[cat].find(p => p._id === itemId || p.id === itemId); 
+                if (prod) break; 
+            }
+            if (!prod) return;
+            
+            // Use consistent ID (prefer _id from MongoDB)
+            const productId = prod._id || prod.id;
+            
+            // Create a temporary "buy now" item (don't modify cart)
+            const buyNowItem = {
+                ...prod,
+                id: productId,
+                _id: productId,
+                quantity: itemQty
+            };
+            
+            // Store in sessionStorage for checkout page
+            sessionStorage.setItem('buyNowItem', JSON.stringify(buyNowItem));
+            
+            // Redirect to checkout with buy now flag
+            window.location.href = 'checkout-page.html?buyNow=true';
+        }
+
+        function itemToggleWishlist() {
+            if (!currentProductData) return;
+            
+            // Ensure wishlist is initialized
+            if (typeof wishlist === 'undefined') {
+                window.wishlist = [];
+            }
+            
+            const existingIndex = wishlist.findIndex(item => item.id === currentProductData.id);
+            
+            if (existingIndex > -1) {
+                // Remove from wishlist
+                wishlist.splice(existingIndex, 1);
+                if (typeof showWishlistFeedback === 'function') {
+                    showWishlistFeedback('Removed from wishlist', 'removed');
+                }
+            } else {
+                // Add to wishlist
+                wishlist.push(currentProductData);
+                if (typeof showWishlistFeedback === 'function') {
+                    showWishlistFeedback('Added to wishlist ♥', 'added');
+                }
+            }
+            
+            // Save to storage
+            if (typeof saveWishlistToStorage === 'function') {
+                saveWishlistToStorage();
+            }
+            
+            // Update counts and UI
+            if (typeof updateWishlistCount === 'function') {
+                updateWishlistCount();
+            }
+            updateWishlistButton();
+            updateBottomBarCounts();
+        }
+
+        function updateWishlistButton() {
+            if (!currentProductData) return;
+            
+            const btn = document.getElementById('item-wishlist-btn');
+            const icon = document.getElementById('item-wishlist-icon');
+            const text = document.getElementById('item-wishlist-text');
+            
+            if (!btn || !icon || !text) return;
+            
+            // Ensure wishlist is initialized
+            if (typeof wishlist === 'undefined') {
+                window.wishlist = [];
+            }
+            
+            const isInWishlist = wishlist.some(item => item.id === currentProductData.id);
+            
+            if (isInWishlist) {
+                btn.classList.add('in-wishlist');
+                icon.textContent = '♥';
+                text.textContent = 'In Wishlist';
+            } else {
+                btn.classList.remove('in-wishlist');
+                icon.textContent = '♡';
+                text.textContent = 'Add to Wishlist';
+            }
+        }
+
+        function shareCurrentProduct() {
+            if (itemId) {
+                shareProduct(itemId);
+            }
+        }
+        
+        function updateBottomBarCounts() {
+            const bottomWishlistCount = document.getElementById('bottom-wishlist-count');
+            const bottomCartCount = document.getElementById('bottom-cart-count');
+            
+            if (bottomWishlistCount && typeof wishlist !== 'undefined') {
+                bottomWishlistCount.textContent = wishlist.length;
+                bottomWishlistCount.style.display = wishlist.length > 0 ? 'flex' : 'none';
+            }
+            
+            if (bottomCartCount && typeof cart !== 'undefined') {
+                const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+                bottomCartCount.textContent = total;
+                bottomCartCount.style.display = total > 0 ? 'flex' : 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!itemId) {
+                // try hash style #id
+                itemId = (location.hash || '').replace('#','') || null; // Keep as string
+            }
+            
+            // Wait for productData to be loaded
+            waitForProductData(function() {
+                if (itemId) {
+                    let prod = null;
+                    for (const cat in productData) {
+                        prod = productData[cat].find(p => {
+                            const matches = (p._id === itemId || p.id === itemId);
+                            return matches;
+                        }); 
+                        if (prod) break; 
+                    }
+                    
+                    if (prod) {
+                        renderItem(prod);
+                    }
+                }
+            });
+            
+            // Load cart and wishlist
+            if (typeof loadCartFromStorage === 'function') loadCartFromStorage();
+            if (typeof loadWishlistFromStorage === 'function') loadWishlistFromStorage();
+            
+            // Initialize mobile menu FIRST
+            if (typeof setupMobileMenu === 'function') {
+                setupMobileMenu();
+            }
+            
+            // Backup hamburger setup with proper event handling
+            setTimeout(function() {
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('nav-menu');
+                
+                if (hamburger && navMenu) {
+                    // Remove existing event listeners by cloning
+                    const newHamburger = hamburger.cloneNode(true);
+                    hamburger.parentNode.replaceChild(newHamburger, hamburger);
+                    
+                    newHamburger.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        newHamburger.classList.toggle('active');
+                        navMenu.classList.toggle('active');
+                    });
+                    
+                    // Close on link click
+                    navMenu.querySelectorAll('.nav-link').forEach(link => {
+                        link.addEventListener('click', () => {
+                            newHamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                        });
+                    });
+                    
+                    // Close when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!navMenu.contains(e.target) && !newHamburger.contains(e.target)) {
+                            newHamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                        }
+                    });
+                }
+            }, 100);
+
+            // Update bottom bar counts periodically
+            setInterval(updateBottomBarCounts, 500);
+            updateBottomBarCounts();
+
+            // Hide loading screen only after product details are rendered
+            function hideLoader() {
+                const productName = document.querySelector('.product-detail-name');
+                const productPrice = document.querySelector('.detail-price');
+                const hasProductData = productName && productPrice && productName.textContent.trim() !== '';
+                
+                if (hasProductData) {
+                    const loader = document.getElementById('app-loader');
+                    const body = document.body;
+                    
+                    if (body) {
+                        body.classList.add('loaded');
+                    }
+                    
+                    if (loader) {
+                        setTimeout(() => {
+                            loader.classList.add('hidden');
+                        }, 200);
+                    }
+                } else {
+                    // Retry after a short delay if product not loaded yet
+                    setTimeout(hideLoader, 100);
+                }
+            }
+            
+            // Start checking after data should be loaded
+            setTimeout(hideLoader, 300);
+        });
+    </script>
+    </div> <!-- End of main-app-content -->
+</body>
+</html>

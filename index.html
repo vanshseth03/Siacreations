@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Sia Creations - Premium Women's Fashion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-footer.css">
+    <link rel="stylesheet" href="loader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=ios_share" />
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="app-loader">
+        <div class="loader-content">
+            <div class="loader-icons">
+                <span class="loader-icon">👗</span>
+                <span class="loader-icon">👚</span>
+                <span class="loader-icon">👘</span>
+                <span class="loader-icon">🧵</span>
+                <span class="loader-icon">✨</span>
+            </div>
+            <div class="loader-logo">Sia Creations</div>
+            <div class="loader-subtitle">Crafting Elegance</div>
+        </div>
+    </div>
+
+    <!-- Main App Content -->
+    <div class="main-app-content">
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Sia Creations</h2>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-tab="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link" data-tab="about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link" data-tab="contact">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-icons">
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Variant Selection Modal -->
+    <div id="variant-modal" class="variant-modal">
+        <div class="variant-modal-overlay" onclick="closeVariantModal()"></div>
+        <div class="variant-modal-content">
+            <div class="variant-modal-header">
+                <h3 id="variant-product-name">Select Options</h3>
+                <button class="variant-close" onclick="closeVariantModal()">&times;</button>
+            </div>
+            
+            <div id="variant-color-section" class="variant-section" style="display: none;">
+                <h4>Choose Colour:</h4>
+                <div id="variant-color-options" class="variant-options">
+                    <!-- Color options will be added dynamically -->
+                </div>
+            </div>
+            
+            <div id="variant-size-section" class="variant-section" style="display: none;">
+                <h4>Choose Size:</h4>
+                <div id="variant-size-options" class="variant-options">
+                    <!-- Size options will be added dynamically -->
+                </div>
+            </div>
+            
+            <div class="variant-actions">
+                <button class="variant-btn variant-btn-cancel" onclick="closeVariantModal()">Cancel</button>
+                <button class="variant-btn variant-btn-confirm" id="confirmVariantBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: ₹<span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-bottom: 80px;">
+        <!-- Home Tab -->
+        <section id="home" class="tab-content active">
+            <!-- Hero Carousel - Loaded from API -->
+            <div class="hero-carousel">
+                <div class="carousel-slides">
+                    <!-- Carousel slides will be loaded from API -->
+                    <div class="carousel-slide active">
+                        <div class="hero-content">
+                            <h1>Welcome to Sia Creations</h1>
+                            <p>Loading latest collections...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-nav">
+                    <button class="carousel-btn prev" onclick="prevSlide()">&lt;</button>
+                    <button class="carousel-btn next" onclick="nextSlide()">&gt;</button>
+                </div>
+                <div class="carousel-dots">
+                    <!-- Dots will be generated dynamically -->
+                    <span class="dot active" onclick="goToSlide(0)"></span>
+                </div>
+            </div>
+
+            <!-- New Arrivals Section - Loaded from API -->
+            <div class="new-arrivals-section">
+                <div class="arrivals-container">
+                    <div class="arrivals-header">
+                        <span class="arrivals-sparkle">✨</span>
+                        <h2 class="arrivals-title">New Arrivals</h2>
+                        <p class="arrivals-subtitle">Fresh styles, just for you</p>
+                    </div>
+                    
+                    <div class="arrivals-showcase" id="new-arrivals-showcase">
+                        <!-- New arrivals will be loaded from API -->
+                    </div>
+                    
+                    <div class="arrivals-floating-elements">
+                        <div class="float-element" style="top: 10%; left: 5%;">✨</div>
+                        <div class="float-element" style="top: 20%; right: 8%;">💫</div>
+                        <div class="float-element" style="bottom: 15%; left: 10%;">⭐</div>
+                        <div class="float-element" style="bottom: 25%; right: 5%;">✨</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop by Category Section - Loaded from API -->
+            <div class="category-section">
+                <div class="category-container">
+                    <h2>Shop by Category</h2>
+                    <div class="category-buttons" id="category-buttons">
+                        <!-- Categories will be loaded from API -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Sections - Loaded from API -->
+            <div class="product-sections" id="product-sections">
+                <!-- Product sections will be dynamically generated based on categories -->
+            </div>
+        </section>
+
+        <!-- Collection Tabs - Dynamically Generated from API -->
+        <div id="category-tabs-container">
+            <!-- Category tabs will be generated dynamically -->
+        </div>
+
+        <!-- Product Detail Page -->
+        <section id="product-detail" class="tab-content">
+            <div class="product-detail-container">
+                <div class="product-detail-content">
+                    <div class="product-detail-image">
+                        <div class="product-image-large" id="product-image-large">
+                            <!-- Large product image will be displayed here -->
+                        </div>
+                    </div>
+                    <div class="product-detail-info">
+                        <div class="product-detail-header">
+                            <h1 id="product-detail-name">Product Name</h1>
+                            <div class="product-detail-price" id="product-detail-price">₹0</div>
+                        </div>
+                        <div class="product-detail-description">
+                            <h3>Description</h3>
+                            <p id="product-detail-desc">This is a premium quality garment crafted with attention to detail and finest materials. Perfect for modern women who appreciate style and comfort. Features include excellent fabric quality, elegant design, and versatile styling options that make it suitable for various occasions.</p>
+                        </div>
+                        <div class="product-detail-actions">
+                            <div class="quantity-selector">
+                                <label>Quantity:</label>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn-detail" onclick="updateDetailQuantity(-1)">-</button>
+                                    <span class="quantity-display" id="detail-quantity">1</span>
+                                    <button class="quantity-btn-detail" onclick="updateDetailQuantity(1)">+</button>
+                                </div>
+                            </div>
+                            <button class="add-to-cart-detail" id="add-to-cart-detail" onclick="addDetailToCart()">
+                                Add to Cart
+                            </button>
+                            <button class="back-to-category" id="back-to-category" onclick="backToCategory()">
+                                Back to Category
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Tab -->
+        <section id="about" class="tab-content">
+            <div class="about-content">
+                <h1>About Sia Creations</h1>
+                <p>At Sia Creations, we believe that every woman deserves to feel beautiful and confident in what she wears. Our carefully curated collection of premium women's fashion combines timeless elegance with contemporary style.</p>
+                <p>From sophisticated stitched pieces to premium unstitched fabrics, comfortable gym wear to elegant daily wear, we offer a complete range of clothing that celebrates the modern woman's lifestyle.</p>
+                <p>Our commitment to quality, style, and customer satisfaction has made us a trusted name in women's fashion.</p>
+            </div>
+        </section>
+
+        <!-- Contact Tab -->
+        <section id="contact" class="tab-content">
+            <div class="contact-content">
+                <h1>Contact Us</h1>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>Phone & WhatsApp</h3>
+                        <p>+91 9711544523</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Email</h3>
+                        <p>info@siacreations.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Follow Us</h3>
+                        <div class="social-links">
+                            <a href="#" class="social-link">Instagram</a>
+                            <a href="#" class="social-link">Facebook</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Form -->
+        <section id="checkout" class="tab-content">
+            <div class="checkout-content">
+                <h1>Checkout</h1>
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-group">
+                        <label for="customer-name">Full Name</label>
+                        <input type="text" id="customer-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Phone Number</label>
+                        <input type="tel" id="customer-phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-address">Delivery Address</label>
+                        <textarea id="customer-address" name="address" rows="4" required></textarea>
+                    </div>
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="checkout-items">
+                            <!-- Checkout items will be populated here -->
+                        </div>
+                        <div class="checkout-total">
+                            <strong>Total: ₹<span id="checkout-total">0</span></strong>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-order-btn">Place Order</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Order Confirmation -->
+        <section id="order-confirmation" class="tab-content">
+            <div class="confirmation-content">
+                <div class="confirmation-success">
+                    <h1>🎉 Order Confirmed!</h1>
+                    <p>Thank you for your order. We have received your request and will contact you soon for confirmation and delivery details.</p>
+                    <div class="confirmation-details">
+                        <h3>Next Steps:</h3>
+                        <ul>
+                            <li>We will call you at <strong id="confirmation-phone"></strong> within 24 hours</li>
+                            <li>Our team will confirm your order details and arrange delivery</li>
+                            <li>For immediate assistance, contact us at <strong>+91 9711544523</strong></li>
+                        </ul>
+                    </div>
+                    <button class="continue-shopping" onclick="switchTab('home')">Continue Shopping</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wishlist Tab -->
+        <section id="wishlist" class="tab-content">
+            <div class="wishlist-content">
+                <div class="wishlist-header">
+                    <h1>♡ My Wishlist</h1>
+                    <p>Your saved favorite items</p>
+                </div>
+                <div class="wishlist-items" id="wishlist-items">
+                    <!-- Wishlist items will be displayed here -->
+                </div>
+                <div class="wishlist-empty" id="wishlist-empty" style="display: none;">
+                    <div class="empty-wishlist">
+                        <span class="empty-heart">♡</span>
+                        <h3>Your wishlist is empty</h3>
+                        <p>Start adding items you love to your wishlist</p>
+                        <button class="continue-shopping" onclick="switchTab('home')">Continue Shopping</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="#home" class="footer-link" data-tab="home">Home</a>
+                    <span class="footer-divider">|</span>
+                    <a href="#about" class="footer-link" data-tab="about">About Us</a>
+                    <span class="footer-divider">|</span>
+                    <a href="#contact" class="footer-link" data-tab="contact">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Collections</h3>
+                <div class="footer-links" id="footer-category-links">
+                    <!-- Category links will be loaded from API -->
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="footer-connect">
+                    <div class="footer-phone">
+                        <span class="phone-icon">📞</span>
+                        <span>+91 9711544523</span>
+                    </div>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/" target="_blank" class="footer-social-link">Instagram</a>
+                        <span class="footer-divider">|</span>
+                        <a href="https://facebook.com/" target="_blank" class="footer-social-link">Facebook</a>
+                        <span class="footer-divider">|</span>
+                        <a href="https://wa.me/919711544523" target="_blank" class="footer-social-link">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>&copy; 2025 Sia Creations. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Wishlist Sidebar -->
+    <div class="wishlist-sidebar" id="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3>♡ My Wishlist</h3>
+            <button class="close-wishlist" onclick="toggleWishlistSidebar()">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-sidebar-items">
+            <!-- Wishlist items will be added here -->
+        </div>
+        <div class="wishlist-footer">
+            <button class="checkout-btn" onclick="addAllWishlistToCart()">Add All to Cart</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-bar">
+        <a href="#home" onclick="switchTab('home')">
+            <span class="bottom-bar-icon">🏠</span>
+            <span class="bottom-bar-label">Home</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleWishlistSidebar()">
+            <span class="bottom-bar-icon">♡</span>
+            <span class="bottom-bar-label">Wishlist</span>
+            <span class="bottom-bar-badge" id="bottom-wishlist-count">0</span>
+        </a>
+        <a href="javascript:void(0)" onclick="proceedToCheckout()">
+            <span class="bottom-bar-icon">💳</span>
+            <span class="bottom-bar-label">Checkout</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleCart()">
+            <span class="bottom-bar-icon">🛒</span>
+            <span class="bottom-bar-label">Cart</span>
+            <span class="bottom-bar-badge" id="bottom-cart-count">0</span>
+        </a>
+    </div>
+    </div> <!-- End of main-app-content -->
+
+    <script src="script.js"></script>
+    <script src="extras.js"></script>
+    <script>
+        // Update bottom bar counts
+        function updateBottomBarCounts() {
+            const bottomWishlistCount = document.getElementById('bottom-wishlist-count');
+            const bottomCartCount = document.getElementById('bottom-cart-count');
+            
+            if (bottomWishlistCount && typeof wishlist !== 'undefined') {
+                bottomWishlistCount.textContent = wishlist.length;
+                bottomWishlistCount.style.display = wishlist.length > 0 ? 'flex' : 'none';
+            }
+            
+            if (bottomCartCount && typeof cart !== 'undefined') {
+                const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+                bottomCartCount.textContent = total;
+                bottomCartCount.style.display = total > 0 ? 'flex' : 'none';
+            }
+        }
+
+        setInterval(updateBottomBarCounts, 500);
+    </script>
+</body>
+</html>

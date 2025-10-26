@@ -1,0 +1,11 @@
+{
+  "name": "siacreations-frontend",
+  "version": "1.0.0",
+  "description": "Sia Creations E-Commerce Frontend",
+  "scripts": {
+    "start": "npx http-server -p 8080 -c-1 --cors"
+  },
+  "keywords": ["ecommerce", "frontend"],
+  "author": "Sia Creations",
+  "license": "MIT"
+}

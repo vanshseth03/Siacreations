@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Checkout - Sia Creations</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-footer.css">
+    <link rel="stylesheet" href="loader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Force hamburger menu styles for checkout page */
+        @media (max-width: 768px) {
+            .nav-menu.active {
+                left: 0 !important;
+                display: flex !important;
+            }
+            .hamburger {
+                display: flex !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app-loader">
+        <div class="loader-content">
+            <div class="loader-icons">
+                <span class="loader-icon">👗</span>
+                <span class="loader-icon">👚</span>
+                <span class="loader-icon">👘</span>
+                <span class="loader-icon">🧵</span>
+                <span class="loader-icon">✨</span>
+            </div>
+            <div class="loader-logo">Sia Creations</div>
+            <div class="loader-subtitle">Crafting Elegance</div>
+        </div>
+    </div>
+    <div class="main-app-content">
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><h2>Sia Creations</h2></div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content" style="padding-bottom: 80px;">
+        <div class="checkout-page-content">
+            <h1>Checkout</h1>
+            
+            <div class="checkout-order-summary">
+                <h2>Order Summary</h2>
+                <div id="checkout-items-list"></div>
+                
+                <div class="gift-packaging-option">
+                    <input type="checkbox" id="gift-packaging" onchange="updateCheckoutTotal()">
+                    <label for="gift-packaging" class="gift-packaging-label">
+                        <strong>🎁 Gift Packaging</strong>
+                        <span>Beautiful paper gift packaging - ₹40</span>
+                    </label>
+                </div>
+                
+                <div class="checkout-pricing">
+                    <div class="checkout-price-row">
+                        <span>Subtotal:</span>
+                        <span id="checkout-subtotal">₹0</span>
+                    </div>
+                    <div class="checkout-price-row">
+                        <span>Gift Packaging:</span>
+                        <span id="checkout-gift-price">₹0</span>
+                    </div>
+                    <div class="checkout-price-row">
+                        <span>Shipping:</span>
+                        <span style="color: var(--text-light); font-style: italic;">To be confirmed</span>
+                    </div>
+                    <div class="checkout-price-row total">
+                        <span>Estimated Total:</span>
+                        <span id="checkout-grand-total" style="color: var(--text-light);">₹0 <span style="font-size: 0.85rem; font-weight: normal;">(+ shipping)</span></span>
+                    </div>
+                    <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-light); font-style: italic;">
+                        *Final amount will be confirmed after shipping calculation
+                    </div>
+                </div>
+            </div>
+            
+            <form class="checkout-customer-form" id="checkout-customer-form">
+                <h2>Delivery Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="full-name">Full Name *</label>
+                        <input type="text" id="full-name" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number">Phone Number *</label>
+                        <input type="tel" id="phone-number" name="phoneNumber" pattern="[0-9]{10}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Complete Address *</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City *</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode *</label>
+                        <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="state">State *</label>
+                    <input type="text" id="state" name="state" required>
+                </div>
+                
+                <button type="submit" class="checkout-submit-btn">Place Order</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html" class="footer-link">Home</a>
+                    <a href="about.html" class="footer-link">About Us</a>
+                    <a href="contact.html" class="footer-link">Contact</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Collections</h3>
+                <div class="footer-links">
+                    <a href="category.html#stitched" class="footer-link">Stitched</a>
+                    <a href="category.html#unstitched" class="footer-link">Unstitched</a>
+                    <a href="category.html#gym" class="footer-link">Gym Wear</a>
+                    <a href="category.html#casuals" class="footer-link">Casuals</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="footer-connect">
+                    <div class="footer-phone">
+                        <span class="phone-icon">📞</span>
+                        <span>+91 9711544523</span>
+                    </div>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/" target="_blank" class="footer-social-link">Instagram</a>
+                        <a href="https://facebook.com/" target="_blank" class="footer-social-link">Facebook</a>
+                        <a href="https://wa.me/919711544523" target="_blank" class="footer-social-link">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2025 Sia Creations. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Checkout page only shows Home button in bottom bar -->
+    <div class="bottom-bar">
+        <a href="index.html" style="width: 100%; justify-content: center;">
+            <span class="bottom-bar-icon">🏠</span>
+            <span class="bottom-bar-label">Home</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        let giftPackaging = false;
+
+        function loadCheckoutItems() {
+            // Check if this is a "Buy Now" checkout
+            const urlParams = new URLSearchParams(window.location.search);
+            const isBuyNow = urlParams.get('buyNow') === 'true';
+            
+            let checkoutItems = [];
+            
+            if (isBuyNow) {
+                // Load the buy now item from sessionStorage
+                const buyNowItem = sessionStorage.getItem('buyNowItem');
+                if (buyNowItem) {
+                    checkoutItems = [JSON.parse(buyNowItem)];
+                }
+            } else {
+                // Normal checkout - load from cart
+                const savedCart = localStorage.getItem('siaCreationsCart');
+                if (savedCart) {
+                    window.cart = JSON.parse(savedCart);
+                    checkoutItems = window.cart;
+                } else {
+                    window.cart = [];
+                    checkoutItems = [];
+                }
+            }
+
+            const container = document.getElementById('checkout-items-list');
+            
+            if (!checkoutItems || checkoutItems.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 3rem; font-family: var(--font-sans); font-size: 1.1rem;">🛒 Your cart is empty</p>';
+                document.getElementById('checkout-subtotal').textContent = '₹0';
+                document.getElementById('checkout-gift-price').textContent = '₹0';
+                document.getElementById('checkout-grand-total').textContent = '₹0';
+                
+                // Hide the form when cart is empty
+                const form = document.querySelector('.checkout-customer-form');
+                if (form) {
+                    form.style.display = 'none';
+                }
+                
+                // Hide gift packaging option
+                const giftOption = document.querySelector('.gift-packaging-option');
+                if (giftOption) {
+                    giftOption.style.display = 'none';
+                }
+                return;
+            }
+
+            container.innerHTML = checkoutItems.map(item => {
+                // Build variant info display
+                let variantInfo = '';
+                if (item.selectedColor) {
+                    variantInfo += `<div style="font-size: 0.85rem; color: var(--text-light);">Color: ${item.selectedColor}</div>`;
+                }
+                if (item.selectedSize) {
+                    variantInfo += `<div style="font-size: 0.85rem; color: var(--text-light);">Size: ${item.selectedSize}</div>`;
+                }
+                
+                return `
+                    <div class="checkout-order-item">
+                        <div class="checkout-item-info">
+                            <div class="checkout-item-name">${item.name}</div>
+                            ${variantInfo}
+                            <div class="checkout-item-quantity">Quantity: ${item.quantity}</div>
+                        </div>
+                        <div class="checkout-item-price">₹${item.price * item.quantity}</div>
+                    </div>
+                `;
+            }).join('');
+
+            updateCheckoutTotal();
+        }
+
+        function updateCheckoutTotal() {
+            giftPackaging = document.getElementById('gift-packaging').checked;
+            
+            // Check if this is a Buy Now checkout
+            const urlParams = new URLSearchParams(window.location.search);
+            const isBuyNow = urlParams.get('buyNow') === 'true';
+            
+            let items = [];
+            if (isBuyNow) {
+                const buyNowItem = sessionStorage.getItem('buyNowItem');
+                if (buyNowItem) {
+                    items = [JSON.parse(buyNowItem)];
+                }
+            } else {
+                items = window.cart || [];
+            }
+            
+            const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const giftPrice = giftPackaging ? 40 : 0;
+            const total = subtotal + giftPrice;
+
+            document.getElementById('checkout-subtotal').textContent = `₹${subtotal}`;
+            document.getElementById('checkout-gift-price').textContent = `₹${giftPrice}`;
+            document.getElementById('checkout-grand-total').textContent = `₹${total}`;
+        }
+
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize checkout items
+            loadCheckoutItems();
+            
+            // Setup form submission
+            const form = document.getElementById('checkout-customer-form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Check if this is a Buy Now checkout
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const isBuyNow = urlParams.get('buyNow') === 'true';
+                    
+                    let orderItems = [];
+                    if (isBuyNow) {
+                        const buyNowItem = sessionStorage.getItem('buyNowItem');
+                        if (buyNowItem) {
+                            orderItems = [JSON.parse(buyNowItem)];
+                        }
+                    } else {
+                        orderItems = window.cart || [];
+                    }
+                    
+                    // Prevent submission if no items
+                    if (!orderItems || orderItems.length === 0) {
+                        alert('Your cart is empty!');
+                        return;
+                    }
+                    
+                    const formData = new FormData(e.target);
+                    const orderNumber = 'SIA' + Date.now().toString().slice(-8);
+                    
+                    // Prepare order data for API
+                    const orderData = {
+                        orderId: orderNumber,
+                        customer: {
+                            name: formData.get('fullName'),
+                            phone: formData.get('phoneNumber'),
+                            address: formData.get('address'),
+                            city: formData.get('city'),
+                            pincode: formData.get('pincode'),
+                            state: formData.get('state')
+                        },
+                        items: orderItems.map(item => ({
+                            productId: item._id || item.id,
+                            productName: item.name,
+                            quantity: item.quantity,
+                            price: item.price,
+                            selectedColor: item.selectedColor || null,
+                            selectedSize: item.selectedSize || null,
+                            image: (item.images && item.images[0]) || item.image || ''
+                        })),
+                        subtotal: orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                        deliveryCharge: giftPackaging ? 40 : 0,
+                        totalAmount: orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + (giftPackaging ? 40 : 0),
+                        paymentMode: 'COD',
+                        notes: giftPackaging ? 'Gift packaging requested' : ''
+                    };
+                    
+                    // Save to localStorage for order confirmation page
+                    localStorage.setItem('lastOrder', JSON.stringify(orderData));
+                    
+                    // Send order to database
+                    try {
+                        const API_URL = 'https://siacreations.vercel.app/api';
+                        const response = await fetch(`${API_URL}/orders`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(orderData)
+                        });
+                        
+                        const result = await response.json();
+                    } catch (error) {
+                        // Continue anyway - order is saved in localStorage
+                    }
+                    
+                    // Clear buy now item from sessionStorage if this was a buy now checkout
+                    if (isBuyNow) {
+                        sessionStorage.removeItem('buyNowItem');
+                    }
+                    
+                    // Clear cart
+                    window.cart = [];
+                    localStorage.setItem('siaCreationsCart', JSON.stringify(window.cart));
+                    
+                    // Redirect to confirmation page
+                    window.location.href = `order-confirmation.html?order=${orderNumber}`;
+                });
+            }
+            
+            // Note: Hamburger menu is handled by script.js via setupMobileMenu()
+            
+            setTimeout(()=>{const loader=document.getElementById('app-loader');const body=document.body;if(body){body.classList.add('loaded')}if(loader){setTimeout(()=>{loader.classList.add('hidden')},200)}},50);
+        });
+    </script>
+    </div>
+</body>
+</html>

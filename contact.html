@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Contact - Sia Creations</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="loader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="app-loader">
+        <div class="loader-content">
+            <div class="loader-icons">
+                <span class="loader-icon">👗</span>
+                <span class="loader-icon">👚</span>
+                <span class="loader-icon">👘</span>
+                <span class="loader-icon">🧵</span>
+                <span class="loader-icon">✨</span>
+            </div>
+            <div class="loader-logo">Sia Creations</div>
+            <div class="loader-subtitle">Crafting Elegance</div>
+        </div>
+    </div>
+
+    <!-- Main App Content -->
+    <div class="main-app-content">
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><h2>Sia Creations</h2></div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content" style="padding-bottom: 80px;">
+        <section class="tab-content active">
+            <div class="contact-content">
+                <h1>Contact Us</h1>
+                <div class="contact-info">
+                    <div class="contact-item"><h3>Phone & WhatsApp</h3><p>+91 9711544523</p></div>
+                    <div class="contact-item"><h3>Email</h3><p>info@siacreations.com</p></div>
+                    <div class="contact-item"><h3>Follow Us</h3><p>WhatsApp / Instagram / Facebook</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Wishlist Sidebar -->
+    <div class="wishlist-sidebar" id="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3>♡ My Wishlist</h3>
+            <button class="close-wishlist" onclick="toggleWishlistSidebar()">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-sidebar-items"></div>
+        <div class="wishlist-footer">
+            <button class="checkout-btn" onclick="addAllWishlistToCart()">Add All to Cart</button>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: ₹<span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-bar">
+        <a href="index.html">
+            <span class="bottom-bar-icon">🏠</span>
+            <span class="bottom-bar-label">Home</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleWishlistSidebar()">
+            <span class="bottom-bar-icon">♡</span>
+            <span class="bottom-bar-label">Wishlist</span>
+            <span class="bottom-bar-badge" id="bottom-wishlist-count">0</span>
+        </a>
+        <a href="javascript:void(0)" onclick="proceedToCheckout()">
+            <span class="bottom-bar-icon">💳</span>
+            <span class="bottom-bar-label">Checkout</span>
+        </a>
+        <a href="javascript:void(0)" onclick="toggleCart()">
+            <span class="bottom-bar-icon">🛒</span>
+            <span class="bottom-bar-label">Cart</span>
+            <span class="bottom-bar-badge" id="bottom-cart-count">0</span>
+        </a>
+    </div>
+    </div> <!-- Close main-app-content -->
+
+    <script src="script.js"></script>
+    <script src="extras.js"></script>
+    <script>
+        // Loading screen handler
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('app-loader');
+            const body = document.body;
+            if (body) {
+                body.classList.add('loaded');
+            }
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 200);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function(){ 
+            if (typeof loadCartFromStorage === 'function') loadCartFromStorage();
+            if (typeof loadWishlistFromStorage === 'function') loadWishlistFromStorage(); 
+            
+            // Initialize mobile menu
+            if (typeof setupMobileMenu === 'function') setupMobileMenu();
+            
+            // Backup hamburger setup
+            setTimeout(function() {
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('nav-menu');
+                
+                if (hamburger && navMenu) {
+                    const newHamburger = hamburger.cloneNode(true);
+                    hamburger.parentNode.replaceChild(newHamburger, hamburger);
+                    
+                    newHamburger.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        newHamburger.classList.toggle('active');
+                        navMenu.classList.toggle('active');
+                    });
+                    
+                    document.addEventListener('click', function(e) {
+                        if (!navMenu.contains(e.target) && !newHamburger.contains(e.target)) {
+                            newHamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                        }
+                    });
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

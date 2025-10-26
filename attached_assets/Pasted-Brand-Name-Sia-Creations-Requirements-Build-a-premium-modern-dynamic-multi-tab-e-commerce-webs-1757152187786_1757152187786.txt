@@ -1,0 +1,103 @@
+Brand Name: Sia Creations
+
+Requirements:
+Build a premium, modern, dynamic, multi-tab e-commerce website for Sia Creations, a women’s clothing brand.
+
+Design Guidelines
+
+Use core HTML, CSS, and JavaScript only (no frameworks, no Tailwind, no TypeScript).
+
+Fonts: Premium serif + clean sans-serif combination.
+
+Colors: Aesthetic pastel + premium tones (blush pink, beige, ivory, soft gold, black accents).
+
+Layout: Stylish and elegant with smooth animations.
+
+Carousels: Hero carousel at the top for stitched, unstitched, gym wear, daily wear, casuals.
+
+Scrolling: Smooth vertical scroll (like luxury fashion websites).
+
+Navigation / Tabs
+
+Home
+
+Stitched Collection
+
+Unstitched Fabric
+
+Gym Wear
+
+Daily Wear
+
+Casuals
+
+About Us
+
+Contact
+
+Homepage Layout
+
+Hero Section – Large carousel with brand visuals.
+
+Dynamic Product Sections (fetched via API):
+
+Unstitched Collection → Horizontal scroll section with products.
+
+Gym Collection → Horizontal scroll section.
+
+Stitched Collection → Horizontal scroll section.
+
+Casuals → Horizontal scroll section.
+
+Each section includes a “View All” button.
+
+Hover effect on products (zoom-in, slight color overlay).
+
+Cart & Checkout Functionality
+
+Add to Cart: Every product card should have an “Add to Cart” button.
+
+Cart Page:
+
+Shows list of selected products with quantity and subtotal.
+
+Packaging option (dropdown or checkbox).
+
+Delivery charges (to be confirmed later) placeholder.
+
+Update/remove items functionality.
+
+Proceed to Checkout:
+
+Checkout form asks: Name, Phone Number, Address.
+
+On submission → show Order Confirmation Page.
+
+Order Confirmation Page
+
+Display:
+
+Order Number (auto-generated)
+
+Date & Time of Order
+
+Subtotal + Packaging + Delivery charges (delivery charges “To be confirmed”)
+
+Message:
+
+Thank you for shopping with Sia Creations 💖  
+Our store manager will soon contact you for payment options, delivery price, and other details.  
+For more enquiries call or WhatsApp us at +91 9711544523.  
+Happy to serve you!  
+
+Extra Features
+
+Sticky navigation bar with Sia Creations logo.
+
+Footer with brand tagline, social media links, and quick links.
+
+Promo banners (like “Festive Sale” or “New Collection”).
+
+Fully responsive design (mobile + desktop).
+
+Smooth page transitions & animations.

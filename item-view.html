@@ -42,6 +42,36 @@
         </div>
     </nav>
 
+    <!-- Variant Selection Modal -->
+    <div id="variant-modal" class="variant-modal">
+        <div class="variant-modal-overlay" onclick="closeVariantModal()"></div>
+        <div class="variant-modal-content">
+            <div class="variant-modal-header">
+                <h3 id="variant-product-name">Select Options</h3>
+                <button class="variant-close" onclick="closeVariantModal()">&times;</button>
+            </div>
+            
+            <div id="variant-color-section" class="variant-section" style="display: none;">
+                <h4>Choose Colour:</h4>
+                <div id="variant-color-options" class="variant-options">
+                    <!-- Color options will be added dynamically -->
+                </div>
+            </div>
+            
+            <div id="variant-size-section" class="variant-section" style="display: none;">
+                <h4>Choose Size:</h4>
+                <div id="variant-size-options" class="variant-options">
+                    <!-- Size options will be added dynamically -->
+                </div>
+            </div>
+            
+            <div class="variant-actions">
+                <button class="variant-btn variant-btn-cancel" onclick="closeVariantModal()">Cancel</button>
+                <button class="variant-btn variant-btn-confirm" id="confirmVariantBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <main class="main-content" style="padding-bottom: 80px;">
         <section class="tab-content active">
             <div class="product-detail-container">

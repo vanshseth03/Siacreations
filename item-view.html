@@ -494,6 +494,18 @@
             }
             if (!prod) return;
             
+            // Check if product has colors or sizes
+            const hasColors = prod.colors && prod.colors.length > 0;
+            const hasSizes = prod.sizes && prod.sizes.length > 0;
+            
+            if (hasColors || hasSizes) {
+                // Show variant selection modal
+                if (typeof showVariantModal === 'function') {
+                    showVariantModal(prod, 'cart');
+                }
+                return; // Don't add yet, wait for modal confirmation
+            }
+            
             // Ensure cart is loaded from storage
             if (typeof cart === 'undefined' || !Array.isArray(cart)) {
                 window.cart = [];
@@ -576,6 +588,18 @@
             }
             if (!prod) return;
             
+            // Check if product has colors or sizes
+            const hasColors = prod.colors && prod.colors.length > 0;
+            const hasSizes = prod.sizes && prod.sizes.length > 0;
+            
+            if (hasColors || hasSizes) {
+                // Show variant selection modal
+                if (typeof showVariantModal === 'function') {
+                    showVariantModal(prod, 'buyNow');
+                }
+                return; // Don't proceed yet, wait for modal confirmation
+            }
+            
             // Use consistent ID (prefer _id from MongoDB)
             const productId = prod._id || prod.id;
             
@@ -602,7 +626,11 @@
                 window.wishlist = [];
             }
             
-            const existingIndex = wishlist.findIndex(item => item.id === currentProductData.id);
+            const productId = currentProductData._id || currentProductData.id;
+            const existingIndex = wishlist.findIndex(item => {
+                const itemId = item._id || item.id;
+                return String(itemId) === String(productId);
+            });
             
             if (existingIndex > -1) {
                 // Remove from wishlist
@@ -611,7 +639,19 @@
                     showWishlistFeedback('Removed from wishlist', 'removed');
                 }
             } else {
-                // Add to wishlist
+                // Check if product has colors or sizes
+                const hasColors = currentProductData.colors && currentProductData.colors.length > 0;
+                const hasSizes = currentProductData.sizes && currentProductData.sizes.length > 0;
+                
+                if (hasColors || hasSizes) {
+                    // Show variant selection modal
+                    if (typeof showVariantModal === 'function') {
+                        showVariantModal(currentProductData, 'wishlist');
+                    }
+                    return; // Don't add yet, wait for modal confirmation
+                }
+                
+                // Add to wishlist (no variants needed)
                 wishlist.push(currentProductData);
                 if (typeof showWishlistFeedback === 'function') {
                     showWishlistFeedback('Added to wishlist ♥', 'added');
@@ -626,6 +666,18 @@
             // Update counts and UI
             if (typeof updateWishlistCount === 'function') {
                 updateWishlistCount();
+            }
+            if (typeof updateAllWishlistCounts === 'function') {
+                updateAllWishlistCounts();
+            }
+            if (typeof updateWishlistDisplay === 'function') {
+                updateWishlistDisplay();
+            }
+            if (typeof updateProductCardHearts === 'function') {
+                updateProductCardHearts();
+            }
+            if (typeof updateSimilarProductHearts === 'function') {
+                updateSimilarProductHearts();
             }
             updateWishlistButton();
             updateBottomBarCounts();
@@ -645,7 +697,11 @@
                 window.wishlist = [];
             }
             
-            const isInWishlist = wishlist.some(item => item.id === currentProductData.id);
+            const productId = currentProductData._id || currentProductData.id;
+            const isInWishlist = wishlist.some(item => {
+                const itemId = item._id || item.id;
+                return String(itemId) === String(productId);
+            });
             
             if (isInWishlist) {
                 btn.classList.add('in-wishlist');

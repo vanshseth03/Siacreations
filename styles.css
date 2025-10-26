@@ -2437,7 +2437,8 @@ h4 { font-size: 1.25rem; }
         left: 0;
         right: 0;
         margin: 0;
-        overflow: visible; /* Changed from overflow-x: hidden to allow menu to show */
+        overflow: visible !important; /* CRITICAL: Changed from overflow-x: hidden to allow menu to show */
+        height: 68px;
     }
     
     .nav-container {
@@ -2449,6 +2450,7 @@ h4 { font-size: 1.25rem; }
         margin: 0;
         box-sizing: border-box;
         overflow: visible; /* Allow menu to overflow */
+        height: auto;
     }
     
     .nav-logo {
@@ -2483,6 +2485,7 @@ h4 { font-size: 1.25rem; }
         height: auto;
         max-height: calc(100vh - 68px); /* Don't exceed viewport */
         overflow-y: auto; /* Allow scrolling if needed */
+        transform: translateX(0); /* Ensure clean positioning */
     }
 
     .nav-menu.active {

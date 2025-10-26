@@ -2368,6 +2368,20 @@ h4 { font-size: 1.25rem; }
         padding-bottom: 100px; /* Extra space for bottom bar */
     }
     
+    /* Force all direct children to respect viewport width */
+    body > *,
+    .main-app-content > *,
+    .main-content > * {
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+    
+    /* Ensure images don't cause overflow */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
     /* Typography adjustments */
     h1 { font-size: 1.8rem; }
     h2 { font-size: 1.5rem; }
@@ -2483,6 +2497,19 @@ h4 { font-size: 1.25rem; }
     /* Carousel mobile */
     .hero-carousel {
         height: 50vh;
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+    
+    .carousel-slides {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .carousel-slide {
+        width: 100%;
+        max-width: 100%;
     }
     
     .slide-content h1 {
@@ -2495,6 +2522,8 @@ h4 { font-size: 1.25rem; }
     
     .slide-content {
         padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .cta-btn {
@@ -2524,10 +2553,16 @@ h4 { font-size: 1.25rem; }
     /* Category section mobile */
     .category-section {
         padding: 2rem 0;
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
     }
     
     .category-container {
         padding: 0 1rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     
     .category-container h2 {
@@ -2538,6 +2573,7 @@ h4 { font-size: 1.25rem; }
     .category-buttons {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
+        width: 100%;
     }
 
     .category-btn {
@@ -2559,7 +2595,10 @@ h4 { font-size: 1.25rem; }
     /* Product sections mobile */
     .product-sections {
         padding: 0 1rem;
+        width: 100%;
         max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
     }
     
     .section-header {
@@ -2567,6 +2606,7 @@ h4 { font-size: 1.25rem; }
         gap: 0.75rem;
         text-align: center;
         margin: 2rem 0 1rem;
+        width: 100%;
     }
     
     .section-header h2 {
@@ -2582,10 +2622,15 @@ h4 { font-size: 1.25rem; }
     .product-scroll {
         gap: 1rem;
         padding: 0.5rem 0;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .product-card {
         flex: 0 0 220px;
+        max-width: 220px;
     }
     
     .product-image {
@@ -2614,7 +2659,9 @@ h4 { font-size: 1.25rem; }
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
         padding: 2rem 1rem;
+        width: 100%;
         max-width: 100%;
+        box-sizing: border-box;
     }
     
     /* Tab header mobile */

@@ -1,20 +1,8 @@
 /* Reset and Base Styles */
-*,
-*::before,
-*::after {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-/* Prevent any white space on mobile */
-html,
-body {
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0;
-    outline: 0;
-    
 }
 
 :root {
@@ -42,12 +30,12 @@ body {
 
 html {
     scroll-behavior: smooth;
-    font-size: 16px;
-    -webkit-text-size-adjust: 100%;
-    overflow-x: hidden;
+    font-size: 16px; /* Base font size */
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll on desktop */
     width: 100%;
-    min-width: 100%;
-    position: relative;
 }
 
 body {
@@ -56,21 +44,18 @@ body {
     color: var(--text-dark);
     background: linear-gradient(135deg, #f8f6f2 0%, #f4f1eb 50%, #f0ede5 100%);
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
     position: relative;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Prevent horizontal scroll */
     width: 100%;
-    min-width: 100%;
-    zoom: 1;
-    -moz-transform: scale(1);
-    -moz-transform-origin: 0 0;
-    transform: scale(1);
-    transform-origin: 0 0;
 }
 
 .main-app-content {
-    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
     width: 100%;
-    min-width: 100%;
 }
 
 /* Remove all text decorations */
@@ -2362,70 +2347,55 @@ h4 { font-size: 1.25rem; }
 }
 
 @media (max-width: 768px) {
-    /* Universal mobile reset - ABSOLUTELY NO GAPS */
     * {
         box-sizing: border-box;
     }
     
-    /* Kill all possible margins/padding that could create white space */
-    html,
-    body,
-    .main-app-content,
-    .main-content {
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow-x: hidden !important;
-    }
-    
     html {
-        font-size: 14px;
-        height: 100vh;
-        height: 100dvh; /* Dynamic viewport height for mobile */
-        min-height: 100vh;
-        min-height: 100dvh;
-        background: linear-gradient(135deg, #f8f6f2 0%, #f4f1eb 50%, #f0ede5 100%);
-        box-sizing: border-box !important;
+        font-size: 14px; /* Slightly smaller base font */
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+        height: 100%;
+        margin: 0;
+        padding: 0;
     }
     
     body {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
         min-height: 100vh;
-        min-height: 100dvh; /* Dynamic viewport height for mobile */
-        height: 100%;
+        min-height: -webkit-fill-available; /* Safari mobile fix */
+        margin: 0;
+        padding: 0;
         position: relative;
     }
     
     .main-app-content {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
         min-height: 100vh;
+        margin: 0;
+        padding: 0;
     }
     
     .main-content {
-        margin-top: 68px !important;
-        padding-bottom: 100px !important;
-    }
-    
-    /* Force all sections to full width with no side gaps */
-    section,
-    .tab-content,
-    .category-section,
-    .product-sections,
-    footer,
-    .footer {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        box-sizing: border-box !important;
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+        padding: 0;
+        margin-top: 68px;
+        padding-bottom: 100px; /* Extra space for bottom bar */
     }
     
     /* Force all direct children to respect viewport width */
     body > *,
     .main-app-content > *,
     .main-content > * {
-        max-width: 100% !important;
-        overflow-x: hidden !important;
+        max-width: 100vw;
+        overflow-x: hidden;
     }
     
     /* Ensure images don't cause overflow */
@@ -2447,8 +2417,7 @@ h4 { font-size: 1.25rem; }
         left: 0;
         right: 0;
         margin: 0;
-        overflow: visible !important; /* CRITICAL: Changed from overflow-x: hidden to allow menu to show */
-        height: 68px;
+        overflow: visible; /* Changed from overflow-x: hidden to allow menu to show */
     }
     
     .nav-container {
@@ -2460,7 +2429,6 @@ h4 { font-size: 1.25rem; }
         margin: 0;
         box-sizing: border-box;
         overflow: visible; /* Allow menu to overflow */
-        height: auto;
     }
     
     .nav-logo {
@@ -2495,7 +2463,6 @@ h4 { font-size: 1.25rem; }
         height: auto;
         max-height: calc(100vh - 68px); /* Don't exceed viewport */
         overflow-y: auto; /* Allow scrolling if needed */
-        transform: translateX(0); /* Ensure clean positioning */
     }
 
     .nav-menu.active {
@@ -2539,16 +2506,6 @@ h4 { font-size: 1.25rem; }
         justify-content: center;
         align-items: center;
         cursor: pointer; /* Ensure cursor shows it's clickable */
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-    
-    .hamburger .bar {
-        background: #333333 !important;
-        width: 28px;
-        height: 3px;
-        display: block !important;
-        visibility: visible !important;
     }
 
     .hamburger.active .bar:nth-child(2) {
@@ -2746,35 +2703,23 @@ h4 { font-size: 1.25rem; }
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
-        padding: 2rem 0.5rem;
+        padding: 2rem 1rem;
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;
-        margin: 0;
-    }
-    
-    /* Category controls mobile - remove side padding */
-    .category-controls {
-        padding: 1rem 0.5rem 0;
-        width: 100%;
-        margin: 0;
     }
     
     /* Tab header mobile */
     .tab-header {
-        padding: 2rem 0;
-        margin: 0;
-        width: 100%;
+        padding: 2rem 1rem;
     }
     
     .tab-header h1 {
         font-size: 1.8rem;
-        padding: 0 1rem;
     }
     
     .tab-header p {
         font-size: 1rem;
-        padding: 0 1rem;
     }
     
     /* Product detail mobile */

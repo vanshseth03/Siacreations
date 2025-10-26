@@ -14,6 +14,7 @@ body {
     padding: 0 !important;
     border: 0;
     outline: 0;
+    
 }
 
 :root {
@@ -2376,7 +2377,7 @@ h4 { font-size: 1.25rem; }
     
     html {
         font-size: 14px;
-        height: 100%;
+        min-height: 100%;
         background: linear-gradient(135deg, #f8f6f2 0%, #f4f1eb 50%, #f0ede5 100%);
     }
     
@@ -2384,7 +2385,6 @@ h4 { font-size: 1.25rem; }
         min-height: 100vh;
         min-height: -webkit-fill-available;
         position: relative;
-        height: 100%;
     }
     
     .main-app-content {
@@ -2526,6 +2526,16 @@ h4 { font-size: 1.25rem; }
         justify-content: center;
         align-items: center;
         cursor: pointer; /* Ensure cursor shows it's clickable */
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .hamburger .bar {
+        background: #333333 !important;
+        width: 28px;
+        height: 3px;
+        display: block !important;
+        visibility: visible !important;
     }
 
     .hamburger.active .bar:nth-child(2) {

@@ -126,7 +126,7 @@ async function loadDataFromAPI() {
             }
         }
     } catch (error) {
-        console.error('Error loading data from API:', error);
+        // Silently handle error
         
         // Initialize empty data structures
         productData = {};
@@ -318,10 +318,12 @@ function setupMobileMenu() {
     const newHamburger = hamburger.cloneNode(true);
     hamburger.parentNode.replaceChild(newHamburger, hamburger);
     
-    // Toggle menu on hamburger click (using both click and touchstart for mobile)
+    // Toggle menu function
     const toggleMenu = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         
         const isActive = newHamburger.classList.contains('active');
         
@@ -334,11 +336,14 @@ function setupMobileMenu() {
         }
     };
     
-    // Add both click and touchstart listeners for better mobile support
-    newHamburger.addEventListener('click', toggleMenu);
-    newHamburger.addEventListener('touchstart', function(e) {
+    // Add click listener (works for both mouse and touch)
+    newHamburger.addEventListener('click', toggleMenu, false);
+    
+    // Add touchend as backup for mobile devices
+    newHamburger.addEventListener('touchend', function(e) {
         e.preventDefault();
-        toggleMenu(e);
+        e.stopPropagation();
+        toggleMenu(null);
     }, { passive: false });
     
     // Handle nav link clicks - close menu after navigation

@@ -209,14 +209,9 @@
     <script>
         // On load, read hash and show corresponding category
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('📄 Category page loaded');
-            
             // Wait for data to load from API
             if (typeof loadDataFromAPI === 'function') {
                 await loadDataFromAPI();
-                console.log('✅ API data loaded for category page');
-                console.log('📁 Available categories:', window.categories);
-                console.log('📦 Available product data:', Object.keys(window.productData || {}));
             }
             
             // Load footer categories
@@ -228,39 +223,15 @@
             if (typeof loadWishlistFromStorage === 'function') loadWishlistFromStorage();
             if (typeof setupMobileMenu === 'function') setupMobileMenu();
             if (typeof setupCartEventListeners === 'function') setupCartEventListeners();
-            
-            // Manual hamburger setup as backup
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('nav-menu');
-            if (hamburger && navMenu) {
-                hamburger.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    hamburger.classList.toggle('active');
-                    navMenu.classList.toggle('active');
-                });
-                
-                // Close on link click
-                navMenu.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', () => {
-                        hamburger.classList.remove('active');
-                        navMenu.classList.remove('active');
-                    });
-                });
-            }
 
             // Initialize current page tracker
             let categoryCurrentPage = 1;
             
             function showCategoryFromHash() {
-                console.log('🔄 showCategoryFromHash called');
-                console.log('   window.categories:', window.categories);
-                console.log('   window.productData:', window.productData);
-                
                 const hash = (location.hash || '').replace('#','').toLowerCase();
                 
                 // Check if data is loaded
                 if (!window.categories || window.categories.length === 0) {
-                    console.warn('⚠️ Categories not loaded yet, retrying in 500ms...');
                     setTimeout(showCategoryFromHash, 500);
                     return;
                 }
@@ -270,9 +241,6 @@
                     cat.name.toLowerCase().replace(/\s+/g, '-')
                 );
                 
-                console.log('📂 Valid category slugs:', validSlugs);
-                console.log('🔗 Current hash:', hash);
-                
                 // Use first category as default if hash is invalid
                 const categorySlug = validSlugs.includes(hash) ? hash : (validSlugs[0] || 'products');
                 
@@ -280,8 +248,6 @@
                 const categoryObj = window.categories.find(cat => 
                     cat.name.toLowerCase().replace(/\s+/g, '-') === categorySlug
                 );
-                
-                console.log('📦 Selected category object:', categoryObj);
 
                 // Reset to page 1 when category changes
                 categoryCurrentPage = 1;
@@ -323,24 +289,13 @@
 
                 // Use loadProducts from script.js to populate grid with pagination
                 if (typeof loadProducts === 'function' && categoryObj) {
-                    console.log('✅ Calling loadProducts for:', categoryObj.name);
                     window.currentCategory = categoryObj.name;
                     loadProducts(categoryObj.name);
                 } else {
-                    console.warn('⚠️ Could not load products');
-                    console.log('   loadProducts function exists?', typeof loadProducts === 'function');
-                    console.log('   categoryObj exists?', !!categoryObj);
-                    console.log('   categoryObj:', categoryObj);
-                    
                     // Fallback: populate directly from productData if available
                     if (window.productData && categoryObj && window.productData[categoryObj.name]) {
-                        console.log('📦 Using fallback - loading from productData');
                         expectedContainer.innerHTML = window.productData[categoryObj.name].map(p => createProductCard(p)).join('');
                     } else {
-                        console.error('❌ No products found');
-                        console.log('   productData exists?', !!window.productData);
-                        console.log('   productData keys:', Object.keys(window.productData || {}));
-                        console.log('   Looking for category:', categoryObj?.name);
                         expectedContainer.innerHTML = '<p style="text-align: center; padding: 3rem; color: #999;">No products found in this category</p>';
                     }
                 }

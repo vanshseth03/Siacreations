@@ -311,6 +311,7 @@ function switchTab(tabName) {
 function setupMobileMenu() {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('nav-menu');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
     
     if (!hamburger || !navMenu) return;
     
@@ -330,9 +331,11 @@ function setupMobileMenu() {
         if (isActive) {
             newHamburger.classList.remove('active');
             navMenu.classList.remove('active');
+            if (backdrop) backdrop.classList.remove('active');
         } else {
             newHamburger.classList.add('active');
             navMenu.classList.add('active');
+            if (backdrop) backdrop.classList.add('active');
         }
     };
     
@@ -346,6 +349,15 @@ function setupMobileMenu() {
         toggleMenu(null);
     }, { passive: false });
     
+    // Handle backdrop clicks
+    if (backdrop) {
+        backdrop.addEventListener('click', function() {
+            newHamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            backdrop.classList.remove('active');
+        }, false);
+    }
+    
     // Handle nav link clicks - close menu after navigation
     const navLinks = navMenu.querySelectorAll('.nav-link');
     navLinks.forEach(function(link) {
@@ -355,6 +367,7 @@ function setupMobileMenu() {
             setTimeout(function() {
                 newHamburger.classList.remove('active');
                 navMenu.classList.remove('active');
+                if (backdrop) backdrop.classList.remove('active');
             }, 150);
         }, false);
     });
@@ -367,6 +380,7 @@ function setupMobileMenu() {
         if (!isClickInsideMenu && !isClickOnHamburger && navMenu.classList.contains('active')) {
             newHamburger.classList.remove('active');
             navMenu.classList.remove('active');
+            if (backdrop) backdrop.classList.remove('active');
         }
     }, false);
 }

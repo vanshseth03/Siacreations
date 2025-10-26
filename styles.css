@@ -1,8 +1,19 @@
 /* Reset and Base Styles */
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* Prevent any white space on mobile */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0;
+    outline: 0;
 }
 
 :root {
@@ -30,12 +41,12 @@
 
 html {
     scroll-behavior: smooth;
-    font-size: 16px; /* Base font size */
-    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* Prevent horizontal scroll on desktop */
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
     width: 100%;
+    min-width: 100%;
+    position: relative;
 }
 
 body {
@@ -44,18 +55,16 @@ body {
     color: var(--text-dark);
     background: linear-gradient(135deg, #f8f6f2 0%, #f4f1eb 50%, #f0ede5 100%);
     min-height: 100vh;
-    margin: 0;
-    padding: 0;
     position: relative;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden;
     width: 100%;
+    min-width: 100%;
 }
 
 .main-app-content {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden;
     width: 100%;
+    min-width: 100%;
 }
 
 /* Remove all text decorations */
@@ -86,7 +95,7 @@ h4 { font-size: 1.25rem; }
     border-bottom: 1px solid var(--blush-pink);
     z-index: 1000;
     transition: var(--transition-smooth);
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow: visible; /* Allow mobile menu to overflow */
     width: 100%;
 }
 
@@ -2347,55 +2356,64 @@ h4 { font-size: 1.25rem; }
 }
 
 @media (max-width: 768px) {
+    /* Universal mobile reset - ABSOLUTELY NO GAPS */
     * {
         box-sizing: border-box;
     }
     
+    /* Kill all possible margins/padding that could create white space */
+    html,
+    body,
+    .main-app-content,
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    
     html {
-        font-size: 14px; /* Slightly smaller base font */
-        width: 100%;
-        max-width: 100vw;
-        overflow-x: hidden;
+        font-size: 14px;
         height: 100%;
-        margin: 0;
-        padding: 0;
     }
     
     body {
-        width: 100%;
-        max-width: 100vw;
-        overflow-x: hidden;
         min-height: 100vh;
-        min-height: -webkit-fill-available; /* Safari mobile fix */
-        margin: 0;
-        padding: 0;
+        min-height: -webkit-fill-available;
         position: relative;
     }
     
     .main-app-content {
-        width: 100%;
-        max-width: 100vw;
-        overflow-x: hidden;
         min-height: 100vh;
-        margin: 0;
-        padding: 0;
     }
     
     .main-content {
-        width: 100%;
-        max-width: 100vw;
-        overflow-x: hidden;
-        padding: 0;
-        margin-top: 68px;
-        padding-bottom: 100px; /* Extra space for bottom bar */
+        margin-top: 68px !important;
+        padding-bottom: 100px !important;
+    }
+    
+    /* Force all sections to full width with no side gaps */
+    section,
+    .tab-content,
+    .category-section,
+    .product-sections,
+    footer,
+    .footer {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
     }
     
     /* Force all direct children to respect viewport width */
     body > *,
     .main-app-content > *,
     .main-content > * {
-        max-width: 100vw;
-        overflow-x: hidden;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
     }
     
     /* Ensure images don't cause overflow */
@@ -2417,7 +2435,7 @@ h4 { font-size: 1.25rem; }
         left: 0;
         right: 0;
         margin: 0;
-        overflow-x: hidden;
+        overflow: visible; /* Changed from overflow-x: hidden to allow menu to show */
     }
     
     .nav-container {
@@ -2428,6 +2446,7 @@ h4 { font-size: 1.25rem; }
         justify-content: space-between; /* Reset for mobile */
         margin: 0;
         box-sizing: border-box;
+        overflow: visible; /* Allow menu to overflow */
     }
     
     .nav-logo {
@@ -2454,11 +2473,14 @@ h4 { font-size: 1.25rem; }
         box-shadow: 0 10px 27px rgba(0,0,0,0.05);
         padding: 2rem 0;
         gap: 0;
-        z-index: 999;
+        z-index: 9999; /* Increased z-index to be above navbar */
         visibility: hidden;
         opacity: 0;
         margin: 0;
         box-sizing: border-box;
+        height: auto;
+        max-height: calc(100vh - 68px); /* Don't exceed viewport */
+        overflow-y: auto; /* Allow scrolling if needed */
     }
 
     .nav-menu.active {
@@ -2487,7 +2509,7 @@ h4 { font-size: 1.25rem; }
         order: 3;
         display: flex;
         align-items: center;
-        pointer-events: none; /* Let clicks pass through to hamburger */
+        /* Removed pointer-events: none to allow hamburger clicks */
     }
     
     .hamburger {
@@ -2501,7 +2523,7 @@ h4 { font-size: 1.25rem; }
         position: relative;
         justify-content: center;
         align-items: center;
-        pointer-events: auto; /* Re-enable pointer events for hamburger */
+        cursor: pointer; /* Ensure cursor shows it's clickable */
     }
 
     .hamburger.active .bar:nth-child(2) {
@@ -2514,6 +2536,25 @@ h4 { font-size: 1.25rem; }
 
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-10px) rotate(-45deg);
+    }
+    
+    /* Mobile menu backdrop */
+    .mobile-menu-backdrop {
+        display: none;
+        position: fixed;
+        top: 68px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .mobile-menu-backdrop.active {
+        display: block;
+        opacity: 1;
     }
     
     /* Carousel mobile */
@@ -2680,23 +2721,35 @@ h4 { font-size: 1.25rem; }
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
-        padding: 2rem 1rem;
+        padding: 2rem 0.5rem;
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;
+        margin: 0;
+    }
+    
+    /* Category controls mobile - remove side padding */
+    .category-controls {
+        padding: 1rem 0.5rem 0;
+        width: 100%;
+        margin: 0;
     }
     
     /* Tab header mobile */
     .tab-header {
-        padding: 2rem 1rem;
+        padding: 2rem 0;
+        margin: 0;
+        width: 100%;
     }
     
     .tab-header h1 {
         font-size: 1.8rem;
+        padding: 0 1rem;
     }
     
     .tab-header p {
         font-size: 1rem;
+        padding: 0 1rem;
     }
     
     /* Product detail mobile */

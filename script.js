@@ -1015,7 +1015,31 @@ function showShareDialog(url, title, product) {
 }
 
 function shareViaWhatsApp(url, title, price) {
-    const text = `Check out this amazing product: ${title}\nPrice: ₹${price}\n\n${url}`;
+    let text = `✨ *Check out this amazing product!* ✨\n\n${title}\n💰 Price: ₹${price}\n\n`;
+    
+    // Try to find the product to include variant information if available
+    const productId = new URL(url).searchParams.get('id');
+    if (productId) {
+        let product = null;
+        for (const category in productData) {
+            product = productData[category].find(p => (p._id || p.id) === productId);
+            if (product) break;
+        }
+        
+        if (product) {
+            // Add available variants info
+            if (product.colors && product.colors.length > 0) {
+                text += `🎨 Available Colors: ${product.colors.join(', ')}\n`;
+            }
+            if (product.sizes && product.sizes.length > 0) {
+                text += `📏 Available Sizes: ${product.sizes.join(', ')}\n`;
+            }
+            text += `\n`;
+        }
+    }
+    
+    text += `🔗 Shop now: ${url}\n\n✨ Sia Creations - Crafting Elegance ✨`;
+    
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
     closeShareDialog();
@@ -1421,13 +1445,30 @@ function createWishlistCard(product) {
 }
 
 function addToCartFromWishlist(productId) {
-    // Find the product in wishlist to get full product details
-    const product = wishlist.find(item => (item._id || item.id) === productId);
+    // Find the product in wishlist to get wishlist item
+    const wishlistItem = wishlist.find(item => (item._id || item.id) === productId);
+    
+    if (!wishlistItem) return;
+    
+    // Fetch full product data from productData to ensure we have colors and sizes
+    let fullProduct = null;
+    for (const category in productData) {
+        fullProduct = productData[category].find(p => (p._id || p.id) === productId);
+        if (fullProduct) break;
+    }
+    
+    // Fallback to allProducts if not found in productData
+    if (!fullProduct && window.allProducts) {
+        fullProduct = allProducts.find(p => (p._id || p.id) === productId);
+    }
+    
+    // Use fullProduct if available, otherwise use wishlistItem
+    const product = fullProduct || wishlistItem;
     
     if (product) {
-        // If product already has selected variants in wishlist, add directly to cart
-        if (product.selectedColor || product.selectedSize) {
-            addToCartDirectly(product, product.selectedColor, product.selectedSize);
+        // If wishlist item already has selected variants, add directly to cart
+        if (wishlistItem.selectedColor || wishlistItem.selectedSize) {
+            addToCartDirectly(product, wishlistItem.selectedColor, wishlistItem.selectedSize);
             
             // Remove from wishlist after adding to cart
             const index = wishlist.findIndex(item => (item._id || item.id) === productId);
@@ -1442,8 +1483,29 @@ function addToCartFromWishlist(productId) {
             
             showWishlistFeedback('Item added to cart and removed from wishlist!', 'cart');
         } else {
-            // Show variant modal for color/size selection if no variants stored
-            showVariantModal(product, 'wishlist');
+            // Check if product has variants
+            const hasVariants = (product.colors && product.colors.length > 0) || (product.sizes && product.sizes.length > 0);
+            
+            if (hasVariants) {
+                // Show variant modal for color/size selection
+                showVariantModal(product, 'wishlist');
+            } else {
+                // No variants, add directly
+                addToCartDirectly(product, null, null);
+                
+                // Remove from wishlist
+                const index = wishlist.findIndex(item => (item._id || item.id) === productId);
+                if (index > -1) {
+                    wishlist.splice(index, 1);
+                    saveWishlistToStorage();
+                    updateWishlistCount();
+                    updateAllWishlistCounts();
+                    updateWishlistDisplay();
+                    updateProductCardHearts();
+                }
+                
+                showWishlistFeedback('Item added to cart and removed from wishlist!', 'cart');
+            }
         }
     }
 }

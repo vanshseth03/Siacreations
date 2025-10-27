@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
     // Order ID (auto-generated)
     orderId: {
         type: String,
-        required: true,
+        required: false,  // Changed to false since it's auto-generated
         unique: true
     },
     

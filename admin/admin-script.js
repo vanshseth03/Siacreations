@@ -687,92 +687,154 @@ function displayCategories(categories) {
 
 // Load all orders
 async function loadOrders(page = 1) {
-    if (!apiAvailable) return;
+    if (!apiAvailable) {
+        console.log('API not available, cannot load orders');
+        return;
+    }
     
     try {
+        console.log(`Loading orders - Page ${page}`);
         const response = await fetch(`${API_URL}/orders?page=${page}&limit=${ordersPerPage}`);
-        if (!response.ok) throw new Error('Failed to fetch');
+        console.log('Orders response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('Orders data received:', data);
         
         if (data.success) {
+            console.log(`Displaying ${data.orders.length} orders`);
             displayOrders(data.orders);
             
             // Update pagination
             ordersCurrentPage = page;
             ordersTotalPages = Math.ceil((data.total || data.orders.length) / ordersPerPage);
             updateOrdersPagination();
+        } else {
+            console.error('API returned success: false', data);
+            const container = document.getElementById('ordersContainer');
+            if (container) {
+                container.innerHTML = `<p style="text-align: center; color: red; padding: 3rem;">Error: ${data.message || 'Failed to load orders'}</p>`;
+            }
         }
     } catch (error) {
         console.error('Error loading orders:', error);
+        const container = document.getElementById('ordersContainer');
+        if (container) {
+            container.innerHTML = `<p style="text-align: center; color: red; padding: 3rem;">Error loading orders: ${error.message}</p>`;
+        }
     }
 }
 
 // Display orders
 function displayOrders(orders) {
     const container = document.getElementById('ordersContainer');
-    if (!container) return;
+    if (!container) {
+        console.error('Orders container not found!');
+        return;
+    }
     
     if (!orders || orders.length === 0) {
+        console.log('No orders to display');
         container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 3rem;">No orders found.</p>';
         return;
     }
     
-    container.innerHTML = orders.map(order => `
-        <div class="order-card" data-order-id="${order._id}">
-            <div class="order-card-header">
-                <div class="order-id-section">
-                    <h4>${order.orderId}</h4>
-                    <span class="order-date">${new Date(order.createdAt).toLocaleDateString()}</span>
-                </div>
-                <select class="status-select ${order.orderStatus}" onchange="updateOrderStatus('${order._id}', this.value)">
-                    <option value="pending" ${order.orderStatus === 'pending' ? 'selected' : ''}>Pending</option>
-                    <option value="shipped" ${order.orderStatus === 'shipped' ? 'selected' : ''}>Shipped</option>
-                    <option value="delivered" ${order.orderStatus === 'delivered' ? 'selected' : ''}>Delivered</option>
-                    <option value="cancelled" ${order.orderStatus === 'cancelled' ? 'selected' : ''}>Cancelled</option>
-                </select>
-            </div>
-            <div class="order-card-body">
-                <div class="order-customer-info">
-                    <div class="info-row">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        <span>${order.customer.name}</span>
-                    </div>
-                    <div class="info-row">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                        <span>${order.customer.phone}</span>
-                    </div>
-                    <div class="info-row">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        <span>${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}</span>
-                    </div>
-                </div>
-                <div class="order-items">
-                    ${order.items.map(item => `
-                        <div class="order-item-row">
-                            <span>${item.productName} × ${item.quantity}</span>
-                            <span>₹${item.price * item.quantity}</span>
+    console.log('Displaying orders:', orders.length);
+    
+    try {
+        container.innerHTML = orders.map((order, index) => {
+            try {
+                // Safe access with defaults
+                const orderId = order.orderId || 'N/A';
+                const createdAt = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A';
+                const orderStatus = order.orderStatus || 'pending';
+                const customerName = order.customer?.name || 'N/A';
+                const customerPhone = order.customer?.phone || 'N/A';
+                const customerAddress = order.customer?.address || '';
+                const customerCity = order.customer?.city || '';
+                const customerState = order.customer?.state || '';
+                const customerPincode = order.customer?.pincode || '';
+                
+                // Build full address
+                const fullAddress = [customerAddress, customerCity, customerState, customerPincode]
+                    .filter(part => part)
+                    .join(', ');
+                
+                const items = order.items || [];
+                const paymentMode = order.paymentMode || 'COD';
+                const totalAmount = order.totalAmount || 0;
+                
+                return `
+                    <div class="order-card" data-order-id="${order._id}">
+                        <div class="order-card-header">
+                            <div class="order-id-section">
+                                <h4>${orderId}</h4>
+                                <span class="order-date">${createdAt}</span>
+                            </div>
+                            <select class="status-select ${orderStatus}" onchange="updateOrderStatus('${order._id}', this.value)">
+                                <option value="pending" ${orderStatus === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="shipped" ${orderStatus === 'shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="delivered" ${orderStatus === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="cancelled" ${orderStatus === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
                         </div>
-                    `).join('')}
-                </div>
-                <div class="order-footer">
-                    <div class="payment-mode">
-                        <strong>Payment:</strong> ${order.paymentMode}
+                        <div class="order-card-body">
+                            <div class="order-customer-info">
+                                <div class="info-row">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    <span>${customerName}</span>
+                                </div>
+                                <div class="info-row">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    </svg>
+                                    <span>${customerPhone}</span>
+                                </div>
+                                <div class="info-row">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span>${fullAddress || 'No address provided'}</span>
+                                </div>
+                            </div>
+                            <div class="order-items">
+                                ${items.map(item => `
+                                    <div class="order-item-row">
+                                        <span>${item.productName || 'Unknown Product'} × ${item.quantity || 0}</span>
+                                        <span>₹${(item.price || 0) * (item.quantity || 0)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="order-footer">
+                                <div class="payment-mode">
+                                    <strong>Payment:</strong> ${paymentMode}
+                                </div>
+                                <div class="order-total">
+                                    <strong>Total:</strong> ₹${totalAmount}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="order-total">
-                        <strong>Total:</strong> ₹${order.totalAmount}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `).join('');
+                `;
+            } catch (itemError) {
+                console.error(`Error rendering order at index ${index}:`, itemError, order);
+                return `<div class="order-card" style="border: 2px solid red; padding: 1rem;">
+                    <p style="color: red;">Error rendering order ${order._id || index}</p>
+                    <pre style="font-size: 0.8rem; overflow: auto;">${JSON.stringify(order, null, 2)}</pre>
+                </div>`;
+            }
+        }).join('');
+    } catch (error) {
+        console.error('Error in displayOrders:', error);
+        container.innerHTML = `<p style="text-align: center; color: red; padding: 3rem;">Error displaying orders: ${error.message}</p>`;
+    }
 }
 
 // Load carousel slides

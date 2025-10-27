@@ -2223,3 +2223,64 @@ function buyNow(productId) {
 }
 
 window.buyNow = buyNow;
+
+// ========================================
+// Smart Back Button Handler
+// ========================================
+
+/**
+ * Smart back button that handles navigation contextually
+ * Falls back to home if no history
+ */
+function smartBack() {
+    // Check if there's history to go back to
+    if (window.history.length > 1 && document.referrer) {
+        // Check if referrer is from same domain
+        const referrerHost = new URL(document.referrer).hostname;
+        const currentHost = window.location.hostname;
+        
+        if (referrerHost === currentHost) {
+            window.history.back();
+        } else {
+            // External referrer, go to home
+            window.location.href = 'index.html';
+        }
+    } else {
+        // No history, go to home
+        window.location.href = 'index.html';
+    }
+}
+
+/**
+ * Navigate back to category page
+ * If category is known, go to that category tab
+ */
+function backToCategory(categoryId = null) {
+    if (categoryId) {
+        window.location.href = `category.html#${categoryId}`;
+    } else if (window.history.length > 1 && document.referrer.includes('category.html')) {
+        window.history.back();
+    } else {
+        window.location.href = 'category.html';
+    }
+}
+
+/**
+ * Navigate back to home page with optional tab
+ */
+function backToHome(tabId = 'home') {
+    window.location.href = `index.html#${tabId}`;
+}
+
+/**
+ * Handle browser back/forward button
+ */
+window.addEventListener('popstate', function(event) {
+    // Reload page to ensure correct state
+    window.location.reload();
+});
+
+// Make functions globally available
+window.smartBack = smartBack;
+window.backToCategory = backToCategory;
+window.backToHome = backToHome;

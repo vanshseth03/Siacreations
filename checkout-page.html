@@ -403,6 +403,38 @@
             
             // Note: Hamburger menu is handled by script.js via setupMobileMenu()
             
+            // Add beforeunload warning if user tries to leave checkout page
+            let orderSubmitted = false;
+            
+            window.addEventListener('beforeunload', function(e) {
+                // Check if this is a Buy Now checkout
+                const urlParams = new URLSearchParams(window.location.search);
+                const isBuyNow = urlParams.get('buyNow') === 'true';
+                
+                let hasItems = false;
+                if (isBuyNow) {
+                    hasItems = sessionStorage.getItem('buyNowItem') !== null;
+                } else {
+                    const cart = JSON.parse(localStorage.getItem('siaCreationsCart') || '[]');
+                    hasItems = cart.length > 0;
+                }
+                
+                // Only warn if there are items and order hasn't been submitted
+                if (hasItems && !orderSubmitted) {
+                    e.preventDefault();
+                    e.returnValue = ''; // Required for Chrome
+                    return ''; // For older browsers
+                }
+            });
+            
+            // Mark order as submitted when form is submitted
+            const checkoutForm = document.getElementById('checkout-customer-form');
+            if (checkoutForm) {
+                checkoutForm.addEventListener('submit', function() {
+                    orderSubmitted = true;
+                });
+            }
+            
             setTimeout(()=>{const loader=document.getElementById('app-loader');const body=document.body;if(body){body.classList.add('loaded')}if(loader){setTimeout(()=>{loader.classList.add('hidden')},200)}},50);
         });
     </script>

@@ -90,6 +90,16 @@
             
             if (typeof setupMobileMenu === 'function') setupMobileMenu();
             
+            // Prevent going back to checkout page after order is placed
+            history.pushState(null, '', window.location.href);
+            window.addEventListener('popstate', function(event) {
+                history.pushState(null, '', window.location.href);
+                // Optionally show a message
+                if (confirm('Your order has been placed. Do you want to go back to the home page?')) {
+                    window.location.href = 'index.html';
+                }
+            });
+            
             setTimeout(()=>{const loader=document.getElementById('app-loader');const body=document.body;if(body){body.classList.add('loaded')}if(loader){setTimeout(()=>{loader.classList.add('hidden')},200)}},50);
         });
     </script>

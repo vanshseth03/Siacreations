@@ -805,12 +805,36 @@ function displayOrders(orders) {
                                 </div>
                             </div>
                             <div class="order-items">
-                                ${items.map(item => `
+                                ${items.map(item => {
+                                    // Extract productId - handle both string and ObjectId
+                                    const productId = typeof item.productId === 'object' ? (item.productId._id || item.productId.toString()) : item.productId;
+                                    return `
                                     <div class="order-item-row">
                                         <span>${item.productName || 'Unknown Product'} × ${item.quantity || 0}</span>
-                                        <span>₹${(item.price || 0) * (item.quantity || 0)}</span>
+                                        <span style="display: flex; gap: 10px; align-items: center;">
+                                            ₹${(item.price || 0) * (item.quantity || 0)}
+                                            <button onclick="viewProductImages('${productId}')" class="btn-view-images" title="View product images">
+                                                🖼️
+                                            </button>
+                                        </span>
                                     </div>
-                                `).join('')}
+                                `}).join('')}
+                            </div>
+                            <div class="order-pricing-breakdown">
+                                <div class="pricing-row">
+                                    <span>Subtotal:</span>
+                                    <span>₹${order.subtotal || totalAmount}</span>
+                                </div>
+                                ${order.giftPackagingCharge > 0 ? `
+                                <div class="pricing-row">
+                                    <span>🎁 Gift Packaging:</span>
+                                    <span>₹${order.giftPackagingCharge}</span>
+                                </div>
+                                ` : ''}
+                                <div class="pricing-row">
+                                    <span>Delivery Charge:</span>
+                                    <span style="font-style: italic; color: var(--text-light);">${typeof order.deliveryCharge === 'string' ? order.deliveryCharge : 'To be confirmed'}</span>
+                                </div>
                             </div>
                             <div class="order-footer">
                                 <div class="payment-mode">
@@ -818,6 +842,7 @@ function displayOrders(orders) {
                                 </div>
                                 <div class="order-total">
                                     <strong>Total:</strong> ₹${totalAmount}
+                                    ${typeof order.deliveryCharge === 'string' ? ' <span style="font-size: 0.85rem; font-weight: normal;">(+ delivery)</span>' : ''}
                                 </div>
                             </div>
                         </div>
@@ -2407,6 +2432,74 @@ async function saveVariantStock(productId) {
 // ========================================
 // Sample Data Loading (for demonstration)
 // ========================================
+
+// View product images in modal
+async function viewProductImages(productId) {
+    if (!productId) {
+        showNotification('Invalid product ID', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/products/${productId}`);
+        if (!response.ok) throw new Error('Failed to fetch product');
+        
+        const data = await response.json();
+        if (!data.success || !data.product) {
+            showNotification('Product not found', 'error');
+            return;
+        }
+        
+        const product = data.product;
+        const images = product.images || [];
+        
+        if (images.length === 0) {
+            showNotification('No images available for this product', 'info');
+            return;
+        }
+        
+        // Create modal
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h2>📸 ${product.name}</h2>
+                    <button class="modal-close" onclick="this.closest('.modal').remove()">×</button>
+                </div>
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                        ${images.map((img, index) => `
+                            <div style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 2px solid var(--border-color); cursor: pointer;" onclick="window.open('${img}', '_blank')">
+                                <img src="${img}" alt="${product.name} - Image ${index + 1}" 
+                                     style="width: 100%; height: 100%; object-fit: cover;"
+                                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\'%3E%3Crect fill=\'%23E8C4B8\' width=\'200\' height=\'200\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23fff\' font-size=\'16\'%3ENo Image%3C/text%3E%3C/svg%3E'">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="margin-top: 1rem; text-align: center; color: var(--text-light); font-size: 0.9rem;">
+                        Click on any image to open it in a new tab
+                    </p>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Close modal on backdrop click
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    } catch (error) {
+        console.error('Error loading product images:', error);
+        showNotification('Failed to load product images', 'error');
+    }
+}
+
+// Make function globally available
+window.viewProductImages = viewProductImages;
 
 // You can uncomment this to load sample data
 // Initialize complete

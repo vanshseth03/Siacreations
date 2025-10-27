@@ -1692,7 +1692,8 @@ async function processOrder() {
             price: item.price
         })),
         subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        deliveryCharge: 0,
+        giftPackagingCharge: 0,
+        deliveryCharge: 'To be confirmed',
         totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
         paymentMode: formData.get('payment') || 'COD',
         notes: ''

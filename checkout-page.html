@@ -342,7 +342,8 @@
                             price: item.price
                         })),
                         subtotal: orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                        deliveryCharge: giftPackaging ? 40 : 0,
+                        giftPackagingCharge: giftPackaging ? 40 : 0,
+                        deliveryCharge: 'To be confirmed',
                         totalAmount: orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + (giftPackaging ? 40 : 0),
                         paymentMode: 'COD',
                         notes: giftPackaging ? 'Gift packaging requested' : ''
@@ -375,10 +376,14 @@
                             localStorage.setItem('lastOrder', JSON.stringify(result.order));
                         } else {
                             console.error('❌ API returned error:', result.message);
+                            console.error('Full error details:', result.error);
+                            console.error('Full response:', result);
                             alert('Order saved locally, but failed to sync with server. We will contact you to confirm.');
                         }
                     } catch (error) {
                         console.error('❌ Error submitting order:', error);
+                        console.error('Error details:', error.message);
+                        console.error('Order data that was sent:', orderData);
                         alert('Order saved locally, but failed to sync with server. We will contact you to confirm.');
                     }
                     

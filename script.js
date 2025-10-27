@@ -1445,12 +1445,12 @@ function createWishlistCard(product) {
 }
 
 function addToCartFromWishlist(productId) {
-    // Find the product in wishlist to get wishlist item
+    // Find the product in wishlist - it already has stored selectedColor and selectedSize
     const wishlistItem = wishlist.find(item => (item._id || item.id) === productId);
     
     if (!wishlistItem) return;
     
-    // Fetch full product data from productData to ensure we have colors and sizes
+    // Fetch full product data to ensure we have all details (price, images, etc.)
     let fullProduct = null;
     for (const category in productData) {
         fullProduct = productData[category].find(p => (p._id || p.id) === productId);
@@ -1465,49 +1465,21 @@ function addToCartFromWishlist(productId) {
     // Use fullProduct if available, otherwise use wishlistItem
     const product = fullProduct || wishlistItem;
     
-    if (product) {
-        // If wishlist item already has selected variants, add directly to cart
-        if (wishlistItem.selectedColor || wishlistItem.selectedSize) {
-            addToCartDirectly(product, wishlistItem.selectedColor, wishlistItem.selectedSize);
-            
-            // Remove from wishlist after adding to cart
-            const index = wishlist.findIndex(item => (item._id || item.id) === productId);
-            if (index > -1) {
-                wishlist.splice(index, 1);
-                saveWishlistToStorage();
-                updateWishlistCount();
-                updateAllWishlistCounts();
-                updateWishlistDisplay();
-                updateProductCardHearts();
-            }
-            
-            showWishlistFeedback('Item added to cart and removed from wishlist!', 'cart');
-        } else {
-            // Check if product has variants
-            const hasVariants = (product.colors && product.colors.length > 0) || (product.sizes && product.sizes.length > 0);
-            
-            if (hasVariants) {
-                // Show variant modal for color/size selection
-                showVariantModal(product, 'wishlist');
-            } else {
-                // No variants, add directly
-                addToCartDirectly(product, null, null);
-                
-                // Remove from wishlist
-                const index = wishlist.findIndex(item => (item._id || item.id) === productId);
-                if (index > -1) {
-                    wishlist.splice(index, 1);
-                    saveWishlistToStorage();
-                    updateWishlistCount();
-                    updateAllWishlistCounts();
-                    updateWishlistDisplay();
-                    updateProductCardHearts();
-                }
-                
-                showWishlistFeedback('Item added to cart and removed from wishlist!', 'cart');
-            }
-        }
+    // Add to cart using the stored variants (no modal needed)
+    addToCartDirectly(product, wishlistItem.selectedColor, wishlistItem.selectedSize);
+    
+    // Remove from wishlist after adding to cart
+    const index = wishlist.findIndex(item => (item._id || item.id) === productId);
+    if (index > -1) {
+        wishlist.splice(index, 1);
+        saveWishlistToStorage();
+        updateWishlistCount();
+        updateAllWishlistCounts();
+        updateWishlistDisplay();
+        updateProductCardHearts();
     }
+    
+    showWishlistFeedback('Item added to cart and removed from wishlist!', 'cart');
 }
 
 function removeFromWishlist(productId) {
@@ -1520,6 +1492,58 @@ function removeFromWishlist(productId) {
         updateProductCardHearts();
         showWishlistFeedback('Item removed from wishlist', 'removed');
     }
+}
+
+function addAllWishlistToCart() {
+    if (wishlist.length === 0) {
+        showWishlistFeedback('Your wishlist is empty', 'error');
+        return;
+    }
+    
+    // Get all products from wishlist with their stored variants
+    const itemsToAdd = [...wishlist];
+    let addedCount = 0;
+    
+    // Add each item to cart using stored variants
+    itemsToAdd.forEach(wishlistItem => {
+        // Fetch full product data
+        let fullProduct = null;
+        const productId = wishlistItem._id || wishlistItem.id;
+        
+        for (const category in productData) {
+            fullProduct = productData[category].find(p => (p._id || p.id) === productId);
+            if (fullProduct) break;
+        }
+        
+        if (!fullProduct && window.allProducts) {
+            fullProduct = allProducts.find(p => (p._id || p.id) === productId);
+        }
+        
+        const product = fullProduct || wishlistItem;
+        
+        // Add to cart with stored variants (no modal needed)
+        addToCartDirectly(product, wishlistItem.selectedColor, wishlistItem.selectedSize);
+        addedCount++;
+    });
+    
+    // Clear wishlist after adding all to cart
+    wishlist = [];
+    window.wishlist = wishlist;
+    saveWishlistToStorage();
+    updateWishlistCount();
+    updateAllWishlistCounts();
+    updateWishlistDisplay();
+    updateProductCardHearts();
+    
+    showWishlistFeedback(`${addedCount} item${addedCount > 1 ? 's' : ''} added to cart!`, 'cart');
+    
+    // Close wishlist sidebar
+    setTimeout(() => {
+        const sidebar = document.getElementById('wishlist-sidebar');
+        if (sidebar) {
+            sidebar.classList.remove('active');
+        }
+    }, 1000);
 }
 
 // Export functions for global access
@@ -1541,6 +1565,7 @@ window.backToCategory = backToCategory;
 window.toggleWishlist = toggleWishlist;
 window.addToCartFromWishlist = addToCartFromWishlist;
 window.removeFromWishlist = removeFromWishlist;
+window.addAllWishlistToCart = addAllWishlistToCart;
 window.showVariantModal = showVariantModal;
 window.closeVariantModal = closeVariantModal;
 window.selectColor = selectColor;

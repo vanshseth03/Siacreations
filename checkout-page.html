@@ -111,6 +111,11 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="email">Email (Optional)</label>
+                    <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-group">
                     <label for="address">Complete Address *</label>
                     <textarea id="address" name="address" rows="3" required></textarea>
                 </div>
@@ -321,23 +326,20 @@
                     
                     // Prepare order data for API
                     const orderData = {
-                        orderId: orderNumber,
                         customer: {
                             name: formData.get('fullName'),
+                            email: formData.get('email') || 'noemail@siacreations.com',
                             phone: formData.get('phoneNumber'),
                             address: formData.get('address'),
                             city: formData.get('city'),
-                            pincode: formData.get('pincode'),
-                            state: formData.get('state')
+                            state: formData.get('state'),
+                            pincode: formData.get('pincode')
                         },
                         items: orderItems.map(item => ({
                             productId: item._id || item.id,
                             productName: item.name,
                             quantity: item.quantity,
-                            price: item.price,
-                            selectedColor: item.selectedColor || null,
-                            selectedSize: item.selectedSize || null,
-                            image: (item.images && item.images[0]) || item.image || ''
+                            price: item.price
                         })),
                         subtotal: orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                         deliveryCharge: giftPackaging ? 40 : 0,
@@ -346,12 +348,15 @@
                         notes: giftPackaging ? 'Gift packaging requested' : ''
                     };
                     
+                    console.log('Submitting order:', orderData);
+                    
                     // Save to localStorage for order confirmation page
                     localStorage.setItem('lastOrder', JSON.stringify(orderData));
                     
                     // Send order to database
                     try {
                         const API_URL = 'https://siacreations.vercel.app/api';
+                        console.log('Sending order to API...');
                         const response = await fetch(`${API_URL}/orders`, {
                             method: 'POST',
                             headers: {
@@ -360,9 +365,21 @@
                             body: JSON.stringify(orderData)
                         });
                         
+                        console.log('API response status:', response.status);
                         const result = await response.json();
+                        console.log('API response:', result);
+                        
+                        if (result.success) {
+                            console.log('✅ Order saved to database successfully!');
+                            // Update localStorage with the actual order from DB (includes orderId)
+                            localStorage.setItem('lastOrder', JSON.stringify(result.order));
+                        } else {
+                            console.error('❌ API returned error:', result.message);
+                            alert('Order saved locally, but failed to sync with server. We will contact you to confirm.');
+                        }
                     } catch (error) {
-                        // Continue anyway - order is saved in localStorage
+                        console.error('❌ Error submitting order:', error);
+                        alert('Order saved locally, but failed to sync with server. We will contact you to confirm.');
                     }
                     
                     // Clear buy now item from sessionStorage if this was a buy now checkout

@@ -1668,31 +1668,37 @@ async function processOrder() {
         name: formData.get('name'),
         phone: formData.get('phone'),
         address: formData.get('address'),
-        email: formData.get('email') || '',
-        city: formData.get('city') || '',
-        state: formData.get('state') || '',
-        pincode: formData.get('pincode') || ''
+        email: formData.get('email') || 'noemail@siacreations.com',
+        city: formData.get('city') || 'Not Provided',
+        state: formData.get('state') || 'Not Provided',
+        pincode: formData.get('pincode') || '000000'
     };
     
-    // Prepare order data for API
+    // Prepare order data for API (matching Order model exactly)
     const orderData = {
         customer: {
             name: customerData.name,
-            phone: customerData.phone,
             email: customerData.email,
-            address: `${customerData.address}, ${customerData.city}, ${customerData.state} - ${customerData.pincode}`
+            phone: customerData.phone,
+            address: customerData.address,
+            city: customerData.city,
+            state: customerData.state,
+            pincode: customerData.pincode
         },
         items: cart.map(item => ({
-            productId: item.id,
+            productId: item._id || item.id,
             productName: item.name,
             quantity: item.quantity,
             price: item.price
         })),
+        subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        deliveryCharge: 0,
         totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        paymentMode: formData.get('payment') || 'cod',
-        orderStatus: 'pending',
-        paymentStatus: 'pending'
+        paymentMode: formData.get('payment') || 'COD',
+        notes: ''
     };
+    
+    console.log('Submitting order:', orderData);
     
     // Submit order to API
     try {
@@ -1704,13 +1710,21 @@ async function processOrder() {
             body: JSON.stringify(orderData)
         });
         
+        console.log('Order API response status:', response.status);
         const data = await response.json();
+        console.log('Order API response:', data);
         
         if (!data.success) {
-            // Silently continue with local processing
+            console.error('❌ Order failed:', data.message);
+            alert('Failed to place order: ' + (data.message || 'Unknown error'));
+            return;
+        } else {
+            console.log('✅ Order placed successfully!', data.order);
         }
     } catch (error) {
-        // Silently continue with local processing
+        console.error('❌ Error submitting order:', error);
+        alert('Failed to connect to server. Please try again or contact us directly.');
+        return;
     }
     
     // Update UI

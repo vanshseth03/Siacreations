@@ -62,6 +62,14 @@ const orderSchema = new mongoose.Schema({
         price: {
             type: Number,
             required: true
+        },
+        selectedColor: {
+            type: String,
+            required: false
+        },
+        selectedSize: {
+            type: String,
+            required: false
         }
     }],
     
@@ -71,9 +79,14 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     
-    deliveryCharge: {
+    giftPackagingCharge: {
         type: Number,
         default: 0
+    },
+    
+    deliveryCharge: {
+        type: String,
+        default: 'To be confirmed'
     },
     
     totalAmount: {

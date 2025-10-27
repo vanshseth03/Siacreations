@@ -79,11 +79,25 @@
                 ? `<img src="${imageUrl}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">` 
                 : `<div style="font-size: 2.5rem; display: flex; align-items: center; justify-content: center; height: 100%;">${imageUrl || '🛍️'}</div>`;
             
+            // Build variant info display - styled like cart items
+            let variantInfo = '';
+            if (item.selectedColor || item.selectedSize) {
+                const parts = [];
+                if (item.selectedColor) {
+                    parts.push(`<span><strong>Colour:</strong> ${item.selectedColor}</span>`);
+                }
+                if (item.selectedSize) {
+                    parts.push(`<span><strong>Size:</strong> ${item.selectedSize}</span>`);
+                }
+                variantInfo = `<div style="font-size: 0.8rem; color: #666; margin-top: 0.25rem; display: flex; gap: 1rem; flex-wrap: wrap;">${parts.join('')}</div>`;
+            }
+            
             return `
                 <div class="wishlist-item" data-id="${itemId}">
                     <div class="wishlist-item-image" onclick="window.location.href='item-view.html?id=${itemId}'">${imageHTML}</div>
                     <div class="wishlist-item-info">
                         <div class="wishlist-item-name">${item.name}</div>
+                        ${variantInfo}
                         <div class="wishlist-item-price">₹${item.price}</div>
                         <div class="wishlist-item-controls">
                             <button class="add-to-cart" onclick="event.stopPropagation(); if(typeof addToCartFromWishlist === 'function') addToCartFromWishlist('${itemId}')">Add to Cart</button>
@@ -130,21 +144,52 @@
             return;
         }
         
-        window.wishlist.forEach(item => {
-            const qty = item.quantity || 1;
-            for (let i=0; i<qty; i++) {
-                if (typeof window.addToCart === 'function') window.addToCart(item.id);
+        // Get all products from wishlist with their stored variants
+        const itemsToAdd = [...window.wishlist];
+        let addedCount = 0;
+        
+        // Add each item to cart using stored variants (no modal needed)
+        itemsToAdd.forEach(wishlistItem => {
+            // Fetch full product data
+            let fullProduct = null;
+            const productId = wishlistItem._id || wishlistItem.id;
+            
+            if (window.productData) {
+                for (const category in window.productData) {
+                    fullProduct = window.productData[category].find(p => (p._id || p.id) === productId);
+                    if (fullProduct) break;
+                }
+            }
+            
+            if (!fullProduct && window.allProducts) {
+                fullProduct = window.allProducts.find(p => (p._id || p.id) === productId);
+            }
+            
+            const product = fullProduct || wishlistItem;
+            
+            // Use stored variants from wishlist item
+            const storedColor = wishlistItem.selectedColor || null;
+            const storedSize = wishlistItem.selectedSize || null;
+            
+            // Add to cart with stored variants using addToCartDirectly
+            if (typeof window.addToCartDirectly === 'function') {
+                window.addToCartDirectly(product, storedColor, storedSize);
+                addedCount++;
             }
         });
         
         // Clear wishlist after adding all to cart
         window.wishlist = [];
         if (typeof window.saveWishlistToStorage === 'function') window.saveWishlistToStorage();
+        if (typeof window.updateWishlistCount === 'function') window.updateWishlistCount();
+        if (typeof window.updateAllWishlistCounts === 'function') window.updateAllWishlistCounts();
+        if (typeof window.updateWishlistDisplay === 'function') window.updateWishlistDisplay();
+        if (typeof window.updateProductCardHearts === 'function') window.updateProductCardHearts();
         renderWishlistSidebar();
         
         // Show feedback
         if (typeof window.showWishlistFeedback === 'function') {
-            window.showWishlistFeedback('All items added to cart!', 'cart');
+            window.showWishlistFeedback(`${addedCount} item${addedCount > 1 ? 's' : ''} added to cart!`, 'cart');
         } else {
             const feedback = document.createElement('div');
             feedback.style.cssText = `
@@ -160,7 +205,7 @@
                 box-shadow: 0 4px 20px rgba(0,0,0,0.2);
                 font-weight: 600;
             `;
-            feedback.textContent = 'All items added to cart!';
+            feedback.textContent = `${addedCount} item${addedCount > 1 ? 's' : ''} added to cart!`;
             
             document.body.appendChild(feedback);
             

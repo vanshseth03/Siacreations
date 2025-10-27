@@ -1372,13 +1372,17 @@ function updateWishlistDisplay() {
                     ? `<img src="${imageUrl}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;">` 
                     : `<div style="font-size: 2.5rem; display: flex; align-items: center; justify-content: center; height: 100%;">${imageUrl || '🛍️'}</div>`;
                 
-                // Build variant info display
+                // Build variant info display - styled like cart items
                 let variantInfo = '';
-                if (item.selectedColor) {
-                    variantInfo += `<div style="font-size: 0.8rem; color: #666; margin-top: 0.25rem;">Color: ${item.selectedColor}</div>`;
-                }
-                if (item.selectedSize) {
-                    variantInfo += `<div style="font-size: 0.8rem; color: #666;">Size: ${item.selectedSize}</div>`;
+                if (item.selectedColor || item.selectedSize) {
+                    const parts = [];
+                    if (item.selectedColor) {
+                        parts.push(`<span><strong>Colour:</strong> ${item.selectedColor}</span>`);
+                    }
+                    if (item.selectedSize) {
+                        parts.push(`<span><strong>Size:</strong> ${item.selectedSize}</span>`);
+                    }
+                    variantInfo = `<div style="font-size: 0.8rem; color: #666; margin-top: 0.25rem; display: flex; gap: 1rem; flex-wrap: wrap;">${parts.join('')}</div>`;
                 }
                 
                 return `
@@ -1413,13 +1417,17 @@ function createWishlistCard(product) {
         ? `<img src="${imageUrl}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">` 
         : `<div style="font-size: 3rem; display: flex; align-items: center; justify-content: center; height: 100%;">${imageUrl || '🛍️'}</div>`;
     
-    // Build variant info display
+    // Build variant info display - styled like cart items
     let variantInfo = '';
-    if (product.selectedColor) {
-        variantInfo += `<div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">Color: ${product.selectedColor}</div>`;
-    }
-    if (product.selectedSize) {
-        variantInfo += `<div style="font-size: 0.85rem; color: #666;">Size: ${product.selectedSize}</div>`;
+    if (product.selectedColor || product.selectedSize) {
+        const parts = [];
+        if (product.selectedColor) {
+            parts.push(`<span><strong>Colour:</strong> ${product.selectedColor}</span>`);
+        }
+        if (product.selectedSize) {
+            parts.push(`<span><strong>Size:</strong> ${product.selectedSize}</span>`);
+        }
+        variantInfo = `<div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap;">${parts.join('')}</div>`;
     }
     
     return `
@@ -1465,8 +1473,12 @@ function addToCartFromWishlist(productId) {
     // Use fullProduct if available, otherwise use wishlistItem
     const product = fullProduct || wishlistItem;
     
+    // Use the stored variants from wishlist item (they were selected when adding to wishlist)
+    const storedColor = wishlistItem.selectedColor || null;
+    const storedSize = wishlistItem.selectedSize || null;
+    
     // Add to cart using the stored variants (no modal needed)
-    addToCartDirectly(product, wishlistItem.selectedColor, wishlistItem.selectedSize);
+    addToCartDirectly(product, storedColor, storedSize);
     
     // Remove from wishlist after adding to cart
     const index = wishlist.findIndex(item => (item._id || item.id) === productId);
@@ -1479,7 +1491,7 @@ function addToCartFromWishlist(productId) {
         updateProductCardHearts();
     }
     
-    showWishlistFeedback('Item added to cart and removed from wishlist!', 'cart');
+    showWishlistFeedback('Item added to cart!', 'cart');
 }
 
 function removeFromWishlist(productId) {
@@ -1631,13 +1643,17 @@ function updateCartDisplay() {
     }
     
     const cartHTML = cart.map(item => {
-        // Build variant info display
+        // Build variant info display - styled consistently
         let variantInfo = '';
-        if (item.selectedColor) {
-            variantInfo += `<div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">Color: ${item.selectedColor}</div>`;
-        }
-        if (item.selectedSize) {
-            variantInfo += `<div style="font-size: 0.85rem; color: #666;">Size: ${item.selectedSize}</div>`;
+        if (item.selectedColor || item.selectedSize) {
+            const parts = [];
+            if (item.selectedColor) {
+                parts.push(`<span><strong>Colour:</strong> ${item.selectedColor}</span>`);
+            }
+            if (item.selectedSize) {
+                parts.push(`<span><strong>Size:</strong> ${item.selectedSize}</span>`);
+            }
+            variantInfo = `<div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem; display: flex; gap: 1rem; flex-wrap: wrap;">${parts.join('')}</div>`;
         }
         
         // Handle image - could be URL or emoji
@@ -1776,7 +1792,9 @@ async function processOrder() {
             productId: item._id || item.id,
             productName: item.name,
             quantity: item.quantity,
-            price: item.price
+            price: item.price,
+            selectedColor: item.selectedColor || null,
+            selectedSize: item.selectedSize || null
         })),
         subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
         giftPackagingCharge: 0,

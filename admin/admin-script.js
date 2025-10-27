@@ -808,9 +808,26 @@ function displayOrders(orders) {
                                 ${items.map(item => {
                                     // Extract productId - handle both string and ObjectId
                                     const productId = typeof item.productId === 'object' ? (item.productId._id || item.productId.toString()) : item.productId;
+                                    
+                                    // Build variant info display
+                                    let variantInfo = '';
+                                    if (item.selectedColor || item.selectedSize) {
+                                        const parts = [];
+                                        if (item.selectedColor) {
+                                            parts.push(`<strong>Colour:</strong> ${item.selectedColor}`);
+                                        }
+                                        if (item.selectedSize) {
+                                            parts.push(`<strong>Size:</strong> ${item.selectedSize}`);
+                                        }
+                                        variantInfo = `<div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">${parts.join(' • ')}</div>`;
+                                    }
+                                    
                                     return `
                                     <div class="order-item-row">
-                                        <span>${item.productName || 'Unknown Product'} × ${item.quantity || 0}</span>
+                                        <div style="flex: 1;">
+                                            <div>${item.productName || 'Unknown Product'} × ${item.quantity || 0}</div>
+                                            ${variantInfo}
+                                        </div>
                                         <span style="display: flex; gap: 10px; align-items: center;">
                                             ₹${(item.price || 0) * (item.quantity || 0)}
                                             <button onclick="viewProductImages('${productId}')" class="btn-view-images" title="View product images">

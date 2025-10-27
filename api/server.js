@@ -1,6 +1,6 @@
 // Simple Node.js API Server for Sia Creations
 // This is a basic Express server with MongoDB integration
-// Updated: 2025-01-26 - Added colors and sizes support to products
+// Updated: 2025-10-27 - Fixed Order model validation (orderId auto-generation)
 
 import express from "express";
 import mongoose from "mongoose";

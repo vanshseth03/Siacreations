@@ -339,7 +339,9 @@
                             productId: item._id || item.id,
                             productName: item.name,
                             quantity: item.quantity,
-                            price: item.price
+                            price: item.price,
+                            selectedColor: item.selectedColor || null,
+                            selectedSize: item.selectedSize || null
                         })),
                         subtotal: orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                         giftPackagingCharge: giftPackaging ? 40 : 0,

@@ -2116,13 +2116,21 @@ function confirmVariantSelection() {
     const hasColors = currentVariantProduct.colors && currentVariantProduct.colors.length > 0;
     const hasSizes = currentVariantProduct.sizes && currentVariantProduct.sizes.length > 0;
     
+    // Both checks should happen - don't return early if one fails
+    let missingSelections = [];
+    
     if (hasColors && !selectedColor) {
-        showShareFeedback('Please select a color', 'error');
-        return;
+        missingSelections.push('colour');
     }
     
     if (hasSizes && !selectedSize) {
-        showShareFeedback('Please select a size', 'error');
+        missingSelections.push('size');
+    }
+    
+    // If any selections are missing, show error and return
+    if (missingSelections.length > 0) {
+        const message = `Please select ${missingSelections.join(' and ')}`;
+        showShareFeedback(message, 'error');
         return;
     }
     
